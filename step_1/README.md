@@ -47,3 +47,9 @@ $ xxd fill.img | less
 运动变化A
 特效
 个人信息
+
+## Bugs
+### mul instruction
+乘的指令，当操作数为16bits时，会将高位放置到dx处
+在本程序中，该行为错误地将dl置为0
+见wiki mul
