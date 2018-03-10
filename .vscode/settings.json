@@ -1,0 +1,44 @@
+{
+    "latex-workshop.chktex.enabled": true,
+    "latex-workshop.latex.toolchain": [
+        {
+          "command": "xelatex",
+          "args": [
+            "%DOC%"
+          ]
+        },
+
+        {
+          "command": "xelatex",
+          "args": [
+            "%DOC%"
+          ]
+        },
+
+        {
+          "command": "xelatex",
+          "args": [
+            "%DOC%"
+          ]
+        },
+
+        {
+          "command": "xelatex",
+          "args": [
+            "%DOC%"
+          ]
+        }
+      ],
+      "todohighlight.include": [
+        "**/*.js",
+        "**/*.jsx",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.html",
+        "**/*.php",
+        "**/*.css",
+        "**/*.scss",
+        "**/*.tex",
+        "**/*.cpp"
+      ]
+}

@@ -1,16 +1,9 @@
 # 实验项目1
 ## 搭建和应用实验环境
 ### Problem1
-将其中一个虚拟软盘用 DOS 格式化为 DOS 引导盘
-Solution：
-``` python
-.
-├── a.img # formatted image
-├── bochsout.log # log file
-├── .bochsrc # config file
-├── boot.com # a sample code
-└── freedos.img # Dos image used by bochs
-```
+产生一个虚拟软盘  
+将其用 DOS 格式化为 DOS 引导盘  
+Solution：  
 上述`a.img`即为格式化后的文件
 ``` shell
 $ bochs
@@ -19,6 +12,15 @@ Dos:> format b:
 ...
 format complete
 $ xxd a.image | less
+```
+文件介绍
+``` python
+.
+├── a.img # formatted image
+├── bochsout.log # log file
+├── .bochsrc # config file
+├── boot.com # a sample code
+└── freedos.img # Dos image used by bochs
 ```
 ### Problem2
 用 WinHex 工具将其中一个虚拟软盘的首扇区填满你的个人信息
@@ -44,10 +46,16 @@ $ xxd fill.img | less
 
 ## 接管裸机控制权
 ### Problem3
-运动变化A
-特效
-个人信息
-
+完成`storm.asm`程序，使其在裸机上显示个人的相关信息
+Solotion：
+运行方式
+``` shell
+$ sh run.sh
+```
+生成文件方式
+``` shell
+$ sh build.sh
+```
 ## Bugs
 ### mul instruction
 乘的指令，当操作数为16bits时，会将高位放置到dx处
