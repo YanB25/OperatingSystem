@@ -10,6 +10,7 @@
      UpSideBoundary equ 0
      LeftSideBoundary equ 0
      RightSideBoundary equ 80
+     ScreenLength equ 25 * 80 * 2
      org 07c00h					; 程序加载到100h，可用于生成COM
 [SECTION .text]
 start:
@@ -20,9 +21,11 @@ start:
       mov ax,0B800h				; 文本窗口显存起始地址
       mov gs,ax					; GS = B800h
       mov dh, byte[style]
+      call clearTheScreen
       call showMyNameAndId
 
       mov dl, byte[char] ; init char to what I want
+      mov word[y], 39
 loop1:
       dec word[count]				; 递减计数变量
       jnz loop1					; >0：跳转;
@@ -177,10 +180,13 @@ show_kernel:
       mov [gs:bx],ax  		;  显示字符的ASCII码值
       ret
 showMyNameAndId:
+      push dx ;save from the shooting format
+      mov dh, byte[style]
       mov bx, 0 ; index
       mov cx, myNameAndIdLength
 showNameLoop:
       loop showNameIdSetting
+      pop dx
       ret
 showNameIdSetting:
       mov dl, byte[myNameAndId+bx]
@@ -203,15 +209,23 @@ clearChar:
       jmp show
 
 clearTheScreen:
-
+      mov cx, ScreenLength
+      mov bx, 0
+clearScreenLoop:
+      loop clearWorker
+      ret
+clearWorker:
+      mov word[gs:bx], 0
+      inc bx
+      jmp clearScreenLoop
 datadef:
     count dw delay
     dcount dw ddelay
     rdul db Dn_Rt         ; 向右下运动
-    x    dw 7
-    y    dw 30
+    x    dw 12
+    y    dw 32
     char db 'A'
-    myNameAndId db `16337269 yanbin class7\0`
+    myNameAndId db `16337269 yanbin\0`
     myNameAndIdLength equ $-myNameAndId
     style db 8Fh
 
