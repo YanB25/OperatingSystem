@@ -23,7 +23,7 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass{article}
+\documentclass[a4paper]{article}
 
 \usepackage{fancyhdr} % Required for custom headers
 \usepackage{lastpage} % Required to determine the last page for the footer
@@ -45,7 +45,7 @@
     linkcolor=black,
     urlcolor=black
 }
-
+\usepackage[title]{appendix} % Required for appendix
 
 % Margins
 \topmargin=-0.45in
@@ -101,7 +101,8 @@
         numbers=left, % Line numbers on left
         firstnumber=1, % Line numbers start with line 1
         numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
-        stepnumber=5 % Line numbers go in steps of 5
+        stepnumber=2, % Line numbers go in steps of 5,
+        firstnumber=1
 }
 
 % Creates a new command to include a perl script, the first parameter is the filename of the script (without .pl), the second parameter is the caption
@@ -111,9 +112,14 @@
 \end{itemize}
 }
 
-\newcommand{\pythonscript}[2]{
+\newcommand{\shfilescript}[3]{
 \begin{itemize}
-\item[]\lstinputlisting[caption=#2, label=#1, language=python, numbers=left, firstnumber=1, stepnumber=2]{#1.py}
+\item[]\lstinputlisting[caption=#2, label=#1, language=sh]{#3}
+\end{itemize}
+}
+\newcommand{\shscript}[3]{
+\begin{itemize}
+\item[]\begin{lstlisting}[label=#1, caption=#2] #3 \end{lstlisting}
 \end{itemize}
 }
 
@@ -133,8 +139,8 @@
 \nobreak\extramarks{接上页}{#1 见下页\ldots}\nobreak{}
 \nobreak\extramarks{#1}{}\nobreak{}
 }
-
-\setcounter{secnumdepth}{0} % Removes default section numbers
+% TODO:code here enable the number before section, but it disable the numbering of problems
+%\setcounter{secnumdepth}{0} % Removes default section numbers
 \newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
 
 \newcommand{\homeworkProblemName}{}
@@ -200,7 +206,7 @@
 %	TABLE OF CONTENTS
 %----------------------------------------------------------------------------------------
 
-%\setcounter{tocdepth}{1} % Uncomment this line if you don't want subsections listed in the ToC
+\setcounter{tocdepth}{2} % Uncomment this line if you don't want subsections listed in the ToC
 
 
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % used for dots between <section> and <page>
@@ -210,50 +216,117 @@
 \addtocontents{toc}{~\hfill\textbf{Page}\par}
 \newpage
 
-%----------------------------------------------------------------------------------------
-%	PROBLEM 1
-%----------------------------------------------------------------------------------------
+% below are document body
+
 
 % To have just one problem per page, simply put a \clearpage after each problem
+\section{实验目的}
+掌握操作系统的相关概念，理解计算机引导的全部过程。利用工具制作正确引导盘并完成特定任务。\\ 
+理解虚拟机的运行方式，了解虚拟机与真实机器的不同之处。熟悉配置、运行虚拟机的基本方法。掌握在虚拟机下运行程序、程序
+查错和运行dos镜像\\ 
+熟悉相关工具的使用。熟悉32位x86汇编器和二进制文件操作软件的使用。熟悉虚拟镜像的制作方法。
+掌握基本的32位x86汇编的编写。掌握汇编程序的编译、运行、调错。掌握硬件级的调试技巧。
+\section{实验要求}
 
-\begin{homeworkProblem}
-% Listing \ref{homework_example} shows a Perl script.
+\subsection{搭建和应用实验环境}
+虚拟机安装,生成一个基本配置的虚拟机 XXXPC 和多个 1.44MB 
+容量的虚拟软盘,将其中一个虚拟软盘用 DOS 格式化为 DOS 引导盘,用 WinHex 工具将其中一个虚拟软盘的首扇区填满你的个人信息
+\subsection{接管裸机控制权}
+设计 ibmpc 的一个引导扇区程序
+，程序功能从屏幕左边某行位置45度
+角斜向下射出，保持一个可观察的适当速度直线运动，在碰到屏幕边后产生反射，
+改变方向运动，如此类推，不断运动。在此基础上，增加你的个性拓展，如同时控制两个运动的轨迹，
+或炫酷动态变色，个性画面，如此等等，自由不限。还要在屏幕某个区域以特别的方式显示你的学号姓名
+等个人信息。将这个程序的机器吗放到第三张虚拟软盘的首扇区，并用此软盘引导你的pc，直到成功。
 
-% \perlscript{homework_example}{Sample Perl Script With Highlighting}
 
-\lipsum[1]
-\end{homeworkProblem}
-%----------------------------------------------------------------------------------------
-%	PROBLEM 2
-%----------------------------------------------------------------------------------------
+\section{实验方案}
+\subsection{基础原理}
+实验环境是不带有操作系统的裸机。为了做到接管逻辑控制权和运行程序的目的，我们需要写出自己的引导程序（制作一个引导扇区）。
+开机后，计算机会首先作自检。若选择从软盘启动，bios会检查软盘的0面0磁道,如果发现它的最后一个字节是0xAA55，则bios会把其视作一个引导扇区，
+尝试执行其中的程序。\\ 
 
-\begin{homeworkProblem}
-\lipsum[2]
+引导扇区通常会将操作系统加载进内存中，将控制权完全交给操作系统，由操作系统完成随后的各种调配。在本实验中，引导扇区内包含了
+若干代码，用于在屏幕中心高亮显示个人信息，以及完成简单的动画。 \\
 
-% \problemAnswer{
-% \begin{center}
-% \includegraphics[width=0.75\columnwidth]{example_figure} % Example image
-% \end{center}
+即便没有操作系统，本次实验依然可以在终端输出相应的信息，甚至是绘制动画。
+0xB8000-0xBFFFF的内存空间是显存地址,共有32KB。向这个地址写入数据可以打印到屏幕上。
+对于从0xB800开始的每个字\(16 bits\)，其高位将解释为输出内容的样式信息，例如前景色、背景色等；其低位将解释为输出内容的Ascii码。\\
 
-% \lipsum[3-5]
-% }
-\end{homeworkProblem}
+通过反复往显存地址中读写数据，本项目最终完成了附带个人资料和动画的引导程序。
 
-%----------------------------------------------------------------------------------------
-\begin{homeworkProblem}[This is a problem]
-我的答案也在这里\\
-关于第一个部分，见下\\
-Listing \ref{bar} 提供了另一个解法
-% \pythonscript{bar}{some test codes}
-\begin{homeworkSection}{第一个问题的第一部分}
-下面是我的解法
-\end{homeworkSection}
 
-\end{homeworkProblem}
-张雨浓
-\section{第二问}
-\subsection{第一小问}
-第二问的回答在这里
 
-% \end{titlingpage}
+\subsection{实验环境与工具}
+\subsubsection{实验环境}
+\begin{itemize}
+    \item 操作系统 \\ 
+    本实验在Linux下完成。采用Ubuntu 16.04
+    \item 虚拟机\\
+    bochs.它是一款开源且跨平台的 IA-32 模拟器。
+\end{itemize}
+\subsubsection{相关工具、指令}
+\begin{itemize}
+    \item 汇编器\\ 
+    NASM. NASM是一个轻量级的、模块化的 80x86 和 x86-64 汇编器。它的语法与
+    Intel 原语法十分相似，但更加简洁和易读。它对宏有十分强大的支持。
+    \item 镜像文件产生工具\\ 
+    bximage. 该命令允许生成指定大小的软件镜像。
+    \item 二进制写入命令\\ 
+    dd. dd 允许指定源文件和目标文件，将源文件的二进制比特写入目标文件中的指定位置。
+    \item 二进制文件查看命令\\ 
+    xxd. xxd 允许将二进制文件中的内容按地址顺序依次输出，可读性强
+\end{itemize}
+关于工具dd和xxd的使用，请见附录\ref{utilitycode}代码\ref{buildFile}
+\subsection{程序流程和算法}
+
+lipsum[1]
+\subsection{程序模块及相关说明}
+lipsum[1]
+\section{实验过程}
+测试输入数据文件和输出数据文
+件
+\section{实验结果} 
+    \subsection{代码编译（可选）}
+    在项目文件中已经包括了产生的所有代码。所以这一步可以跳过
+    代码 \ref{build}展示了将汇编最终写入镜像文件的过程。
+    首先使用nasm将.asm文件编译为.bin文件。随后使用dd将.bin的内容写入.img中。
+
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language=sh, label=build, caption=将汇编转化为二进制并写入镜像]
+    $ bximage # 先用该命令产生空白的stone.img文件
+    $ sh build.sh
+    \end{lstlisting}
+    \end{itemize}
+    代码\ref{build}的内容请见附录\ref{utilitycode}的代码\ref{buildFile}
+
+
+    \subsection{运行代码}
+    在这一步中，我们使用bochs运行完成好的镜像文件。bochs将自动加载相同目录内的
+    .bochsrc文件，以此为配置运行虚拟机。
+    \begin{itemize}
+        \item[] \begin{lstlisting}[label=run, caption=运行方法]
+$ sh run.sh
+        \end{lstlisting}
+    \end{itemize}
+    
+    代码\ref{run}的内容见附录\ref{utilitycode}代码\ref{runFile}
+
+    \subsection{结果展示}
+    \lipsum[2]
+    
+\section{实验总结}
+lipsum[1]
+\begin{appendices}
+\section{参考文献}
+\label{reference}
+\begin{enumerate}
+    \item The labels consists of sequential numbers.
+    \item The numbers starts at 1 with every call to the enumerate environment.
+  \end{enumerate}
+    \section{辅助代码}
+    \label{utilitycode}
+    \shfilescript{buildFile}{build.sh文件内容}{../build.sh}
+    \shfilescript{runFile}{run.sh文件内容}{../run.sh}
+\end{appendices}
 \end{document}
