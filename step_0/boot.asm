@@ -1,5 +1,5 @@
 %define w(x) __utf32__(x) 
-    org 0100h
+    org 07c00h
     mov ax, cs
     mov ds, ax
     mov es, ax
@@ -15,7 +15,7 @@ DispStr:
     mov dl, 0
     int 10h
     ret
-BootMessage: dd w(`\ue9a2\u9c00`), 0
+BootMessage: db 'hello world!'
 length equ ($-BootMessage)
     times 510-($-$$) db 0
     dw 0xaa55

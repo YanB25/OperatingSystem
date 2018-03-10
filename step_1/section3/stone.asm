@@ -1,163 +1,169 @@
-; 程序源代码（stone.asm）
-; 本程序在文本方式显示器上从左边射出一个*号,以45度向右下运动，撞到边框后反射,如此类推.
-;  凌应标 2014/3
-;   MASM汇编格式
+; stone.asm
+; show a running 'A', 'B' and my name
      Dn_Rt equ 1                  ;D-Down,U-Up,R-right,L-Left
      Up_Rt equ 2                  ;
      Up_Lt equ 3                  ;
      Dn_Lt equ 4                  ;
      delay equ 50000					; 计时器延迟计数,用于控制画框的速度
      ddelay equ 580					; 计时器延迟计数,用于控制画框的速度
-     .386
-     org 100h					; 程序加载到100h，可用于生成COM
-     ASSUME cs:code,ds:code
-code SEGMENT
+     DownSideBoundary equ 25
+     UpSideBoundary equ 0
+     LeftSideBoundary equ 0
+     RightSideBoundary equ 80
+     org 07c00h					; 程序加载到100h，可用于生成COM
+[SECTION .text]
 start:
-	;xor ax,ax					; AX = 0   程序加载到0000：100h才能正确执行
       mov ax,cs
-	mov es,ax					; ES = 0
-	mov ds,ax					; DS = CS
-	mov es,ax					; ES = CS
-	mov ax,0B800h				; 文本窗口显存起始地址
-	mov gs,ax					; GS = B800h
-      mov byte[char],'A'
+      mov es,ax					; ES = 0
+      mov ds,ax					; DS = CS
+      mov es,ax					; ES = CS
+      mov ax,0B800h				; 文本窗口显存起始地址
+      mov gs,ax					; GS = B800h
 loop1:
-	dec word[count]				; 递减计数变量
-	jnz loop1					; >0：跳转;
-	mov word[count],delay
-	dec word[dcount]				; 递减计数变量
+      dec word[count]				; 递减计数变量
+      jnz loop1					; >0：跳转;
+      mov word[count],delay
+      dec word[dcount]				; 递减计数变量
       jnz loop1
-	mov word[count],delay
-	mov word[dcount],ddelay
+      mov word[count],delay
+      mov word[dcount],ddelay
 
+; setTimeOut callback here
+; main logic
       mov al,1
       cmp al,byte[rdul]
-	jz  DnRt
+      jz  DnRt
       mov al,2
       cmp al,byte[rdul]
-	jz  UpRt
+      jz  UpRt
       mov al,3
       cmp al,byte[rdul]
-	jz  UpLt
+      jz  UpLt
       mov al,4
       cmp al,byte[rdul]
-	jz  DnLt
-      jmp $	
+      jz  DnLt
+      jmp $
 
 DnRt:
-	inc word[x]
-	inc word[y]
-	mov bx,word[x]
-	mov ax,25
-	sub ax,bx
+      inc word[x]
+      inc word[y]
+      mov bx,word[x]
+      mov ax, DownSideBoundary
+      sub ax,bx
       jz  dr2ur
-	mov bx,word[y]
-	mov ax,80
-	sub ax,bx
+      mov bx,word[y]
+      mov ax,80
+      sub ax,bx
       jz  dr2dl
-	jmp show
+      jmp show
 dr2ur:
       mov word[x],23
-      mov byte[rdul],Up_Rt	
+      mov byte[rdul],Up_Rt
       jmp show
 dr2dl:
       mov word[y],78
-      mov byte[rdul],Dn_Lt	
+      mov byte[rdul],Dn_Lt
       jmp show
 
 UpRt:
-	dec word[x]
-	inc word[y]
-	mov bx,word[y]
-	mov ax,80
-	sub ax,bx
+      dec word[x]
+      inc word[y]
+      mov bx,word[y]
+      mov ax,80
+      sub ax,bx
       jz  ur2ul
-	mov bx,word[x]
-	mov ax,-1
-	sub ax,bx
+      mov bx,word[x]
+      mov ax,-1
+      sub ax,bx
       jz  ur2dr
-	jmp show
+      jmp show
 ur2ul:
       mov word[y],78
-      mov byte[rdul],Up_Lt	
+      mov byte[rdul],Up_Lt
       jmp show
 ur2dr:
       mov word[x],1
-      mov byte[rdul],Dn_Rt	
+      mov byte[rdul],Dn_Rt
       jmp show
 
-	
-	
+
+
 UpLt:
-	dec word[x]
-	dec word[y]
-	mov bx,word[x]
-	mov ax,-1
-	sub ax,bx
+      dec word[x]
+      dec word[y]
+      mov bx,word[x]
+      mov ax,-1
+      sub ax,bx
       jz  ul2dl
-	mov bx,word[y]
-	mov ax,-1
-	sub ax,bx
+      mov bx,word[y]
+      mov ax,-1
+      sub ax,bx
       jz  ul2ur
-	jmp show
+      jmp show
 
 ul2dl:
       mov word[x],1
-      mov byte[rdul],Dn_Lt	
+      mov byte[rdul],Dn_Lt
       jmp show
 ul2ur:
       mov word[y],1
-      mov byte[rdul],Up_Rt	
+      mov byte[rdul],Up_Rt
       jmp show
 
-	
-	
+
+
 DnLt:
-	inc word[x]
-	dec word[y]
-	mov bx,word[y]
-	mov ax,-1
-	sub ax,bx
+      inc word[x]
+      dec word[y]
+      mov bx,word[y]
+      mov ax,-1
+      sub ax,bx
       jz  dl2dr
-	mov bx,word[x]
-	mov ax,25
-	sub ax,bx
+      mov bx,word[x]
+      mov ax,25
+      sub ax,bx
       jz  dl2ul
-	jmp show
+      jmp show
 
 dl2dr:
       mov word[y],1
-      mov byte[rdul],Dn_Rt	
+      mov byte[rdul],Dn_Rt
       jmp show
-	
+
 dl2ul:
       mov word[x],23
-      mov byte[rdul],Up_Lt	
+      mov byte[rdul],Up_Lt
       jmp show
-	
-show:	
+
+show:
+;input
+; x, y for cordination
+; char for the character
       xor ax,ax                 ; 计算显存地址
       mov ax,word[x]
-	mov bx,80
-	mul bx
-	add ax,word[y]
-	mov bx,2
-	mul bx
-	mov bx,ax
-	mov ah,0Fh				;  0000：黑底、1111：亮白字（默认值为07h）
-	mov al,byte[char]			;  AL = 显示字符值（默认值为20h=空格符）
-	mov es:[bx],ax  		;  显示字符的ASCII码值
-	jmp loop1
-	
+      mov bx,80
+      mul bx
+      add ax,word[y] ; ax = 80 * x + y
+      mov bx,2
+      mul bx
+      mov bx,ax ; bx = 2(80 * x + y)
+      mov ah,0Fh				;  0000：黑底、1111：亮白字（默认值为07h）
+      mov al,byte[char]			;  AL = 显示字符值（默认值为20h=空格符）
+      mov [gs:bx],ax  		;  显示字符的ASCII码值
+      jmp loop1
+
 end:
-    jmp $                   ; 停止画框，无限循环 
-	
-datadef:	
+    jmp $                   ; 停止画框，无限循环
+
+datadef:
     count dw delay
     dcount dw ddelay
     rdul db Dn_Rt         ; 向右下运动
     x    dw 7
     y    dw 0
     char db 'A'
-code ENDS
-     END start
+
+; below for boot
+    times 510-($-$$) db 0
+stack:
+      dw 0xaa55
