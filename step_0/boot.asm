@@ -1,5 +1,5 @@
 %define w(x) __utf32__(x) 
-    org 07c00h
+    org 0100h
     mov ax, cs
     mov ds, ax
     mov es, ax
