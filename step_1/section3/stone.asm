@@ -4,21 +4,21 @@
      Up_Rt equ 2                  ;
      Up_Lt equ 3                  ;
      Dn_Lt equ 4                  ;
-     delay equ 50000					; ¼ÆÊ±Æ÷ÑÓ³Ù¼ÆÊý,ÓÃÓÚ¿ØÖÆ»­¿òµÄËÙ¶È
-     ddelay equ 580					; ¼ÆÊ±Æ÷ÑÓ³Ù¼ÆÊý,ÓÃÓÚ¿ØÖÆ»­¿òµÄËÙ¶È
+     delay equ 50000					; ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ó³Ù¼ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½Æ»ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
+     ddelay equ 580					; ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ó³Ù¼ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½Æ»ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
      DownSideBoundary equ 25
      UpSideBoundary equ 0
      LeftSideBoundary equ 0
      RightSideBoundary equ 80
      ScreenLength equ 25 * 80 * 2
-     org 07c00h					; ³ÌÐò¼ÓÔØµ½100h£¬¿ÉÓÃÓÚÉú³ÉCOM
+     org 07c00h					; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½100hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½COM
 [SECTION .text]
 start:
       mov ax,cs
       mov es,ax					; ES = 0
       mov ds,ax					; DS = CS
       mov es,ax					; ES = CS
-      mov ax,0B800h				; ÎÄ±¾´°¿ÚÏÔ´æÆðÊ¼µØÖ·
+      mov ax,0B800h				; ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Ö·
       mov gs,ax					; GS = B800h
       mov dh, byte[style]
       call clearTheScreen
@@ -27,10 +27,10 @@ start:
       mov dl, byte[char] ; init char to what I want
       mov word[y], 39
 loop1:
-      dec word[count]				; µÝ¼õ¼ÆÊý±äÁ¿
-      jnz loop1					; >0£ºÌø×ª;
+      dec word[count]				; ï¿½Ý¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      jnz loop1					; >0ï¿½ï¿½ï¿½ï¿½×ª;
       mov word[count],delay
-      dec word[dcount]				; µÝ¼õ¼ÆÊý±äÁ¿
+      dec word[dcount]				; ï¿½Ý¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       jnz loop1
       mov word[count],delay
       mov word[dcount],ddelay
@@ -165,7 +165,7 @@ show:
       and dh, 0x7F
 show_kernel:
       push dx
-      xor ax,ax                 ; ¼ÆËãÏÔ´æµØÖ·
+      xor ax,ax                 ; ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½Ö·
       mov ax,word[x]
       mov bx,80
       mul bx
@@ -173,11 +173,11 @@ show_kernel:
       mov bx,2
       mul bx
       mov bx,ax ; bx = 2(80 * x + y)
-      ;mov al,byte[char]			;  AL = ÏÔÊ¾×Ö·ûÖµ£¨Ä¬ÈÏÖµÎª20h=¿Õ¸ñ·û£© 
+      ;mov al,byte[char]			;  AL = ï¿½ï¿½Ê¾ï¿½Ö·ï¿½Öµï¿½ï¿½Ä¬ï¿½ï¿½ÖµÎª20h=ï¿½Õ¸ï¿½ï¿½ï¿½ï¿½ 
       pop dx
       mov ax, dx ;get ax to the char
-      ;mov ah, byte[style]				;  0000£ººÚµ×¡¢1111£ºÁÁ°××Ö£¨Ä¬ÈÏÖµÎª07h£©
-      mov [gs:bx],ax  		;  ÏÔÊ¾×Ö·ûµÄASCIIÂëÖµ
+      ;mov ah, byte[style]				;  0000ï¿½ï¿½ï¿½Úµ×¡ï¿½1111ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö£ï¿½Ä¬ï¿½ï¿½ÖµÎª07hï¿½ï¿½
+      mov [gs:bx],ax  		;  ï¿½ï¿½Ê¾ï¿½Ö·ï¿½ï¿½ï¿½ASCIIï¿½ï¿½Öµ
       ret
 showMyNameAndId:
       push dx ;save from the shooting format
@@ -202,7 +202,7 @@ showNameIdSetting:
       jmp showNameLoop
 
 end:
-    jmp $                   ; Í£Ö¹»­¿ò£¬ÎÞÏÞÑ­»·
+    jmp $                   ; Í£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½
 
 clearChar:
       mov dl, 'A'
@@ -221,7 +221,7 @@ clearWorker:
 datadef:
     count dw delay
     dcount dw ddelay
-    rdul db Dn_Rt         ; ÏòÓÒÏÂÔË¶¯
+    rdul db Dn_Rt         ; ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¶ï¿½
     x    dw 12
     y    dw 32
     char db 'A'
