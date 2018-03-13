@@ -22,7 +22,7 @@ start:
       mov gs,ax					; GS = B800h
       mov dh, byte[style]
       call clearTheScreen
-      call showMyNameAndId
+      call sn
 
       mov dl, byte[char] ; init char to what I want
       mov word[y], 39
@@ -179,27 +179,38 @@ show_kernel:
       ;mov ah, byte[style]				;  0000���ڵס�1111�������֣�Ĭ��ֵΪ07h��
       mov [gs:bx],ax  		;  ��ʾ�ַ���ASCII��ֵ
       ret
-showMyNameAndId:
-      push dx ;save from the shooting format
-      mov dh, byte[style]
-      mov bx, 0 ; index
+; showMyNameAndId:
+;       push dx ;save from the shooting format
+;       mov dh, byte[style]
+;       mov bx, 0 ; index
+;       mov cx, myNameAndIdLength
+; showNameLoop:
+;       loop showNameIdSetting
+;       pop dx
+;       ret
+; showNameIdSetting:
+;       mov dl, byte[myNameAndId+bx]
+;       inc bx
+;       push bx
+;       push cx
+;       call show_kernel
+;       pop cx
+;       pop bx
+;       mov al, byte[y]
+;       inc ax
+;       mov byte[y], al
+;       jmp showNameLoop
+sn:
+      push dx
+      mov ax, 0B800h
+      mov es, ax ; es = 0B800H
+      mov ax, 0
+      mov si, myNameAndId
+      mov di, ax
       mov cx, myNameAndIdLength
-showNameLoop:
-      loop showNameIdSetting
+      rep movsb
       pop dx
       ret
-showNameIdSetting:
-      mov dl, byte[myNameAndId+bx]
-      inc bx
-      push bx
-      push cx
-      call show_kernel
-      pop cx
-      pop bx
-      mov al, byte[y]
-      inc ax
-      mov byte[y], al
-      jmp showNameLoop
 
 end:
     jmp $                   ; ֹͣ��������ѭ��
