@@ -18,6 +18,7 @@ show_at_call:
 
 show_call:
     push gs
+    push dx
 
     mov ax, 0B800H
     mov gs, ax
@@ -34,6 +35,7 @@ show_call:
     mov ax, word[bp]
     mov [gs:bx],ax  
 
+    pop dx
     pop gs
     ret
 

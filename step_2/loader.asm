@@ -91,6 +91,22 @@ wait_key:
 load:
     ; cl the nth sector to load
     ; bx the base address to put the code
+; .test_has_load:
+;     push bx
+;     mov ax, 1
+;     sub cl, 1
+;     shl ax, cl
+;     add cl, 1
+;     mov bx, [hasLoaded]
+;     and bx, ax 
+;     jnz .Ret
+; .set_flag:
+;     mov bx, [hasLoaded]
+;     or bx, ax 
+;     mov [hasLoaded], bx
+;     pop bx
+
+.body:
     mov ax, 0
     mov es, ax ; which segment to load
     mov ah, 2 ; function number
@@ -99,6 +115,11 @@ load:
     mov ch, 0 
     int 13H ; TODO: unkown bugs
     ret    
+
+.Ret:
+    pop bx
+    ret
+
 
 printStr:
     ; bp point to str address
@@ -126,6 +147,7 @@ clearScreen:
     loop .Loop
     ret
 data:
+hasLoaded db 0 ; x x b s a e w q
 phy_base equ 0A100H ; where to load
 promt db `press Q, E, R, A, S, D to load a program\n\rpress L to clear the screen.`
 length equ $ - promt
