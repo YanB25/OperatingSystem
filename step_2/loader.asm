@@ -53,6 +53,7 @@ wait_key:
     je .clear_screen
 
     jmp wait_key
+    ;jmp .UL ; if invalid is press, just jump to UL
 
 
 .DR:
@@ -96,7 +97,7 @@ load:
     mov al, 1 ; load one sector
     mov dx, 0 ; dl = 0 for floppy disk, dh = 0 for 0 head
     mov ch, 0 
-    int 13H
+    int 13H ; TODO: unkown bugs
     ret    
 
 printStr:

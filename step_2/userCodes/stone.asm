@@ -2,11 +2,11 @@
 ; show a running 'A', 'B' and my name
 %ifdef DEBUG
       delay equ 1000
-%else 
+%else
       delay equ 50000
 %endif
 
-%ifdef UL 
+%ifdef UL
      mycode equ 'q'
      DownSideBoundary equ 12
      UpSideBoundary equ -1 ; for some reason, minus one
@@ -15,7 +15,7 @@
      _x equ 6
      _y equ 13
      org 0A300H
-%elifdef UP 
+%elifdef UP
      mycode equ 'w'
      DownSideBoundary equ 12
      UpSideBoundary equ -1 ; for some reason, minus one
@@ -24,7 +24,7 @@
      _x equ 6
      _y equ 40
      org 0A500H
-%elifdef UR 
+%elifdef UR
      mycode equ 'e'
      DownSideBoundary equ 12
      UpSideBoundary equ -1 ; for some reason, minus one
@@ -33,7 +33,7 @@
      _x equ 1
      _y equ 70
      org 0A700H
-%elifdef DL 
+%elifdef DL
      mycode equ 'a'
      DownSideBoundary equ 25
      UpSideBoundary equ 12 ; for some reason, minus one
@@ -42,7 +42,7 @@
      _x equ 20
      _y equ 13
      org 0A900H
-%elifdef DN 
+%elifdef DN
      mycode equ 's'
      DownSideBoundary equ 25
      UpSideBoundary equ 12 ; for some reason, minus one
@@ -52,7 +52,7 @@
      _y equ 40
      org 0AB00H
 
-%elifdef DR 
+%elifdef DR
      mycode equ 'd'
      DownSideBoundary equ 25
      UpSideBoundary equ 12 ; for some reason, minus one
@@ -108,7 +108,7 @@ loop1:
       mov al,4
       cmp al,byte[rdul]
       jz  DnLt
-      jmp $ 
+      jmp $
 
 DnRt:
       inc word[x]
@@ -207,7 +207,7 @@ dl2ul:
 
 
 show:
-    push bx 
+    push bx
 
     mov ax, word [x]
     push ax
@@ -236,6 +236,8 @@ test_key_press:
     cmp ah, 1
     jz loop1.Loop
 
+    ; cmp al, mycode
+    ; jz loop1.Loop
     ; key pressed
     ; xor ax, ax
     ; int 16H

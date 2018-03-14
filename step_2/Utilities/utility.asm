@@ -41,7 +41,7 @@ clear_screen:
     push si
     push es
 
-    mov cx, ScreenLength
+    mov cx, ScreenLength ;TODO: can i change cx?
     mov si, 0
     mov ax, 0B800H
     mov es, ax
@@ -55,6 +55,6 @@ clear_screen:
     ret
 
 key_press_callback:
-    jmp loader_back_address
+    jmp [loader_back_address] ;TODO: change here!
 
 ScreenLength equ 25 * 80 * 2
