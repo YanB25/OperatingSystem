@@ -62,6 +62,9 @@
      _y equ 70
      org 0AD00H
 %endif
+
+
+
      Dn_Rt equ 1                  ;D-Down,U-Up,R-right,L-Left
      Up_Rt equ 2                  ;
      Up_Lt equ 3                  ;
@@ -69,24 +72,27 @@
      ddelay equ 580					; ��ʱ���ӳټ���,���ڿ��ƻ�����ٶ�
  eBoundary equ 80
      ScreenLength equ 25 * 80 * 2
+     sys_base equ 0A100H
 [SECTION .text]
 start:
       mov ax,cs
       mov es,ax					; ES = 0
       mov ds,ax					; DS = CS
       mov es,ax					; ES = CS
-      mov ax,0B800h				; �ı������Դ���ʼ��ַ
-      mov gs,ax					; GS = B800h
+      mov ax, stack
+      mov sp, ax
       mov dh, byte[style]
 
 loop1:
-      dec word[count]				; �ݼ���������
-      jnz loop1					; >0����ת;
-      mov word[count],delay
-      dec word[dcount]				; �ݼ���������
-      jnz loop1
-      mov word[count],delay
-      mov word[dcount],ddelay
+    jmp test_key_press
+.Loop:
+    dec word[count]				; �ݼ���������
+    jnz loop1.Loop					; >0����ת;
+    mov word[count],delay
+    dec word[dcount]				; �ݼ���������
+    jnz loop1
+    mov word[count],delay
+    mov word[dcount],ddelay
 
 ; setTimeOut callback here
 ; main logic
@@ -102,7 +108,7 @@ loop1:
       mov al,4
       cmp al,byte[rdul]
       jz  DnLt
-      jmp $ ; FIXME: a bug, this instruction is not supposed to be reached
+      jmp $ 
 
 DnRt:
       inc word[x]
@@ -199,20 +205,50 @@ dl2ul:
       call show
       jmp loop1
 
+
 show:
-      xor ax,ax                 ; �����Դ��ַ
-      inc byte [style]
-      mov ax,word[x]
-      mov bx,80
-      mul bx
-      add ax,word[y] ; ax = 80 * x + y
-      mov bx,2
-      mul bx
-      mov bx,ax ; bx = 2(80 * x + y)
-      mov al,byte[char]			;  AL = ��ʾ�ַ�ֵ��Ĭ��ֵΪ20h=�ո���� 
-      mov ah, [style]
-      mov [gs:bx],ax  		;  ��ʾ�ַ���ASCII��ֵ
-      ret
+    push bx 
+
+    mov ax, word [x]
+    push ax
+
+    mov ax, word [y]
+    push ax
+
+    mov ah, [style]
+    mov al, [char]
+    push ax
+
+    mov bp, sp
+    mov bx, 0A100H
+
+    call [bx + 6]
+
+    times 3 pop bx
+    pop bx
+
+    ret
+
+test_key_press:
+    xor ax, ax
+    mov ah, 1
+    int 16H
+    cmp ah, 1
+    jz loop1.Loop
+
+    ; key pressed
+    ; xor ax, ax
+    ; int 16H
+    ; cmp al, mycode
+    ; jz loop1.Loop
+
+    ; catch key press
+    ; TODO: maybe bug: this step would lose
+    ; some registers' infomation.
+    mov bx, sys_base
+    jmp [bx + 0AH]
+
+
 end:
     jmp $                   ; ֹͣ��������ѭ��
 
@@ -224,9 +260,10 @@ datadef:
     dcount dw ddelay
     rdul db Dn_Rt         ; �������˶�
     char db 'A'
-    style db 8Fh
+    style db 0Fh
     x dw _x
     y db _y
 
 ; below for boot
     times 510-($-$$) db 0
+stack:

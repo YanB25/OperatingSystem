@@ -20,17 +20,17 @@ init_utility:
     mov [bx + 2], ax
 
 
-;TODO: test please delete it when finish
-test_case:
-    mov bx, phy_base
-    jmp [bx + 4]
-
 wait_key:
     xor al, al
-    mov ah, 0
+    mov ah, 1
     int 16H
-    cmp al, 0
+    cmp ah, 1
     jz wait_key ; no key pressed
+
+    ; fetch the key
+    xor ax, ax
+    int 16H
+    ; now key in `al`
 
     mov cl, 2 ; initial to 2(th) sector
     mov bx, phy_base ; initial to base
@@ -48,6 +48,8 @@ wait_key:
     je .DN
     cmp al, 'd'
     je .DR
+    cmp al, 'l'
+    je .clear_screen
 
     jmp wait_key
 
@@ -74,7 +76,14 @@ wait_key:
     call load
     jmp bx
 
+.clear_screen:
+    push bx
 
+    mov bx, phy_base
+    call [bx+8]
+
+    pop bx
+    jmp wait_key
 
 
 load:
@@ -116,7 +125,7 @@ clearScreen:
     ret
 data:
 phy_base equ 0A100H ; where to load
-promt db "press Q, E, R, A, S, D to load a program"
+promt db `press Q, E, R, A, S, D to load a program\n\rpress L to clear the screen.`
 length equ $ - promt
 newline db `\n\r`
 nl_length equ $ - newline
