@@ -7,51 +7,60 @@
 %endif
 
 %ifdef UL 
+     mycode equ 'q'
      DownSideBoundary equ 12
      UpSideBoundary equ -1 ; for some reason, minus one
      LeftSideBoundary equ 0
      RightSideBoundary equ 30
      _x equ 6
      _y equ 13
+     org 0A300H
 %elifdef UP 
+     mycode equ 'w'
      DownSideBoundary equ 12
      UpSideBoundary equ -1 ; for some reason, minus one
      LeftSideBoundary equ 30
      RightSideBoundary equ 60
      _x equ 6
      _y equ 40
-
+     org 0A500H
 %elifdef UR 
+     mycode equ 'e'
      DownSideBoundary equ 12
      UpSideBoundary equ -1 ; for some reason, minus one
      LeftSideBoundary equ 60
      RightSideBoundary equ 79
      _x equ 1
      _y equ 70
-
+     org 0A700H
 %elifdef DL 
+     mycode equ 'a'
      DownSideBoundary equ 25
      UpSideBoundary equ 12 ; for some reason, minus one
      LeftSideBoundary equ 0
      RightSideBoundary equ 30
      _x equ 20
      _y equ 13
+     org 0A900H
 %elifdef DN 
+     mycode equ 's'
      DownSideBoundary equ 25
      UpSideBoundary equ 12 ; for some reason, minus one
      LeftSideBoundary equ 30
      RightSideBoundary equ 60
      _x equ 20
      _y equ 40
+     org 0AB00H
 
 %elifdef DR 
+     mycode equ 'd'
      DownSideBoundary equ 25
      UpSideBoundary equ 12 ; for some reason, minus one
      LeftSideBoundary equ 60
      RightSideBoundary equ 79
      _x equ 20
      _y equ 70
-
+     org 0AD00H
 %endif
      Dn_Rt equ 1                  ;D-Down,U-Up,R-right,L-Left
      Up_Rt equ 2                  ;

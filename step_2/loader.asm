@@ -7,14 +7,35 @@ start:
     mov cx, length
     call printStr
 
+init_utility:
+.load_utility:
+    mov cl, 2
+    mov bx, phy_base
+    call load
+.realocate_utility:
+    mov bx, 0A100H
+    mov ax, 07c00H
+    mov [bx], ax ; 07c00H to show address
+    mov ax, wait_key ; 07c00H + test_key 
+    mov [bx + 2], ax
+
+
+;TODO: test please delete it when finish
+test_case:
+    mov bx, phy_base
+    jmp [bx + 4]
+
 wait_key:
+    xor al, al
     mov ah, 0
     int 16H
     cmp al, 0
     jz wait_key ; no key pressed
 
     mov cl, 2 ; initial to 2(th) sector
+    mov bx, phy_base ; initial to base
 
+.test_key:
     cmp al, 'q'
     je .UL
     cmp al, 'w'
@@ -30,35 +51,43 @@ wait_key:
 
     jmp wait_key
 
-.load:
 
-    mov bx, phy_base
+.DR:
+    inc cl
+    add bx, 200H
+.DN:
+    inc cl
+    add bx, 200H
+.DL:
+    inc cl
+    add bx, 200H
+.UR:
+    inc cl
+    add bx, 200H
+.UP:
+    inc cl
+    add bx, 200H
+.UL:
+    inc cl
+    add bx, 200H
+
+    call load
+    jmp bx
+
+
+
+
+load:
+    ; cl the nth sector to load
+    ; bx the base address to put the code
     mov ax, 0
     mov es, ax ; which segment to load
     mov ah, 2 ; function number
     mov al, 1 ; load one sector
     mov dx, 0 ; dl = 0 for floppy disk, dh = 0 for 0 head
     mov ch, 0 
-    ;mov cl, 2 ; from 2 (th) sector
     int 13H
-
-    mov bx, phy_base
-    jmp phy_base ; FIXME: ERROR in segments
-    
-
-.DR:
-    inc cl
-.DN:
-    inc cl
-.DL:
-    inc cl
-.UR:
-    inc cl
-.UP:
-    inc cl
-.UL:
-    jmp .load
-
+    ret    
 
 printStr:
     ; bp point to str address
