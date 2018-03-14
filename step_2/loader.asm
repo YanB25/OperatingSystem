@@ -32,10 +32,11 @@ wait_key:
     int 16H
     ; now key in `al`
 
+
+.test_key:
     mov cl, 2 ; initial to 2(th) sector
     mov bx, phy_base ; initial to base
 
-.test_key:
     cmp al, 'q'
     je .UL
     cmp al, 'w'
