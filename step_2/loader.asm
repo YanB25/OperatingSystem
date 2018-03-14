@@ -13,25 +13,51 @@ wait_key:
     cmp al, 0
     jz wait_key ; no key pressed
 
+    mov cl, 2 ; initial to 2(th) sector
+
+    cmp al, 'q'
+    je .UL
+    cmp al, 'w'
+    je .UP
     cmp al, 'e'
-    jnz wait_key ; key not 'e'
+    je .UR
+    cmp al, 'a'
+    je .DL
+    cmp al, 's'
+    je .DN
+    cmp al, 'd'
+    je .DR
 
-    ;key is e
-    mov cx, nl_length
-    mov bp, newline
-    call printStr
+    jmp wait_key
 
-    mov bx, phy_base 
+.load:
+
+    mov bx, phy_base
     mov ax, 0
     mov es, ax ; which segment to load
     mov ah, 2 ; function number
     mov al, 1 ; load one sector
     mov dx, 0 ; dl = 0 for floppy disk, dh = 0 for 0 head
     mov ch, 0 
-    mov cl, 2 ; from 2 (th) sector
+    ;mov cl, 2 ; from 2 (th) sector
     int 13H
+
+    mov bx, phy_base
+    jmp phy_base ; FIXME: ERROR in segments
     
-    jmp phy_base
+
+.DR:
+    inc cl
+.DN:
+    inc cl
+.DL:
+    inc cl
+.UR:
+    inc cl
+.UP:
+    inc cl
+.UL:
+    jmp .load
 
 
 printStr:
@@ -60,8 +86,8 @@ clearScreen:
     loop .Loop
     ret
 data:
-phy_base dw 08000H ; where to load
-promt db "press E to load a program"
+phy_base equ 0A100H ; where to load
+promt db "press Q, E, R, A, S, D to load a program"
 length equ $ - promt
 newline db `\n\r`
 nl_length equ $ - newline

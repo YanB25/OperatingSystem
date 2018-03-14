@@ -60,7 +60,6 @@
      ddelay equ 580					; ��ʱ���ӳټ���,���ڿ��ƻ�����ٶ�
  eBoundary equ 80
      ScreenLength equ 25 * 80 * 2
-     org 07c00h					; ������ص�100h������������COM
 [SECTION .text]
 start:
       mov ax,cs
@@ -94,7 +93,7 @@ loop1:
       mov al,4
       cmp al,byte[rdul]
       jz  DnLt
-      jmp $
+      jmp $ ; FIXME: a bug, this instruction is not supposed to be reached
 
 DnRt:
       inc word[x]
@@ -222,4 +221,3 @@ datadef:
 
 ; below for boot
     times 510-($-$$) db 0
-stack:

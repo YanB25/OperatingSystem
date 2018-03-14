@@ -11,7 +11,7 @@
      LeftSideBoundary equ 0
      RightSideBoundary equ 80
      ScreenLength equ 25 * 80 * 2
-     org 07c00h					; ������ص�100h������������COM
+     ;org 07c00h					; ������ص�100h������������COM
 [SECTION .text]
 start:
       mov ax,cs
