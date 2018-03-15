@@ -51,7 +51,7 @@ clear_screen:
     mov byte[es:si], 0
     inc si
     loop .Loop
-
+.RET:
     pop es
     pop si
     ret

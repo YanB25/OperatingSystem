@@ -3,9 +3,6 @@ start:
     mov ax, 0
     mov es, ax
     mov ds, ax
-    mov bp, promt
-    mov cx, length
-    call printStr
 
 init_utility:
 .load_utility:
@@ -19,6 +16,12 @@ init_utility:
     mov ax, wait_key.test_key ; 07c00H + test_key 
     mov [bx + 2], ax
 
+init_screen:
+.clean_up_screen:
+    mov bx, phy_base
+    call [bx + 8] ; call clear screen
+.print_promt:
+    call printStr
 
 wait_key:
     ; init
@@ -132,18 +135,46 @@ load:
 printStr:
     ; bp point to str address
     ; cx contents the length
-    mov ah, 0EH
-    mov si, 0
+;     push gs
+;     push si
+;     push di
+;     push bx
+; 
+;     mov ax, 0B800H
+;     mov gs, ax
+;     mov si, 0
+;     mov di, 0
+;     mov bx, promt
+;     mov cx, length
+; .Loop:
+;     mov al, byte[bx + si]
+;     mov ah, 0FH
+;     mov[gs:di], ax
+;     add di, 2
+;     inc si
+;     loop .Loop
+; 
+;     pop bx
+;     pop di
+;     pop si
+;     pop gs
+;     ret    
     push bx
-    mov bl, 0
-.Loop:
-    mov al, [bp + si]
+    push bp
+
+    mov ah, 13H
+    mov al, 1
+    mov bl, 0FH
+    mov bh, 0
+    mov dh, 5
+    mov dl, 8
+    mov bp, promt
+    mov cx, length
     int 10H
-    inc si
-    loop .Loop
+
+    pop bp
     pop bx
     ret
-    
 clearScreen:
     mov cx, ScreenLength
     mov si, 0
@@ -157,7 +188,8 @@ clearScreen:
 data:
 hasLoaded db 0 ; x x b s a e w q
 phy_base equ 0A100H ; where to load
-promt db `press Q, E, R, A, S, D to load a program\n\rpress L to clear the screen.`
+promt db `press Q, E, R, A, S, D to load a program\n\r        press L to clear the screen.`
+db `\n\r\n\r        made by yanbin, 16337269`
 length equ $ - promt
 newline db `\n\r`
 nl_length equ $ - newline
