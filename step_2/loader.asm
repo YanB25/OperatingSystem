@@ -28,10 +28,7 @@ wait_key:
     mov ax, 0
     mov es, ax
     mov ds, ax
-    ; mov cs, ax
 
-
-    
     xor al, al
     mov ah, 1
     int 16H
@@ -64,7 +61,6 @@ wait_key:
     je .clear_screen
 
     jmp wait_key
-    ;jmp .UL ; if invalid is press, just jump to UL
 
 
 .DR:
@@ -92,6 +88,7 @@ wait_key:
 .clear_screen:
     push bx
 
+    mov si, 4 * 80 * 2
     mov bx, phy_base
     call [bx+8]
 
@@ -102,21 +99,6 @@ wait_key:
 load:
     ; cl the nth sector to load
     ; bx the base address to put the code
-; .test_has_load:
-;     push bx
-;     mov ax, 1
-;     sub cl, 1
-;     shl ax, cl
-;     add cl, 1
-;     mov bx, [hasLoaded]
-;     and bx, ax 
-;     jnz .Ret
-; .set_flag:
-;     mov bx, [hasLoaded]
-;     or bx, ax 
-;     mov [hasLoaded], bx
-;     pop bx
-
 .body:
     mov ax, 0
     mov es, ax ; which segment to load
@@ -135,55 +117,36 @@ load:
 printStr:
     ; bp point to str address
     ; cx contents the length
-;     push gs
-;     push si
-;     push di
-;     push bx
-; 
-;     mov ax, 0B800H
-;     mov gs, ax
-;     mov si, 0
-;     mov di, 0
-;     mov bx, promt
-;     mov cx, length
-; .Loop:
-;     mov al, byte[bx + si]
-;     mov ah, 0FH
-;     mov[gs:di], ax
-;     add di, 2
-;     inc si
-;     loop .Loop
-; 
-;     pop bx
-;     pop di
-;     pop si
-;     pop gs
-;     ret    
+
     push bx
     push bp
+    push cx
 
+    mov cx, length
+    mov bp, promt
     mov ah, 13H
     mov al, 1
     mov bl, 0FH
     mov bh, 0
-    mov dh, 5
+    mov dh, 0
     mov dl, 8
-    mov bp, promt
-    mov cx, length
     int 10H
 
+    pop cx
     pop bp
     pop bx
     ret
+
+
 clearScreen:
     mov cx, ScreenLength
-    mov si, 0
     mov ax, 0B800H
     mov es, ax
 .Loop:
     mov byte[es:si], 0
     inc si
     loop .Loop
+
     ret
 data:
 hasLoaded db 0 ; x x b s a e w q

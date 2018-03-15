@@ -8,9 +8,9 @@
 
 %ifdef UL
      mycode equ 'q'
-     DownSideBoundary equ 10
-     UpSideBoundary equ -1 ; for some reason, minus one
-     LeftSideBoundary equ 0
+     DownSideBoundary equ 12
+     UpSideBoundary equ 4 ; for some reason, minus one
+     LeftSideBoundary equ 1
      RightSideBoundary equ 23
      _x equ 1
      _y equ 10
@@ -18,8 +18,8 @@
      DIRECTION equ Up_Lt
 %elifdef UP
      mycode equ 'w'
-     DownSideBoundary equ 10
-     UpSideBoundary equ -1 ; for some reason, minus one
+     DownSideBoundary equ 12
+     UpSideBoundary equ 4 ; for some reason, minus one
      LeftSideBoundary equ 29
      RightSideBoundary equ 50
      _x equ 4
@@ -28,8 +28,8 @@
      DIRECTION equ Up_Lt
 %elifdef UR
      mycode equ 'e'
-     DownSideBoundary equ 10
-     UpSideBoundary equ -1 ; for some reason, minus one
+     DownSideBoundary equ 12
+     UpSideBoundary equ 4 ; for some reason, minus one
      LeftSideBoundary equ 56
      RightSideBoundary equ 79
      _x equ 1
@@ -39,7 +39,7 @@
 %elifdef DL
      mycode equ 'a'
      DownSideBoundary equ 25
-     UpSideBoundary equ 14 ; for some reason, minus one
+     UpSideBoundary equ 16 ; for some reason, minus one
      LeftSideBoundary equ 0
      RightSideBoundary equ 23
      _x equ 23
@@ -49,7 +49,7 @@
 %elifdef DN
      mycode equ 's'
      DownSideBoundary equ 25
-     UpSideBoundary equ 14 ; for some reason, minus one
+     UpSideBoundary equ 16 ; for some reason, minus one
      LeftSideBoundary equ 29
      RightSideBoundary equ 50
      _x equ 20
@@ -59,7 +59,7 @@
 %elifdef DR
      mycode equ 'd'
      DownSideBoundary equ 25
-     UpSideBoundary equ 14 ; for some reason, minus one
+     UpSideBoundary equ 16 ; for some reason, minus one
      LeftSideBoundary equ 56
      RightSideBoundary equ 79
      _x equ 20
