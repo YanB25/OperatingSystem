@@ -75,7 +75,8 @@
      sys_base equ 0A100H
 [SECTION .text]
 start:
-      mov ax,cs
+      mov ax, 0
+      ; mov ax,cs
       mov es,ax					; ES = 0
       mov ds,ax					; DS = CS
       mov es,ax					; ES = CS

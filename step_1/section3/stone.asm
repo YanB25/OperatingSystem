@@ -14,7 +14,8 @@
      ;org 07c00h					; ������ص�100h������������COM
 [SECTION .text]
 start:
-      mov ax,cs
+      mov ax, 0
+      ; mov ax,cs
       mov es,ax					; ES = 0
       mov ds,ax					; DS = CS
       mov es,ax					; ES = CS
