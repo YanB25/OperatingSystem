@@ -5,6 +5,7 @@ _show_at_call dw show_at_call ; 0xA104H +4
 _show_call dw show_call ; 0xA106H +6
 _clear_screen dw clear_screen ; 0xA108H +8
 _key_press_callback dw key_press_callback ; 0xA10AH + 0AH
+_special_clean_screen dw special_clean_screen; 0xA10CH +0CH
 show_at_call:
     ; bp point to str address
     ; cx contents the length
@@ -59,4 +60,24 @@ clear_screen:
 key_press_callback:
     jmp [loader_back_address] ;TODO: change here!
 
+special_clean_screen:
+    push si
+    push es
+
+    mov cx, SpecialScreenLength 
+    mov si, Diff
+    mov ax, 0B800H
+    mov es, ax
+.Loop:
+    mov byte[es:si], 0
+    inc si
+    loop .Loop
+.RET:
+    pop es
+    pop si
+    ret
+
+
 ScreenLength equ 25 * 80 * 2
+Diff equ 4 * 80 * 2
+SpecialScreenLength equ ScreenLength - Diff

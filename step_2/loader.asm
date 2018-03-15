@@ -88,9 +88,8 @@ wait_key:
 .clear_screen:
     push bx
 
-    mov si, 4 * 80 * 2
     mov bx, phy_base
-    call [bx+8]
+    call [bx+0CH]
 
     pop bx
     jmp wait_key
