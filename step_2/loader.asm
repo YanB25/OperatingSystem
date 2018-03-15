@@ -3,7 +3,6 @@ start:
     mov ax, 0
     mov es, ax
     mov ds, ax
-
 init_utility:
 .load_utility:
     mov cl, 2
@@ -150,7 +149,7 @@ clearScreen:
 data:
 hasLoaded db 0 ; x x b s a e w q
 phy_base equ 0A100H ; where to load
-promt db `press Q, E, R, A, S, D to load a program\n\r        press L to clear the screen.`
+promt db `press Q, W, E, A, S, D to load a program\n\r        press L to clear the screen.`
 db `\n\r\n\r        made by yanbin, 16337269`
 length equ $ - promt
 newline db `\n\r`
