@@ -75,12 +75,14 @@
      sys_base equ 0A100H
 [SECTION .text]
 start:
+      ;TODO:debug
+      mov ax, datadef
       mov ax, 0
       ; mov ax,cs
       mov es,ax					; ES = 0
       mov ds,ax					; DS = CS
       mov es,ax					; ES = CS
-      mov ax, stack
+      mov ax, stack + 2000H
       mov sp, ax
       mov dh, byte[style]
 
@@ -216,8 +218,9 @@ show:
     mov ax, word [y]
     push ax
 
-    mov ah, [style]
-    mov al, [char]
+     ; mov ah, 088H
+    mov ah, byte[style]
+    mov al, byte[char]
     push ax
 
     mov bp, sp
@@ -237,17 +240,21 @@ test_key_press:
     cmp ah, 1
     jz loop1.Loop
 
-    ; cmp al, mycode
-    ; jz loop1.Loop
+      xor ax, ax
+      int 16H
+      cmp al, mycode
+      jz loop1.Loop
     ; key pressed
-    ; xor ax, ax
-    ; int 16H
-    ; cmp al, mycode
-    ; jz loop1.Loop
 
     ; catch key press
     ; TODO: maybe bug: this step would lose
     ; some registers' infomation.
+     push cx
+     mov cl, byte[style]
+     inc cl
+     mov byte[style], cl
+     pop cx
+
     mov bx, sys_base
     jmp [bx + 0AH]
 
@@ -265,7 +272,7 @@ datadef:
     char db 'A'
     style db 0Fh
     x dw _x
-    y db _y
+    y dw _y
 
 ; below for boot
     times 510-($-$$) db 0

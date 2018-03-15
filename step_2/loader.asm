@@ -1,6 +1,6 @@
 org 07c00H
 start:
-    mov ax, cs
+    mov ax, 0
     mov es, ax
     mov ds, ax
     mov bp, promt
@@ -16,11 +16,19 @@ init_utility:
     mov bx, 0A100H
     mov ax, 07c00H
     mov [bx], ax ; 07c00H to show address
-    mov ax, wait_key ; 07c00H + test_key 
+    mov ax, wait_key.test_key ; 07c00H + test_key 
     mov [bx + 2], ax
 
 
 wait_key:
+    ; init
+    mov ax, 0
+    mov es, ax
+    mov ds, ax
+    ; mov cs, ax
+
+
+    
     xor al, al
     mov ah, 1
     int 16H
