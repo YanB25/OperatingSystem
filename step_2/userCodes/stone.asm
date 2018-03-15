@@ -8,59 +8,64 @@
 
 %ifdef UL
      mycode equ 'q'
-     DownSideBoundary equ 12
+     DownSideBoundary equ 10
      UpSideBoundary equ -1 ; for some reason, minus one
      LeftSideBoundary equ 0
-     RightSideBoundary equ 30
-     _x equ 6
-     _y equ 13
+     RightSideBoundary equ 23
+     _x equ 1
+     _y equ 10
      org 0A300H
+     DIRECTION equ Up_Lt
 %elifdef UP
      mycode equ 'w'
-     DownSideBoundary equ 12
+     DownSideBoundary equ 10
      UpSideBoundary equ -1 ; for some reason, minus one
-     LeftSideBoundary equ 30
-     RightSideBoundary equ 60
-     _x equ 6
+     LeftSideBoundary equ 29
+     RightSideBoundary equ 50
+     _x equ 4
      _y equ 40
      org 0A500H
+     DIRECTION equ Up_Lt
 %elifdef UR
      mycode equ 'e'
-     DownSideBoundary equ 12
+     DownSideBoundary equ 10
      UpSideBoundary equ -1 ; for some reason, minus one
-     LeftSideBoundary equ 60
+     LeftSideBoundary equ 56
      RightSideBoundary equ 79
      _x equ 1
      _y equ 70
      org 0A700H
+     DIRECTION equ Up_Rt
 %elifdef DL
      mycode equ 'a'
      DownSideBoundary equ 25
-     UpSideBoundary equ 12 ; for some reason, minus one
+     UpSideBoundary equ 14 ; for some reason, minus one
      LeftSideBoundary equ 0
-     RightSideBoundary equ 30
-     _x equ 20
-     _y equ 13
+     RightSideBoundary equ 23
+     _x equ 23
+     _y equ 10
      org 0A900H
+     DIRECTION equ Dn_Lt
 %elifdef DN
      mycode equ 's'
      DownSideBoundary equ 25
-     UpSideBoundary equ 12 ; for some reason, minus one
-     LeftSideBoundary equ 30
-     RightSideBoundary equ 60
+     UpSideBoundary equ 14 ; for some reason, minus one
+     LeftSideBoundary equ 29
+     RightSideBoundary equ 50
      _x equ 20
      _y equ 40
      org 0AB00H
-
+      DIRECTION equ Dn_Rt
 %elifdef DR
      mycode equ 'd'
      DownSideBoundary equ 25
-     UpSideBoundary equ 12 ; for some reason, minus one
-     LeftSideBoundary equ 60
+     UpSideBoundary equ 14 ; for some reason, minus one
+     LeftSideBoundary equ 56
      RightSideBoundary equ 79
      _x equ 20
      _y equ 70
      org 0AD00H
+     DIRECTION equ Dn_Rt
 %endif
 
 
@@ -268,7 +273,7 @@ clearChar:
 datadef:
     count dw delay
     dcount dw ddelay
-    rdul db Dn_Rt         ; �������˶�
+    rdul db DIRECTION         ; �������˶�
     char db 'A'
     style db 0Fh
     x dw _x
