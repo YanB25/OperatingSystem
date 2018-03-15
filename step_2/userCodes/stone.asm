@@ -53,7 +53,7 @@
      LeftSideBoundary equ 29
      RightSideBoundary equ 50
      _x equ 20
-     _y equ 40
+     _y equ 38
      org 0AB00H
       DIRECTION equ Dn_Rt
 %elifdef DR
@@ -215,6 +215,8 @@ dl2ul:
 
 
 show:
+    inc byte[style]
+    and byte[style], 0FH
     push bx
 
     mov ax, word [x]
