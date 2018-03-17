@@ -276,6 +276,19 @@
     在本项目中，所有跳转都采用\codev{jmp near}的方式。 \\
     
     在本项目中，\codev{org}的使用尤其关键。对于它的使用见..节代码。。%FIXME: ref
+    %TODO: 在这里解释org！！！
+    \subsubsection{键盘响应} \label{subsec:kbhandler}
+    对按键的响应主要通过16H系统中断完成。本项目主要使用16号中断的00H功能和01H功能。\\ 
+    
+    01H功能会检查键盘缓冲区的内容。若缓冲区为空，ax将保持不变。若缓冲区中按键缓冲，
+    则ah会被修改，而al将存储按下键的ascii码。\\
+    
+    00H的功能和01H十分相似。两者最大的不同在于对缓冲区的处理。01H功能调用在检查缓冲区后，会保留缓冲区不变。
+    这意味着，若缓冲区不为空，连续的多次使用01H号功能将得到相同的返回内容。而00H则不同，它在检查缓冲区后，若缓冲区
+    不为空，则会将缓冲区的头部取出（相当于队列的出队操作）;若缓冲区为空，程序会被阻塞直到键盘被按下。\\ 
+
+    关于按键响应的详细使用，见\ref{subsec:kbhandler}节。
+
     \subsubsection{实验环境}
         \begin{itemize} \item 操作系统 \\ 
             本实验在Linux下完成。采用Ubuntu 16.04
@@ -324,10 +337,24 @@
     
     \subsection{程序模块及相关说明}\label{subsec:modelIntroduction}
     \subsubsection{NASM宏}
-    为了产生6个互不相同的用户程序，本代码充分利用了
+    为了产生6个互不相同的用户程序，本代码充分利用了NASM的宏特性。如代码\ref{lst:userMacro}所示。\\
+    
+    首先，若编译时带有\codev{DEBUG}选项，则会使delay为1000,否则delay为50000.这是由于bochs虚拟机的性能较差，
+    在延迟太大时程序运行速度过低，导致查错不容易。故这里根据是否定义了\codev{DEBUG}宏而给出了两种不同的延时。\\
+    
+    随后，根据程序的六种不同的位置（左上、右上、左下等），定义了6个不同的宏。通过在编译时指出不同的宏，
+    程序将被编译出6种不同的版本。这些版本之间的区别在于，符号的起始坐标\codev{x}和\codev{y}，上下左右的四个边界
+    的坐标\codev{[(Down)|(Up)|(Left)|(Right)]SideBound},符号的初始运行方向和程序的偏移地址等。\\
+    
+
+    编译命令见%FIXME: ref
+    。偏移地址的解释见%FIXME:ref
+    
     \begin{figure}
     \begin{itemize}
     \item[] \begin{lstlisting}[language={[x86masm]Assembler, label=lst:userMacro, caption=用户程序中的部分宏代码]
+    ; in file stone.asm 
+
     %ifdef DEBUG
       delay equ 1000
     %else
@@ -351,7 +378,42 @@
     \end{lstlisting}
     \end{itemize}
     \end{figure}
-    \lipsum[1]
+    
+
+    \subsubsection{键盘响应}
+    对键盘的响应和中断的使用见\ref{subsec:kbhandler}节的介绍。\\
+
+    代码\ref{lst:userKbPress}介绍了用户程序中的按键响应方法。每个循环内，程序都会跳转到test_key_press.程序首先
+    检查是否有键按下，若没有，则跳转到下一次的延时循环。程序再检测按下的键是否合法，若不合法，同样跳转到下一次循环。若按键
+    是
+    
+    \begin{figure}
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language={x86masm[Assembler]}, label=lst:userKbPress, caption=用户程序中对键盘按下的响应]
+    ; in file stone.asm
+    test_key_press:
+        xor ax, ax
+        mov ah, 1
+        int 16H
+        cmp ah, 1
+        jz loop1.Loop ; if no key is pressed, jump to delay loop
+
+        xor ax, ax
+        int 16H
+        cmp al, mycode
+        jz loop1.Loop ; if pressed key stand for the program itself
+                      ; then just ignore it
+        ; key pressed
+
+        ; ...
+        ; some set-ups
+        ; ...
+
+        mov bx, sys_base
+        jmp [bx + 0AH] ; jump to a key-press handler
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
 \section{实验过程}
     \lipsum[1]
 \section{实验结果}
