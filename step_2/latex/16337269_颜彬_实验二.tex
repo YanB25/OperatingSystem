@@ -236,12 +236,12 @@
     个区域特别的方式显示你的学号姓名等个人信息。
     \subsection{组织存储方式}
     自行组织映像盘的空间,以存放四个用户可执行程序。自行组织内存的空间，以排列控制程序和用户程序等。
-    \subsection{相应按键事件}
+    \subsection{响应按键事件}
     修改参考原型代码,允许键盘输入,用于指定运行这四个有输出的用户可执
     行程序之一,要确保系统执行代码不超过 512 字节,以便放在引导扇区
 \section{实验方案}
     \subsection{基础原理}
-    \subsubsection{NASM宏} \label{subsec:NASMmacro}
+    \subsubsection{NASM宏} 
     NASM具有极其强大的宏功能。NASM宏允许程序在编译时成文本替换、代码生成、表达式运算、引入其他文件代码等强大的工作。\\
     
     本实验要求产生四个及以上的用户程序。本项目利用宏的灵活性，通过调整编译指令，在简单修改源代码的基础上，产生了6个
@@ -336,60 +336,72 @@
     
     
     \subsection{程序模块及相关说明}\label{subsec:modelIntroduction}
-    \subsubsection{NASM宏}
+    \subsubsection{NASM宏} \label{subsec:NASMmacro}
     为了产生6个互不相同的用户程序，本代码充分利用了NASM的宏特性。如代码\ref{lst:userMacro}所示。\\
     
-    首先，若编译时带有\codev{DEBUG}选项，则会使delay为1000,否则delay为50000.这是由于bochs虚拟机的性能较差，
-    在延迟太大时程序运行速度过低，导致查错不容易。故这里根据是否定义了\codev{DEBUG}宏而给出了两种不同的延时。\\
+    首先，若编译时带有\codev{DEBUG}选项，则会使delay被定义为1000,否则delay为50000。以这个方式定义delay变量
+    是由于bochs虚拟机的性能较差，
+    若delay的值较大会导致程序运行速度过低，查错变得更难。但其他虚拟机的运行速度比bochs
+    快，需要更大的delay才能让程序的动画肉眼可见。故这里根据是否定义了\codev{DEBUG}宏而给出了两种不同的延时。
+    通过简单地修改编译指令，可以使得编译后的程序适应多种机型（和虚拟机）。\\
     
-    随后，根据程序的六种不同的位置（左上、右上、左下等），定义了6个不同的宏。通过在编译时指出不同的宏，
-    程序将被编译出6种不同的版本。这些版本之间的区别在于，符号的起始坐标\codev{x}和\codev{y}，上下左右的四个边界
+    随后，根据程序的六种不同的位置（如左上、右上、左下等），定义了6个不同的宏。通过在编译时指出不同的宏，
+    程序将被编译出6种不同的版本。如此即可在几乎不修改代码的前提下产生众多相似程序。
+    这六个不同的宏中，每个宏各自定义了符号的起始坐标\codev{x}和\codev{y}，上下左右的四个边界
     的坐标\codev{[(Down)|(Up)|(Left)|(Right)]SideBound},符号的初始运行方向和程序的偏移地址等。\\
     
 
-    编译命令见%FIXME: ref
-    。偏移地址的解释见%FIXME:ref
+    程序的编译方法对程序的产生具有重大影响。编译命令见%FIXME: ref
+    。\\
+    
+    宏中\codev{org}指令的解释见%FIXME:ref
     
     \begin{figure}
     \begin{itemize}
-    \item[] \begin{lstlisting}[language={[x86masm]Assembler, label=lst:userMacro, caption=用户程序中的部分宏代码]
-    ; in file stone.asm 
+    \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:userMacro, caption=用户程序中的部分宏代码]
+; in file stone.asm 
 
-    %ifdef DEBUG
-      delay equ 1000
-    %else
-        delay equ 50000
-    %endif
+%ifdef DEBUG
+    delay equ 1000
+%else
+    delay equ 50000
+%endif
 
-    %ifdef UL
-        mycode equ 'q'
-        DownSideBoundary equ 12
-        UpSideBoundary equ 4 ; for some reason, minus one
-        LeftSideBoundary equ 1
-        RightSideBoundary equ 23
-        _x equ 1
-        _y equ 10
-        org 0A300H
-        DIRECTION equ Up_Lt
-    %elifdef UP
-        ; ...
-        ; ...
-    %endif
+%ifdef UL
+    mycode equ 'q'
+    DownSideBoundary equ 12
+    UpSideBoundary equ 4
+    LeftSideBoundary equ 1
+    RightSideBoundary equ 23
+    _x equ 1
+    _y equ 10
+    org 0A300H
+    DIRECTION equ Up_Lt
+%elifdef UP
+    ; ...
+    ; ...
+%endif
     \end{lstlisting}
     \end{itemize}
     \end{figure}
-    
+   
 
     \subsubsection{键盘响应}
-    对键盘的响应和中断的使用见\ref{subsec:kbhandler}节的介绍。\\
+    对键盘的响应和中断的使用见\ref{subsec:kbhandler}节的介绍。本节主要对程序代码中的相关部分做解释。\\
 
-    代码\ref{lst:userKbPress}介绍了用户程序中的按键响应方法。每个循环内，程序都会跳转到test_key_press.程序首先
-    检查是否有键按下，若没有，则跳转到下一次的延时循环。程序再检测按下的键是否合法，若不合法，同样跳转到下一次循环。若按键
-    是
+    代码\ref{lst:userKbPress}介绍了用户程序中的按键响应方法。\\
+    
+    用户程序的主体部分是一个延时循环。每次循环时，程序都会跳转到test\_key\_press过程.程序首先
+    检查是否有键按下，若没有，则跳转到下一次的延时循环。若有，程序再检测按下的键是否合法，若不合法，同样跳转到下一次循环。
+    若按键合法，则程序会调用一个函数，并将控制权交给控制程序。在进入函数之前，程序首先会做一些准备工作，例如向寄存器中存入传递
+    的参数等。随后，程序将sys\_base的值置入bx中。sys\_base指向一系列常用函数的``地址表''的表头。其中按键响应函数的地址在地址表的偏移量
+    0AH处。故\codev{call [bx + 0AH]}指令会直接调用键盘响应函数。 \\
+     
+    有关全局函数地址表和全局函数的问题，见代码%FIXME: ref
     
     \begin{figure}
     \begin{itemize}
-    \item[] \begin{lstlisting}[language={x86masm[Assembler]}, label=lst:userKbPress, caption=用户程序中对键盘按下的响应]
+    \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:userKbPress, caption=用户程序中对键盘按下的响应]
     ; in file stone.asm
     test_key_press:
         xor ax, ax
@@ -414,8 +426,140 @@
     \end{lstlisting}
     \end{itemize}
     \end{figure}
+
+    \subsubsection{全局函数}
+    为了减少控制模块的代码体积，减少各个模块间的耦合度，以及增加可拓展性，本实验将各个程序间共同需要使用的
+    函数抽取出来。当需要调用这些共享函数时，只需要查阅0xA100地址起始处的一个表，找到函数入口地址即可。\\ 
+
+    如代码\ref{lst:utility}所示，该代码段首先声明了\codev{org 0A100H}，这是因为控制函数会把该其载入到
+    内存0xA100处。紧接着代码段声明了若干个单字长的空间，每个空间存储着对应函数的入口地址。例如\codev{\_show\_at\_call}
+    （0xA104H处)这一16位空间存储着函数\codev{show\_at\_call}的入口的地址。每个地址空间声明为16位长（dw）而不是其他的
+    长度是因为，8位太短，很可能不足以表示部分函数的地址;不声明为32位或以上的原因是，每个段的段长最多为16位，在不改变
+    段寄存器的前提下，16位刚刚好足以表示所有段内函数的地址。\\
+    
+    在该代码段中，\codev{loader\_address}和\codev{loader\_back\_addres}是两个比较特殊的表项。他们分别指向控制
+    程序的首地址和控制程序中按键响应函数的首地址。他们的值在控制程序中会被改写，修改为正确的值。\\
+    
+    使用这些全局函数的方法很简单。由于这些函数会被载入到内存地址0xA100处，故只需先将bx的值赋为0xA100,并采用
+    \codev{call near [bx + offset]}即可。
+    \begin{figure}
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:utility, caption=全局函数和其地址表的定义]
+; in file Utilities/utility.asm
+org 0A100H
+loader_address dw 0xF0F0 ; 0xA100H        0xA100H + 0
+loader_back_address dw 0xF0F0 ; 0xA102H        0xA100H + 2
+_show_at_call dw show_at_call ; 0xA104H        0xA100H + 4
+; ... 
+; more items here
+; ...
+show_at_call:
+    ; bp point to str address
+    ; cx contents the length
+    mov ah, 0EH
+    push bx
+    mov bl, 0
+    mov al, '@'
+    int 10H
+    pop bx
+    jmp [loader_back_address]
+
+; ...
+; more functions here
+; ...
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
+
+    \subsubsection{扇区载入}
+    控制程序需要将其他的程序载入到内存中。在本项目中，控制程序还要尽早将全局函数加载入
+    内存，以便控制程序（和用户程序）调用其中的函数。\\
+    
+    同时，当对应的按键被按下时，控制程序还应载入相应的用户程序到相应的内存地址，并跳转到该
+    内存地址以执行用户程序。\\
+    
+    控制程序的代码见代码\ref{lst:loader}.
+
+    \begin{figure}
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:loader, caption=控制程序中的扇区载入部分]
+; in file loader.asm
+
+; ...
+; after a key has pressed
+; ...
+;   mov cl, 3
+;   mov bx, 0xA300
+    call load
+    jmp bx
+
+
+    load:
+    ; cl the nth sector to load
+    ; bx the base address to put the code
+.body:
+    mov ax, 0
+    mov es, ax ; which segment to load
+    mov ah, 2 ; function number
+    mov al, 1 ; load one sector
+    mov dx, 0 ; dl = 0 for floppy disk, dh = 0 for 0 head
+    mov ch, 0 
+    int 13H ; TODO: unkown bugs
+    ret 
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
+
 \section{实验过程}
-    \lipsum[1]
+    \subsection{编译方法}
+    如代码\ref{lst:shbuild}所示，编译本个项目的方法已经封装成脚本build.sh。该脚本会递归地
+    调用Utilities/build.sh和userCodes/build.sh，完成这些组件的编译过程。\\ 
+
+    其中userCodes/build.sh的内容如代码\ref{lst:userCodesBuild}所示。该代码在使用
+    nasm六次编译文件时，都给出了-D DEBUG的选项。该选项的介绍见\ref{subsec:NASMmacro}.
+    这六个文件，在编译时各给出了UL,UP,UR,DL,DN,DR六个选项，分别代表从左上到右下的六个不同
+    方向。在编译完成后。这六份代码中的字符'A'会以不同的位置和角度在各自的区域内反射。\\ 
+
+    其中将二进制代码写入虚拟软盘的代码如\ref{lst:build}所示。\\
+    boot.bin作为引导程序和控制程序放在第一个扇区。utility.bin作为全局函数放在第二个扇区。
+    其余用户程序依次放在连续的扇区中。sh脚本采用"\$((expr))"的方式计算各个bin文件的放置位置。
+
+    \begin{figure}
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language=sh, label=lst:shbuild, caption=编译程序代码的方法]
+$ sh build.sh
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
+
+    \begin{figure}
+    \begin{itemize}
+        \item[]\lstinputlisting[language=sh, label=lst:userCodesBuild, caption=userCodes/build.sh文件内容]{../userCodes/build.sh}
+    \end{itemize}
+    \end{figure}
+
+
+    \begin{figure}
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language=sh, label=lst:build, caption=caption]
+dd if=loader.bin of=boot.img conv=notrunc
+dd if=Utilities/utility.bin of=boot.img conv=notrunc oflag=seek_bytes seek="$((512*1))"
+dd if=userCodes/ul.bin of=boot.img conv=notrunc oflag=seek_bytes seek="$((512*2))"
+dd if=userCodes/up.bin of=boot.img conv=notrunc oflag=seek_bytes seek="$((512*3))"
+// ...
+// ...
+dd if=userCodes/dr.bin of=boot.img conv=notrunc oflag=seek_bytes seek="$((512*7))"
+
+    \subsection{运行方法}
+    本项目的运行方法与项目一的运行方法一致。\\
+    
+    运行的方法同样被封装成一个脚本，直接运行即可。见附录\ref{sec:utilitycode}的代码\ref{lst:run}.
+    其中文件run.sh的内容见附录\ref{sec:utilitycode}的代码\ref{lst:shrun}.此处不再赘述。
+
+    
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
 \section{实验结果}
     \lipsum[1]
 \section{实验总结}
@@ -434,5 +578,17 @@
     for 32bit x86
   \end{enumerate}
     \section{辅助代码}\label{sec:utilitycode}
+    \begin{figure}
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language=sh, label=lst:run, caption=运行本项目的方法]
+$ sh run.sh
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
+    \begin{figure}
+    \begin{itemize}
+        \item[]\lstinputlisting[language=sh, label=lst:shrun, caption=run.sh文件内容]{../run.sh}
+    \end{itemize}
+    \end{figure}
 \end{appendices}
 \end{document}
