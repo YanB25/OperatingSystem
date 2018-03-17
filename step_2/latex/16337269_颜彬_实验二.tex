@@ -168,8 +168,8 @@
 %	NAME AND CLASS SECTION
 %----------------------------------------------------------------------------------------
 
-\newcommand{\hmwkTitle}{操作系统原理实验\ \#1} % Assignment title
-\newcommand{\hmwkDueDate}{Monday,\ March\ 12,\ 2018} % Due date
+\newcommand{\hmwkTitle}{操作系统原理实验\ \#2} % Assignment title
+\newcommand{\hmwkDueDate}{Monday,\ March\ 19,\ 2018} % Due date
 \newcommand{\hmwkClass}{16级计科\ 7班} % Course/class
 \newcommand{\hmwkClassTime}{周一9-10节} % Class/lecture time
 \newcommand{\hmwkClassInstructor}{凌应标} % Teacher/lecturer
@@ -218,18 +218,139 @@
 
 % To have just one problem per page, simply put a \clearpage after each problem
 \section{实验目的}
-\lipsum[2]
+设计和完善更多的有输出的用户程序。加深对 16位x86汇编的理解。加深对汇编程序中``寻址''的理解，
+例如\codev{jmp near}和\codev{jmp far}的区别,和\codev{org}指令的理解。\\
+
+理解bios中断，掌握基础的bios中断的运用，特别是键盘输入中断，字符串输出中断和扇区载入中断。修改并完成控制程序，使其识别
+并响应键盘按下事件。\\
+
+理解程序在磁盘和内存中存储方式的不同点。掌握将用户程序载入内存的操作。\\
+
 \section{实验要求}
-\lipsum[1]
+    \subsection{拓展用户程序}
+    设计四个有输出的用户可执行程序,分别在屏幕 1/4 区域动态输出字符,如
+    将用字符`A'从屏幕左边某行位置 45 度角下斜射出,保持一个可观察的适当
+    速度直线运动,碰到屏幕相应 1/4 区域的边后产生反射,改变方向运动,如
+    此类推,不断运动;在此基础上,增加你的个性扩展,如同时控制两个运动
+    的轨迹,或炫酷动态变色,个性画面,如此等等,自由不限。还要在屏幕某
+    个区域特别的方式显示你的学号姓名等个人信息。
+    \subsection{组织存储方式}
+    自行组织映像盘的空间,以存放四个用户可执行程序。自行组织内存的空间，以排列控制程序和用户程序等。
+    \subsection{相应按键事件}
+    修改参考原型代码,允许键盘输入,用于指定运行这四个有输出的用户可执
+    行程序之一,要确保系统执行代码不超过 512 字节,以便放在引导扇区
 \section{实验方案}
-\lipsum[1]
     \subsection{基础原理}
-    \lipsum[1]
-    \subsection{实验环境与工具}
-        \subsubsection{实验环境}
-        \subsubsection{相关工具、指令}
+    \subsubsection{NASM宏} \label{subsec:NASMmacro}
+    NASM具有极其强大的宏功能。NASM宏允许程序在编译时成文本替换、代码生成、表达式运算、引入其他文件代码等强大的工作。\\
+    
+    本实验要求产生四个及以上的用户程序。本项目利用宏的灵活性，通过调整编译指令，在简单修改源代码的基础上，产生了6个
+    用户程序。该6个用户程序分别在屏幕的左上角、上方、右上角、左下角、下方、右下角运动。代码实现如,编译方法见%TODO:finish here
+    \subsubsection{独立的全局函数空间} \label{subsec:globalFunc}
+    为了增加代码的可拓展性和可组织性，本项目特地增加了``全局函数空间''。即在内存0xA100至0xA300的空间范围内，放置
+    本项目常用的函数的实现，如清屏和打印字符串等。0xA100地址起始处的若干字节将保留用作索引信息。其他程序只需要检查
+    0xA100之后的若干字节，即可知道目标函数的物理地址，并采用\codev{call [reg]}的方式跳转并执行。具体实现方法xx节的见代码%FIXME: ref
+    \subsubsection{组织存储方式}
+    真正的磁盘由若干个盘片堆叠而成。每个盘片都有两个磁头，故经常用磁头从上到下的
+    编号来代指盘面的编号。每个磁头可以共同步进或步退，在磁盘高速运转时，磁头的每个运行轨迹对应一个磁道。
+    将磁道继续细分，每个磁道可分为若干个扇区，通常分为63个，从1编号至63.每个扇区512字节。\\
+    
+    从实验一可知，第一个扇区为引导扇区，在裸机开机时会被自动加载入内存并尝试引导。本项目还有额外的6个用户程序和1个独立的全局函数程序（见
+    \ref{subsec:globalFunc})。在
+    本实现中，全局函数程序将占据虚拟软盘的第二个扇区。
+    其余的每个用户程序将单独占据一个扇区，并从第三个扇区开始，依次排列。即将第\codev{i}个用户程序放置在虚拟软盘的第
+    \codev{i + 2}个扇区内。他们在内存中的存放方式见。。节代码。。。%FIXME: ref
+    \\
+    
+    \subsubsection{bios中断}
+    bios提供了若干基本的中断供程序调用。其中包括字符（串）输出中断，键盘中断和扇区载入中断等。在程序中，只需要将正确的参数
+    置于相应的寄存器中，并执行\codev{int <num>}即可直接调用相应的中断。本程序使用的中断见附录中断表%FIXME: ref
+    \\
+    \subsubsection{程序寻址}
+    由于本项目除了引导程序外，还具有数个其他程序，代码段间的跳转和数据的寻址显得尤其重要。在x86实模式下，寻址采用的方式是
+    $$ addr = segment \times 16 + offset $$
+    其中，在十六进制下又等价为 $$addr = segment \ll 1 + offset$$.
+    \\
+    
+    值得注意的是，\codev{jmp near}和\codev{jmp far}将具有不同的行为。前者不会改变段寄存器，而后者会将段寄存器修改为目标位置的段基地址。
+    在本项目中，所有跳转都采用\codev{jmp near}的方式。 \\
+    
+    在本项目中，\codev{org}的使用尤其关键。对于它的使用见..节代码。。%FIXME: ref
+    \subsubsection{实验环境}
+        \begin{itemize} \item 操作系统 \\ 
+            本实验在Linux下完成。采用Ubuntu 16.04
+            \item 虚拟机\\
+            bochs.它是一款开源且跨平台的 IA-32 模拟器。
+        \end{itemize}
+    \subsubsection{相关工具、指令}
+        \begin{itemize}
+            \item 汇编器\\ 
+            NASM. NASM是一个轻量级的、模块化的 80x86 和 x86-64 汇编器。它的语法与
+            Intel 原语法十分相似，但更加简洁和易读。它对宏有十分强大的支持。
+            \item 镜像文件产生工具\\ 
+            bximage. 该命令允许生成指定大小的软件镜像。
+            \item 二进制写入命令\\ 
+            dd. dd 允许指定源文件和目标文件，将源文件的二进制比特写入目标文件中的指定位置。
+            \item 二进制文件查看命令\\ 
+            xxd. xxd 允许将二进制文件中的内容按地址顺序依次输出，可读性强
+        \end{itemize}
     \subsection{程序流程}\label{subsec:programProcedure}
+    图\ref{fig:overview}展示了程序整体间的关联方式。控制程序在获得处理器控制权后，立即将全局函数模块
+    载入内存中。在清屏和输出相关的提示信息后，等待键盘按下。\\
+    
+    每当键盘被按下，控制程序会判断按下的是哪个键，并把相应的用户程序载入内存中，随后运行用户程序。在用户程序的
+    运行期间，若用户程序检测到键盘按下，它会先把控制权返回给控制程序，由控制程序统一处理。而控制程序使用到的
+    所有函数，由全局函数模块统一管理。\\
+    
+    图\ref{fig:program}展示了用户程序的流程图。该流程与实验一的流程图十分相似。不同之处在于，每个循环内，
+    用户程序需要检查键盘是否被按下。若键盘被按下，需要将控制权返回给控制程序。
+
+    
+    \begin{figure}
+        \begin{center}
+        \includegraphics[scale=0.4]{assets/overview.png}
+        \caption{程序间关联方式\label{fig:overview}}
+        \end{center} 
+    \end{figure} 
+    
+    
+    \begin{figure}
+        \begin{center}
+        \includegraphics[scale=0.4]{assets/program.png}
+        \caption{用户程序流程图\label{fig:program}} 
+        \end{center} 
+    \end{figure} 
+    
+    
     \subsection{程序模块及相关说明}\label{subsec:modelIntroduction}
+    \subsubsection{NASM宏}
+    为了产生6个互不相同的用户程序，本代码充分利用了
+    \begin{figure}
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language={[x86masm]Assembler, label=lst:userMacro, caption=用户程序中的部分宏代码]
+    %ifdef DEBUG
+      delay equ 1000
+    %else
+        delay equ 50000
+    %endif
+
+    %ifdef UL
+        mycode equ 'q'
+        DownSideBoundary equ 12
+        UpSideBoundary equ 4 ; for some reason, minus one
+        LeftSideBoundary equ 1
+        RightSideBoundary equ 23
+        _x equ 1
+        _y equ 10
+        org 0A300H
+        DIRECTION equ Up_Lt
+    %elifdef UP
+        ; ...
+        ; ...
+    %endif
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
     \lipsum[1]
 \section{实验过程}
     \lipsum[1]
