@@ -46,6 +46,8 @@
     urlcolor=black
 }
 \usepackage[title]{appendix} % Required for appendix
+\usepackage{float}
+\usepackage{amsmath} % used for \text{} in math formula
 
 % Margins
 \topmargin=-0.45in
@@ -203,10 +205,11 @@
 %	TABLE OF CONTENTS
 %----------------------------------------------------------------------------------------
 
-\setcounter{tocdepth}{2} % Uncomment this line if you don't want subsections listed in the ToC
+% \setcounter{tocdepth}{2} % Uncomment this line if you don't want subsections listed in the ToC
+% set depth in toc
 
+% \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % used for dots between <section> and <page>
 
-\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % used for dots between <section> and <page>
 \renewcommand{\contentsname}{Content} % force the word to be "content
 \newpage
 \tableofcontents
@@ -224,8 +227,7 @@
 理解bios中断，掌握基础的bios中断的运用，特别是键盘输入中断，字符串输出中断和扇区载入中断。修改并完成控制程序，使其识别
 并响应键盘按下事件。\\
 
-理解程序在磁盘和内存中存储方式的不同点。掌握将用户程序载入内存的操作。\\
-
+理解程序在磁盘和内存中存储方式的不同点。掌握将用户程序载入内存的操作。
 \section{实验要求}
     \subsection{拓展用户程序}
     设计四个有输出的用户可执行程序,分别在屏幕 1/4 区域动态输出字符,如
@@ -241,31 +243,54 @@
     行程序之一,要确保系统执行代码不超过 512 字节,以便放在引导扇区
 \section{实验方案}
     \subsection{基础原理}
-    \subsubsection{NASM宏} 
+    \subsubsection{NASM宏}  
     NASM具有极其强大的宏功能。NASM宏允许程序在编译时成文本替换、代码生成、表达式运算、引入其他文件代码等强大的工作。\\
     
     本实验要求产生四个及以上的用户程序。本项目利用宏的灵活性，通过调整编译指令，在简单修改源代码的基础上，产生了6个
-    用户程序。该6个用户程序分别在屏幕的左上角、上方、右上角、左下角、下方、右下角运动。代码实现如,编译方法见%TODO:finish here
-    \subsubsection{独立的全局函数空间} \label{subsec:globalFunc}
+    用户程序。该6个用户程序分别在屏幕的左上角、上方、右上角、左下角、下方、右下角运动。实现如代码\ref{lst:userMacro},
+    编译方法见\ref{sec:compile}
+    节的代码\ref{lst:userCodesBuild}。
+    \subsubsection{独立的全局函数空间} 
     为了增加代码的可拓展性和可组织性，本项目特地增加了``全局函数空间''。即在内存0xA100至0xA300的空间范围内，放置
     本项目常用的函数的实现，如清屏和打印字符串等。0xA100地址起始处的若干字节将保留用作索引信息。其他程序只需要检查
-    0xA100之后的若干字节，即可知道目标函数的物理地址，并采用\codev{call [reg]}的方式跳转并执行。具体实现方法xx节的见代码%FIXME: ref
+    0xA100之后的若干字节，即可知道目标函数的物理地址，并采用\codev{call [reg]}的方式跳转并执行。具体实现方法\ref{subsec:globalFunc}
+    节的代码\ref{lst:utility}
     \subsubsection{组织存储方式}
     真正的磁盘由若干个盘片堆叠而成。每个盘片都有两个磁头，故经常用磁头从上到下的
     编号来代指盘面的编号。每个磁头可以共同步进或步退，在磁盘高速运转时，磁头的每个运行轨迹对应一个磁道。
     将磁道继续细分，每个磁道可分为若干个扇区，通常分为63个，从1编号至63.每个扇区512字节。\\
     
     从实验一可知，第一个扇区为引导扇区，在裸机开机时会被自动加载入内存并尝试引导。本项目还有额外的6个用户程序和1个独立的全局函数程序（见
-    \ref{subsec:globalFunc})。在
+    \ref{subsec:globalFunc}节)。在
     本实现中，全局函数程序将占据虚拟软盘的第二个扇区。
     其余的每个用户程序将单独占据一个扇区，并从第三个扇区开始，依次排列。即将第\codev{i}个用户程序放置在虚拟软盘的第
-    \codev{i + 2}个扇区内。他们在内存中的存放方式见。。节代码。。。%FIXME: ref
-    \\
+    \codev{i + 2}个扇区内。写入虚拟软盘的指令实现了这些程序的存放方式。
+    具体指令见\ref{sec:compile}节代码\ref{lst:build}.
+    \subsubsection{ORG伪指令} \label{subsec:org}
+    由于本项目包含了多份代码文件，有多处跳转和寻址，故理解ORG伪指令显得尤为重要。 \\
     
+    在一份汇编代码中，所有的label在编译期都会转化为相对于程序开头的偏移量。即编译器会把程序的开头作为基准，记开头的地址为
+    0x0000，
+    并以此计算所有label的偏移量。需要注意的是，ORG并不影响程序最终放在内存的什么位置。程序在内存中的存放是由操作系统
+    完成的，操作系统的调度对于程序而言是``透明''的。\\
+    
+    假设段寄存器都指向0x0000且一直保持不变。
+    假设程序实际被装载入内存0xA300处。在程序实际执行时，所有的寻址操作都会跳转到无效地址。这是因为程序永远以
+    以0x0000为基准，加上偏移量寻找目标。程序寻找地址的方式是$$ \text{phy\_addr} = \text{base\_addr} \ll 1 + \text{offset} $$
+    而此时base\_addr是0.
+    
+    ORG伪指令可以解决这个寻址错误的问题。假设程序员提前知道了自己的程序会被装载入0xA300处。ORG A300伪指令做的事情是，
+    在所有的label偏移量计算完成后，再额外加上0xA300。此时寻址方式变成了
+    \[ \text{phy\_addr} = \text{base\_addr} \ll 1 + \text{offset}' \]
+    其中 $$ \text{offset}' = \text{offset} + \text{0xA300} $$.这些操作都由汇编器在编译期间完成。\\
+    
+    解决这个寻址错误的问题还有另外一个方法。同样设程序被加载入内存的0xA300处。只需将段寄存器设置为
+    $$\text{segment} = \text{0xa300} \div \text{0x10H} = \text{0x0a30} $$
+
     \subsubsection{bios中断}
     bios提供了若干基本的中断供程序调用。其中包括字符（串）输出中断，键盘中断和扇区载入中断等。在程序中，只需要将正确的参数
-    置于相应的寄存器中，并执行\codev{int <num>}即可直接调用相应的中断。本程序使用的中断见附录中断表%FIXME: ref
-    \\
+    置于相应的寄存器中，并执行\codev{int <num>}即可直接调用相应的中断。
+
     \subsubsection{程序寻址}
     由于本项目除了引导程序外，还具有数个其他程序，代码段间的跳转和数据的寻址显得尤其重要。在x86实模式下，寻址采用的方式是
     $$ addr = segment \times 16 + offset $$
@@ -275,9 +300,8 @@
     值得注意的是，\codev{jmp near}和\codev{jmp far}将具有不同的行为。前者不会改变段寄存器，而后者会将段寄存器修改为目标位置的段基地址。
     在本项目中，所有跳转都采用\codev{jmp near}的方式。 \\
     
-    在本项目中，\codev{org}的使用尤其关键。对于它的使用见..节代码。。%FIXME: ref
-    %TODO: 在这里解释org！！！
-    \subsubsection{键盘响应} \label{subsec:kbhandler}
+    在本项目中，\codev{org}的使用尤其关键。它影响了所有数据、函数的寻址。
+    \subsubsection{键盘响应} \label{subsec:kbhandlerIntro}
     对按键的响应主要通过16H系统中断完成。本项目主要使用16号中断的00H功能和01H功能。\\ 
     
     01H功能会检查键盘缓冲区的内容。若缓冲区为空，ax将保持不变。若缓冲区中按键缓冲，
@@ -289,7 +313,8 @@
 
     关于按键响应的详细使用，见\ref{subsec:kbhandler}节。
 
-    \subsubsection{实验环境}
+    \subsection{实验环境}
+    \subsubsection{系统与虚拟机}
         \begin{itemize} \item 操作系统 \\ 
             本实验在Linux下完成。采用Ubuntu 16.04
             \item 虚拟机\\
@@ -317,24 +342,20 @@
     
     图\ref{fig:program}展示了用户程序的流程图。该流程与实验一的流程图十分相似。不同之处在于，每个循环内，
     用户程序需要检查键盘是否被按下。若键盘被按下，需要将控制权返回给控制程序。
-
+    \begin{figure} 
+    \begin{minipage}{0.48\textwidth}
+     \centering
+     \includegraphics[width=\linewidth]{assets/overview.png}
+     \caption{程序间的关联方式}\label{fig:overview}
+   \end{minipage}\hfill
+   \begin {minipage}{0.48\textwidth}
+     \centering
+     \includegraphics[width=\linewidth]{assets/program.png}
+     \caption{用户程序流程图}\label{fig:program}
+    \end{minipage}
+    \end{figure}
     
-    \begin{figure}
-        \begin{center}
-        \includegraphics[scale=0.4]{assets/overview.png}
-        \caption{程序间关联方式\label{fig:overview}}
-        \end{center} 
-    \end{figure} 
-    
-    
-    \begin{figure}
-        \begin{center}
-        \includegraphics[scale=0.4]{assets/program.png}
-        \caption{用户程序流程图\label{fig:program}} 
-        \end{center} 
-    \end{figure} 
-    
-    
+\section{实验过程}
     \subsection{程序模块及相关说明}\label{subsec:modelIntroduction}
     \subsubsection{NASM宏} \label{subsec:NASMmacro}
     为了产生6个互不相同的用户程序，本代码充分利用了NASM的宏特性。如代码\ref{lst:userMacro}所示。\\
@@ -351,10 +372,10 @@
     的坐标\codev{[(Down)|(Up)|(Left)|(Right)]SideBound},符号的初始运行方向和程序的偏移地址等。\\
     
 
-    程序的编译方法对程序的产生具有重大影响。编译命令见%FIXME: ref
+    程序的编译方法对程序的产生具有重大影响。编译命令见\ref{sec:compile}节的代码\ref{lst:build}
     。\\
     
-    宏中\codev{org}指令的解释见%FIXME:ref
+    宏中\codev{org}指令的解释见\ref{subsec:org}节。
     
     \begin{figure}
     \begin{itemize}
@@ -386,8 +407,8 @@
     \end{figure}
    
 
-    \subsubsection{键盘响应}
-    对键盘的响应和中断的使用见\ref{subsec:kbhandler}节的介绍。本节主要对程序代码中的相关部分做解释。\\
+    \subsubsection{键盘响应} \label{subsec:kbhandler}
+    对键盘的响应和中断的使用见\ref{subsec:kbhandlerIntro}节的介绍。本节主要对程序代码中的相关部分做解释。\\
 
     代码\ref{lst:userKbPress}介绍了用户程序中的按键响应方法。\\
     
@@ -395,39 +416,39 @@
     检查是否有键按下，若没有，则跳转到下一次的延时循环。若有，程序再检测按下的键是否合法，若不合法，同样跳转到下一次循环。
     若按键合法，则程序会调用一个函数，并将控制权交给控制程序。在进入函数之前，程序首先会做一些准备工作，例如向寄存器中存入传递
     的参数等。随后，程序将sys\_base的值置入bx中。sys\_base指向一系列常用函数的``地址表''的表头。其中按键响应函数的地址在地址表的偏移量
-    0AH处。故\codev{call [bx + 0AH]}指令会直接调用键盘响应函数。 \\
+    0AH处。故call [bx + 0AH]指令会直接调用键盘响应函数。 \\
      
-    有关全局函数地址表和全局函数的问题，见代码%FIXME: ref
+    有关全局函数地址表和全局函数的问题，见代码\ref{lst:utility}
     
     \begin{figure}
     \begin{itemize}
     \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:userKbPress, caption=用户程序中对键盘按下的响应]
-    ; in file stone.asm
-    test_key_press:
-        xor ax, ax
-        mov ah, 1
-        int 16H
-        cmp ah, 1
-        jz loop1.Loop ; if no key is pressed, jump to delay loop
+; in file stone.asm
+test_key_press:
+    xor ax, ax
+    mov ah, 1
+    int 16H
+    cmp ah, 1
+    jz loop1.Loop ; if no key is pressed, jump to delay loop
 
-        xor ax, ax
-        int 16H
-        cmp al, mycode
-        jz loop1.Loop ; if pressed key stand for the program itself
-                      ; then just ignore it
-        ; key pressed
+    xor ax, ax
+    int 16H
+    cmp al, mycode
+    jz loop1.Loop ; if pressed key stand for the program itself
+                    ; then just ignore it
+    ; key pressed
 
-        ; ...
-        ; some set-ups
-        ; ...
+    ; ...
+    ; some set-ups
+    ; ...
 
-        mov bx, sys_base
-        jmp [bx + 0AH] ; jump to a key-press handler
+    mov bx, sys_base
+    jmp [bx + 0AH] ; jump to a key-press handler
     \end{lstlisting}
     \end{itemize}
     \end{figure}
 
-    \subsubsection{全局函数}
+    \subsubsection{全局函数} \label{subsec:globalFunc}
     为了减少控制模块的代码体积，减少各个模块间的耦合度，以及增加可拓展性，本实验将各个程序间共同需要使用的
     函数抽取出来。当需要调用这些共享函数时，只需要查阅0xA100地址起始处的一个表，找到函数入口地址即可。\\ 
 
@@ -438,7 +459,8 @@
     段寄存器的前提下，16位刚刚好足以表示所有段内函数的地址。\\
     
     在该代码段中，\codev{loader\_address}和\codev{loader\_back\_addres}是两个比较特殊的表项。他们分别指向控制
-    程序的首地址和控制程序中按键响应函数的首地址。他们的值在控制程序中会被改写，修改为正确的值。\\
+    程序的首地址和控制程序中按键响应函数的首地址。由于控制程序的首地址难以在编译器直接确定，故控制程序在载入内存后，
+    会立即修改这两个表项的值，使其指向正确的地址。\\
     
     使用这些全局函数的方法很简单。由于这些函数会被载入到内存地址0xA100处，故只需先将bx的值赋为0xA100,并采用
     \codev{call near [bx + offset]}即可。
@@ -504,23 +526,22 @@ show_at_call:
     mov al, 1 ; load one sector
     mov dx, 0 ; dl = 0 for floppy disk, dh = 0 for 0 head
     mov ch, 0 
-    int 13H ; TODO: unkown bugs
+    int 13H ;
     ret 
     \end{lstlisting}
     \end{itemize}
     \end{figure}
 
-\section{实验过程}
-    \subsection{编译方法}
+    \subsection{编译方法} \label{sec:compile}
     如代码\ref{lst:shbuild}所示，编译本个项目的方法已经封装成脚本build.sh。该脚本会递归地
     调用Utilities/build.sh和userCodes/build.sh，完成这些组件的编译过程。\\ 
 
     其中userCodes/build.sh的内容如代码\ref{lst:userCodesBuild}所示。该代码在使用
-    nasm六次编译文件时，都给出了-D DEBUG的选项。该选项的介绍见\ref{subsec:NASMmacro}.
+    nasm六次编译文件时，都给出了-D DEBUG的选项。该选项的介绍见\ref{subsec:NASMmacro}节.
     这六个文件，在编译时各给出了UL,UP,UR,DL,DN,DR六个选项，分别代表从左上到右下的六个不同
     方向。在编译完成后。这六份代码中的字符'A'会以不同的位置和角度在各自的区域内反射。\\ 
 
-    其中将二进制代码写入虚拟软盘的代码如\ref{lst:build}所示。\\
+    其中将二进制代码写入虚拟软盘的代码如代码\ref{lst:build}所示。\\
     boot.bin作为引导程序和控制程序放在第一个扇区。utility.bin作为全局函数放在第二个扇区。
     其余用户程序依次放在连续的扇区中。sh脚本采用"\$((expr))"的方式计算各个bin文件的放置位置。
 
@@ -541,33 +562,105 @@ $ sh build.sh
 
     \begin{figure}
     \begin{itemize}
-    \item[] \begin{lstlisting}[language=sh, label=lst:build, caption=caption]
+    \item[] \begin{lstlisting}[language=sh, label=lst:build, caption=向虚拟软盘内写入比特的部分代码]
 dd if=loader.bin of=boot.img conv=notrunc
-dd if=Utilities/utility.bin of=boot.img conv=notrunc oflag=seek_bytes seek="$((512*1))"
+dd if=Utilities/utility.bin of=boot.img conv=notrunc \
+    oflag=seek_bytes seek="$((512*1))"
 dd if=userCodes/ul.bin of=boot.img conv=notrunc oflag=seek_bytes seek="$((512*2))"
 dd if=userCodes/up.bin of=boot.img conv=notrunc oflag=seek_bytes seek="$((512*3))"
 // ...
 // ...
 dd if=userCodes/dr.bin of=boot.img conv=notrunc oflag=seek_bytes seek="$((512*7))"
-
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
     \subsection{运行方法}
     本项目的运行方法与项目一的运行方法一致。\\
     
     运行的方法同样被封装成一个脚本，直接运行即可。见附录\ref{sec:utilitycode}的代码\ref{lst:run}.
-    其中文件run.sh的内容见附录\ref{sec:utilitycode}的代码\ref{lst:shrun}.此处不再赘述。
-
-    
-    \end{lstlisting}
-    \end{itemize}
-    \end{figure}
+    其中文件run.sh的内容见附录\ref{sec:utilitycode}的代码\ref{lst:shrun}.运行虚拟机bochs的配置
+    文件见附录\ref{sec:utilitycode}的代码\ref{lst:bochsrc}
 \section{实验结果}
-    \lipsum[1]
+    程序开始运行时，会清屏并显示一个欢迎页。欢迎页上有基本的操作方法和本人的学号姓名。如
+    图\ref{fig:helloPage}所示。\\
+    
+    按照欢迎页的指引，依次按下Q,W,E,A,S,D六个键后，六个用户程序将依次运行。此时程序的
+    运行图如图\ref{fig:sixPageRun}所示。\\
+    
+    按下L后将执行清屏。清屏并不会将本人的学号和姓名清空。只会将这六个用户程序的画面清空。
+    故清屏后的屏幕显示效果与图\ref{fig:helloPage}一致。
+
+    \begin{figure}[H]
+    \begin{minipage}{0.48\textwidth}
+     \centering
+     \includegraphics[width=\linewidth]{assets/helloPage.png}
+     \caption{开始程序时的欢迎页和清屏后的页面}\label{fig:helloPage}
+   \end{minipage}\hfill
+   \begin {minipage}{0.48\textwidth}
+     \centering
+     \includegraphics[width=\linewidth]{assets/sixPageRun.png}
+     \caption{六个用户程序的运行图}\label{fig:sixPageRun}
+   \end{minipage}
+\end{figure}
+
 \section{实验总结}
     \subsection{心得体会}
-    \lipsum[1]
-    \subsection{遇到的BUG}
-        \subsubsection{缓冲区溢出}
-        \subsubsection{数据范围错误}
+    这次实验，我经历了十分顺利的过程，也遇到了很多坎坷。\\
+    
+    顺利的地方在于，我对x86和nasm的一些特性比较熟悉，在编程之前，我已经把大概的想法在心里过了几遍。所以
+    代码的实现过程很短。而且实现完后几乎无需怎么修改就能正常地运行了。\\
+    
+    但我在这次项目中遇到了一个十分严重的bug。我用了许多bochs自带的debugger功能，花了一天多的所有课余时间，
+    才把这个bug最终解决。\textbf{bug的解决过程见\ref{sec:bug}节的心路历程，此处不再赘述}。由于这个bug
+    隐藏得比较深，故在这次debug的过程中，我花了很多时间在内存级别上观察数据和跟踪程序的跳转。这个过程虽然
+    繁琐，却让我对大小端、数据寻址和指令跳转地址等较为繁琐的知识点有了直观的感觉。
+
+    \subsection{遇到的BUG} \label{sec:bug}
+        \subsubsection{心路历程}
+    但这次项目，我依旧遇到了几个严重的bug。这个bug会导致程序运行了一段时间后，发生异常，包括
+    卡死、卡退、屏幕变花等。其中卡死是最最常发生。其余的情况只遇见过一两次。
+    这些bug的严重之处在于，它们在程序的每次运行时都会发生，但我却
+    很难找到一种稳定复现bug的方法。也就是，我很难找到一种简便的操作，使得程序``一定在这一步后卡死''。
+    有时程序在一开始就会被卡死，有时程序能正常运行一分多种的时间，却又突然在某一个操作后卡死。
+    我唯一能确定的是，卡死一定是在按键按下时发生，不按键盘是不会卡死的。\\
+    
+    在我被这个bug折磨了一整天后，我依旧毫无进展。我甚至无法定位到bug的具体位置。因为每次出状况时程序
+    所在的代码段都不一样！甚至程序会运行内存中其他位置的代码段，甚至程序会执行非法代码！由于我的程序中出现了
+    大量的跳转（我实现一些比较复杂的跳转逻辑，因为以后的实验可能会用到), 我很难反向追踪到，到底是哪一条跳转
+    指令将我的程序带到各种非法的内存处。\\
+    
+    在王永锋同学的建议下，我换了一个虚拟机qemu。意外的是，在qemu虚拟机上运行，这个bug居然一次都没有出现。
+    于是接下来的半天里我都把这个bug归咎到bochs虚拟机的头上。但我依旧不死心。尤其是我查阅到bochs的最后一次更新
+    在2018年。这意味着bochs是一个被长期维护的虚拟机。这种``活跃''的开源软件绝对不可能有这么明显的bug。所以我
+    又开始认定了是我自己的问题。\\
+    
+    在debug的期间，我用尽了各种方法。我甚至让bochs开启了trace-mem on指令。该指令会将所有的内存修改和访问输出
+    到终端。但我依旧一无所获，因为程序在运行时修改和读取内存是极其常见的事情，我的终端很快被海量的输出信息给占满了，
+    我根本找不到我需要的信息。在我持续的努力下，我偶然发现了程序的代码段被改写了。我眼睁睁地看着代码段0xA4B0中的
+    值在调用中断的前后发生了变化。这让我更加困惑了。于是我用watch write 0xA480指令监控内存，反复将程序跑了几次，
+    发现这个内存被改写的情况时有发生（但却不是必然发生），而且一定是在调用中断时被改写内存。\\
+    
+    经过了详细的思考和同学间的讨论。我逐渐怀疑是发生了缓冲区溢出。因为我发现自己无意间在程序开头写下了
+    \codev{mov sp, ax}这样的代码。我的程序没有大量用到栈，所以我没有特地为栈预留很大的空间。我预估
+    着若干个\codev{push} 和 \codev{call}等还是安全的。但我突然想到，很可能是调用中断时INT指令
+    依旧利用了我当前的用户栈，发生了栈溢出，先是改写了我的数据段，最后甚至改写了代码段。\\
+    
+    我修改了代码，把栈指针扔到了一个很远的地方，预留了一大块空间。随后我突然发现我的一个数据的数据大小声明错误了。
+    用户程序中记录字符`A'坐标的x变量，我声明成了db，但应为dw。我迅速将这个错误也改了过来，于是程序能完美地运行，
+    不再有任何bug了。 \\
+    
+    后来我经过详细分析，逐渐明白了这种现象的原因。由于我的程序中，从低地址到高地址依次排列着代码段，数据段和未使用
+    空间（栈指针指向其末尾）。故缓冲区溢出时，首先是部分数据被改写了。数据段中不是所有数据都十分重要且会被立即访问到
+    ，故少量的溢出不会立即改变程序的行为。栈溢出进一步进行，甚至意外地改写了我的程序代码。
+    在程序继续执行的过程中，执行到了被覆写的内存，于是出现了不同程度的异常。这些异常包括，运行到错误的jump \$指令，
+    运行到非法指令，偶然跳转到0x0000-0x0100的非法内存等。程序不会在栈溢出的瞬间出现问题，而是在其后的一小段
+    时间后才出现异常，且异常的行为各种各样。这就是造成我的程序debug如此困难的主要原因。同时，数据长度声明错误
+    带了的影响，也与栈溢出类似。它不会立即造成程序的错误，而是在某个特别的时机使程序进入不正确的状态。
+    \subsubsection{解决办法}
+    给每一个sp增加2000H的偏移量，使其远离主程序且指向一片空白的内存区域。\\
+    
+    将长度错误的数据段改为正确的长度。
+        
 
 \begin{appendices}
 \section{参考文献} \label{sec:reference}
@@ -576,18 +669,54 @@ dd if=userCodes/dr.bin of=boot.img conv=notrunc oflag=seek_bytes seek="$((512*7)
     for nasm
     \item https://en.wikibooks.org/wiki/X86\_Assembly \\
     for 32bit x86
+    \item https://en.wikipedia.org/wiki/INT\_16H
+    查阅wiki学习INT 16中断更详细的用法。
+    \item 《x86汇编语言++从实模式到保护模式完整版》
+    学习了ORG伪指令的用处，物理磁盘和虚拟软盘等的工作原理。
   \end{enumerate}
     \section{辅助代码}\label{sec:utilitycode}
-    \begin{figure}
+    \begin{figure}[H]
     \begin{itemize}
     \item[] \begin{lstlisting}[language=sh, label=lst:run, caption=运行本项目的方法]
 $ sh run.sh
     \end{lstlisting}
     \end{itemize}
     \end{figure}
-    \begin{figure}
+    \begin{figure}[H]
     \begin{itemize}
         \item[]\lstinputlisting[language=sh, label=lst:shrun, caption=run.sh文件内容]{../run.sh}
+    \end{itemize}
+    \end{figure}
+
+    \begin{figure}[H]
+    \begin{itemize}
+        \item[]\lstinputlisting[language=sh, label=lst:bochsrc, caption=bochs虚拟机的配置文件]{../.bochsrc}
+    \end{itemize}
+    \end{figure}
+
+    \begin{figure}
+    \begin{itemize}
+    \item[] \begin{lstlisting}[label=lst:errorlog, caption=DEBUG过程中捕捉到的错误信息。栈溢出意外修改到代码段内存]
+; 注意其中的 Caught write watch point at <address>
+    
+(0) [0x000000000000a481] 0000:a481 (unk. ctxt): int 0x16                  ; cd16
+<bochs:32>
+(0) Caught write watch point at 0x000000000000a4b0
+Next at t=38737314
+(0) [0x00000000000f05f1] f000:05f1 (unk. ctxt): push ds                   ; 1e
+
+(0) [0x000000000000a482] 0000:a482 (unk. ctxt): mov ah, 0x01              ; b401
+<bochs:29> n
+Next at t=32029212
+(0) [0x000000000000a484] 0000:a484 (unk. ctxt): int 0x16                  ; cd16
+<bochs:30> n
+<strong>(0) Caught write watch point at 0x000000000000a4b2</strong>
+Next at t=32029254
+(0) [0x00000000000f05ee] f000:05ee (unk. ctxt): mov bp, sp                ; 89e5
+<bochs:31>
+
+watch 0xa4b3
+    \end{lstlisting}
     \end{itemize}
     \end{figure}
 \end{appendices}
