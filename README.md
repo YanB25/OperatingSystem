@@ -1,26 +1,33 @@
 # OperatingSystem
 操作系统实验课课程项目  
 本项目将长期更新，并按照本学期操作系统课程的进度逐步完成。  
-其中每个文件夹代表每次可提交的课程作业（或里程碑式事件）
+其中每个文件夹代表每次可提交的课程作业（或里程碑式事件）  
+**本项目打算以.pdf和.latex的方式，公开以往的所有项目报告**   
+有空我会处理这件事
+
 ## 碎碎念
 为什么要把这个repo设为public呢。这明明是课程作业啊。  
 一方面，我认为懂得使用github的人都不会选择抄作业。想抄作业的人都不太会用github.  
 另一方面，希望同样在做这个项目的同学可以互相学习，互相参考。  
 所以我觉得public也没问题啦。  
 ## file-list
-1. [step zero][2]
-操作系统的第＂零＂个项目
-该项目中包含一个＂样例程序＂，用来检测自己的环境是否搭配完成
-该样例程序可以正确在裸机上运行。正确运行时，其输出Hello World
+1. [step three][4]
+It will be a tough war.  
+C语言和汇编混合编程。如果在linux下失败，可能整个项目会重构并在windows下实现。  
+linux下工具链：编译器gcc，连接器ld。
+1. [step two][3]  
+操作系统的第二个项目。  
+主要内容为学习调用`bios`
+<img src="step_2/latex/assets/sixPageRun.png" alt="Drawing" style="width: 400px; margin-left:auto; margin-right:auto;"/>
 1. [step one][1]
 操作系统实验的第一个项目。  
 项目中的sectoin1和section2都是热身，其任务要求[见此][1]  
 任务3要求制作引导程序。引导程序要求可以在裸机上运行，且输出动画和个人信息。
 <img src="step_1/section3/latex/asset/stone_run.png" alt="Drawing" style="width: 400px; margin-left:auto; margin-right:auto;"/>
-1. [step two][3]  
-操作系统的第二个项目。  
-主要内容为学习调用`bios`
-<img src="step_2/latex/assets/sixPageRun.png" alt="Drawing" style="width: 400px; margin-left:auto; margin-right:auto;"/>
+1. [step zero][2]
+操作系统的第＂零＂个项目
+该项目中包含一个＂样例程序＂，用来检测自己的环境是否搭配完成
+该样例程序可以正确在裸机上运行。正确运行时，其输出Hello World
 ## How-to
 ### understand files
 在根目录下，有若干文件夹`step_{{i}}`  
@@ -43,3 +50,4 @@
 [1]: /step_1/README.md
 [2]: /step_0/README.md
 [3]: /step_2/README.md
+[4]: /step_3/README.md
