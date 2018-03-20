@@ -1,6 +1,7 @@
 [BITS 16]
 global clear_screen
 global hello_hybrid_programming
+global add
 
 clear_screen:
     mov ax, 03h
@@ -23,7 +24,9 @@ hello_hybrid_programming:
     pop ecx
     jmp cx
 
-
+add:
+    pop ecx 
+    jmp cx
 
 helloStr db "hello hybrid programming!"
 length equ $ - helloStr
