@@ -13,8 +13,11 @@
 ## file-list
 1. [step three][4]
 It will be a tough war.  
-C语言和汇编混合编程。如果在linux下失败，可能整个项目会重构并在windows下实现。  
-linux下工具链：编译器gcc，连接器ld。
+~~C语言和汇编混合编程。如果在linux下失败，可能整个项目会重构并在windows下实现。~~  
+linux下工具链：编译器gcc，连接器ld。  
+成功。本实验可以继续在linux下进行。  
+step_3大量参考了日哥的解决方案，其`github`地址见 //TODO:address
+本实验从以往的`shell`脚本编译运行改为了`makefile`编译运行。  
 1. [step two][3]  
 操作系统的第二个项目。  
 主要内容为学习调用`bios`
