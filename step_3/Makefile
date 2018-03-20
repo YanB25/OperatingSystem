@@ -16,9 +16,12 @@ loader.o: loader.asm
 loader.bin: loader.o
 	$(LD) $(LDFLAGS) -Ttext 0x7c00 --oformat binary -o $@ $^
 
+build:
+	dd if=loader.bin of=OS.img conv=notrunc
+	dd if=kernel.bin of=OS.img conv=notrunc oflag=seek_bytes seek="$((512*1))"
 clean:
-	rm *.bin
-	rm *.o
-
+	rm *.bin -f 
+	rm *.o -f 
+	rm *.gch -f
 run:
 	bochs -q
