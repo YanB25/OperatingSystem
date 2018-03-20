@@ -18,12 +18,10 @@ linux下工具链：编译器gcc，连接器ld。
 1. [step two][3]  
 操作系统的第二个项目。  
 主要内容为学习调用`bios`
-<img src="step_2/latex/assets/sixPageRun.png" alt="Drawing" style="width: 400px; margin-left:auto; margin-right:auto;"/>
 1. [step one][1]
 操作系统实验的第一个项目。  
 项目中的sectoin1和section2都是热身，其任务要求[见此][1]  
 任务3要求制作引导程序。引导程序要求可以在裸机上运行，且输出动画和个人信息。
-<img src="step_1/section3/latex/asset/stone_run.png" alt="Drawing" style="width: 400px; margin-left:auto; margin-right:auto;"/>
 1. [step zero][2]
 操作系统的第＂零＂个项目
 该项目中包含一个＂样例程序＂，用来检测自己的环境是否搭配完成
