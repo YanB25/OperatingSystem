@@ -1,8 +1,8 @@
 #include "kernel.h"
 #include "utilities.h"
 int main() {
-
-    print_promt();
+    clear_screen();
+    hello_hybrid_programming();
     while(1) {}
     return 0;
 }
