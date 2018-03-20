@@ -25,7 +25,10 @@ hello_hybrid_programming:
     jmp cx
 
 add:
-    pop ecx 
+    mov eax, [bp-8]
+    mov ecx, [bp-12]
+    add eax, ecx
+    pop ecx
     jmp cx
 
 helloStr db "hello hybrid programming!"
