@@ -32,7 +32,7 @@ add:
     mov [esp], eax
     mov ecx, [bp+10]
     add [esp], ecx
-    mov eax, [esp]
+    mov eax, [sp]
 
     leave
     pop ecx
