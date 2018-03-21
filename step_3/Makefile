@@ -34,4 +34,8 @@ run:
 	bochs -q
 rebuild:
 	make clean 
+	clear
 	make
+auto:
+	make rebuild
+	make run
