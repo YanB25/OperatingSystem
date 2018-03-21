@@ -2,6 +2,7 @@
 global clear_screen
 global hello_hybrid_programming
 global add
+global _puts
 
 clear_screen:
     mov ax, 03h
@@ -25,11 +26,19 @@ hello_hybrid_programming:
     jmp cx
 
 add:
-    mov eax, [bp-8]
-    mov ecx, [bp-12]
-    add eax, ecx
+    enter 4, 0
+
+    mov eax, [bp+6]
+    mov [esp], eax
+    mov ecx, [bp+10]
+    add [esp], ecx
+    mov eax, [esp]
+
+    leave
     pop ecx
     jmp cx
 
+_puts:
+    
 helloStr db "hello hybrid programming!"
 length equ $ - helloStr
