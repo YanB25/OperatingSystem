@@ -13,12 +13,12 @@ kernel.bin: kernel.o $(INCLUDE)/utilities.o
 	$(LD) $(LDFLAGS) -Ttext 0xA100 --oformat binary -o $@ $^
 kernel.o: kernel.c kernel.h $(INCLUDE)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
-$(INCLUDE)/utilities.o 
+$(INCLUDE)/utilities.o:
 	cd $(INCLUDE)/ && make
 	cd ../kernel
 clean:
 	rm *.bin -f 
-	rm *.o -f 
+	rm *.o -f  
 	rm *.gch -f
 rebuild:
 	make clean 
