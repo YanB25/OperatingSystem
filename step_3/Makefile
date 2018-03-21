@@ -8,21 +8,20 @@ ASFLAGS=
 INCLUDE=include
 KERNEL=kernel
 LOADER=loader
-
+ROOT=..
 all: $(KERNEL)/kernel.bin $(LOADER)/loader.bin build
 
-$(KERNEL)/kernel.bin: $(KERNEL)/kernel.o $(INCLUDE)/utilities.o 
-	$(LD) $(LDFLAGS) -Ttext 0xA100 --oformat binary -o $@ $^
-$(KERNEL)/kernel.o: 
+$(KERNEL)/kernel.bin: 
 	cd $(KERNEL)/ && make
-	cd ..
+	cd $(ROOT)/
+
 $(INCLUDE)/utilities.o: 
 	cd $(INCLUDE)/ && make
-	cd ..
+	cd $(ROOT)/
 
 $(LOADER)/loader.bin: 
 	cd $(LOADER) && make
-	cd ..
+	cd $(ROOT)/
 
 build: $(LOADER)/loader.bin $(KERNEL)/kernel.bin
 	dd if=$(LOADER)/loader.bin of=OS.img conv=notrunc
