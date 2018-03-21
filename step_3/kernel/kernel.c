@@ -8,6 +8,7 @@ int main() {
     puts("I am here!");
     puts("\n\rhei, i am happy!");
     draw_str("I love you", 10, 8);
+    puts("\n\rcan i still output?");
     while(true) {}
     return 0;
 }
