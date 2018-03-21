@@ -27,3 +27,6 @@ clean:
 	rm *.gch -f
 run:
 	bochs -q
+rebuild:
+	make clean 
+	make
