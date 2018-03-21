@@ -3,15 +3,23 @@
 void clear_screen();
 void hello_hybrid_programming();
 int add(int, int);
-void _put_char(char, int);
-void _puts(char*, int, int);
+void _draw_char(char, int);
+void draw_str(char*, int, int);
+void putch(char);
+void puts(char*);
 
-inline void _puts(char* str, int row, int col) {
+inline void draw_str(char* str, int row, int col) {
     int pos = (row * 80 + col) * 2;
     while (*str != '\0') {
-        _put_char(*str, pos);
+        _draw_char(*str, pos);
         str++;
         pos += 2;
+    }
+}
+inline void puts(char* str) {
+    while (*str) {
+        putch(*str);
+        str++;
     }
 }
 #endif

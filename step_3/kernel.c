@@ -4,7 +4,10 @@
 #define false 0
 int main() {
     clear_screen();
-    _puts("hello world", 5, 10);
+    draw_str("hello world", 5, 30);
+    puts("I am here!");
+    puts("\n\rhei, i am happy!");
+    draw_str("I love you", 10, 8);
     while(true) {}
     return 0;
 }
