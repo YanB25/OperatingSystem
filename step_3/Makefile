@@ -5,22 +5,28 @@ CCFLAGS=-march=i386 -m32 -mpreferred-stack-boundary=2 -ffreestanding
 AS=nasm
 ASFLAGS=
 
-all: kernel.bin loader.bin build
+INCLUDE=include
+KERNEL=kernel
+LOADER=loader
 
-kernel.bin: kernel.o utilities.o 
+all: $(KERNEL)/kernel.bin $(LOADER)/loader.bin build
+
+$(KERNEL)/kernel.bin: $(KERNEL)/kernel.o $(INCLUDE)/utilities.o 
 	$(LD) $(LDFLAGS) -Ttext 0xA100 --oformat binary -o $@ $^
-kernel.o: kernel.c kernel.h utilities.h
-	$(CC) $(CCFLAGS) -c $^
-utilities.o: utilities.asm
-	$(AS) $(ASFLAGS) -f elf32 -o $@ $^
-loader.o: loader.asm
-	$(AS) $(ASFLAGS) -f elf32 -o $@ $^
-loader.bin: loader.o
-	$(LD) $(LDFLAGS) -Ttext 0x7c00 --oformat binary -o $@ $^
+$(KERNEL)/kernel.o: 
+	cd $(KERNEL)/ && make
+	cd ..
+$(INCLUDE)/utilities.o: 
+	cd $(INCLUDE)/ && make
+	cd ..
 
-build: loader.bin kernel.bin
-	dd if=loader.bin of=OS.img conv=notrunc
-	dd if=kernel.bin of=OS.img conv=notrunc oflag=seek_bytes seek=512
+$(LOADER)/loader.bin: 
+	cd $(LOADER) && make
+	cd ..
+
+build: $(LOADER)/loader.bin $(KERNEL)/kernel.bin
+	dd if=$(LOADER)/loader.bin of=OS.img conv=notrunc
+	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc oflag=seek_bytes seek=512
 clean:
 	rm *.bin -f 
 	rm *.o -f 
