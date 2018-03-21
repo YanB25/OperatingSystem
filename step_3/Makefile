@@ -28,9 +28,9 @@ build: $(LOADER)/loader.bin $(KERNEL)/kernel.bin
 	dd if=$(LOADER)/loader.bin of=OS.img conv=notrunc
 	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc oflag=seek_bytes seek=512
 clean:
-	rm *.bin -f 
-	rm *.o -f 
-	rm *.gch -f
+	find . -name "*.bin" -type f -delete
+	find . -name "*.o" -type f -delete
+	find . -name "*.gch" -type f -delete
 run:
 	bochs -q
 rebuild:
