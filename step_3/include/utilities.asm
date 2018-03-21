@@ -33,8 +33,7 @@ add:
     mov [esp], eax
     mov ecx, [bp+10]
     add [esp], ecx
-    ; mov eax, [sp] ;TODO:bugs?
-
+    mov eax, [esp]
     leave
     retl
 
