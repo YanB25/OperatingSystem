@@ -6,11 +6,12 @@ global _draw_char
 global puts
 global putch
 
+%include "bridge.inc"
+
 clear_screen:
     mov ax, 03h
     int 10h
-    pop ecx
-    jmp cx
+    retl
 
 hello_hybrid_programming:
     mov ah, 13H
@@ -24,9 +25,7 @@ hello_hybrid_programming:
     mov cx, length
     int 10H
 
-    pop ecx
-    jmp cx
-
+    retl
 add:
     enter 4, 0
 
@@ -37,8 +36,7 @@ add:
     ; mov eax, [sp] ;TODO:bugs?
 
     leave
-    pop ecx
-    jmp cx
+    retl
 
 _draw_char:
     enter 0, 0
@@ -53,8 +51,7 @@ _draw_char:
 
     pop di
     leave
-    pop ecx
-    jmp cx
+    retl
 
 putch:
     enter 0, 0
@@ -65,8 +62,7 @@ putch:
     int 10H
 
     leave
-    pop ecx
-    jmp cx
+    retl
 
 helloStr db "hello hybrid programming!"
 length equ $ - helloStr
