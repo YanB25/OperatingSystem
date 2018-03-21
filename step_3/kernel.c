@@ -4,9 +4,7 @@
 #define false 0
 int main() {
     clear_screen();
-    int t = add(4, 5);
-    hello_hybrid_programming();
-
+    _puts("hello world", 5, 10);
     while(true) {}
     return 0;
 }

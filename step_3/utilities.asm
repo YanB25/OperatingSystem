@@ -2,7 +2,7 @@
 global clear_screen
 global hello_hybrid_programming
 global add
-global _puts
+global _put_char
 
 clear_screen:
     mov ax, 03h
@@ -32,13 +32,27 @@ add:
     mov [esp], eax
     mov ecx, [bp+10]
     add [esp], ecx
-    mov eax, [sp]
+    ; mov eax, [sp] ;TODO:bugs?
 
     leave
     pop ecx
     jmp cx
 
-_puts:
-    
+_put_char:
+    enter 0, 0
+
+    mov ax, 0B800H
+    mov gs, ax
+    push di
+    mov ecx, [bp + 6]
+    mov edi, [bp + 10]
+    mov ch, 0FH
+    mov [gs:di], cx
+
+    pop di
+    leave
+    pop ecx
+    jmp cx
+
 helloStr db "hello hybrid programming!"
 length equ $ - helloStr
