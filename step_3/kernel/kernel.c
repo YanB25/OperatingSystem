@@ -4,7 +4,9 @@
 #define false 0
 int main() {
     clear_screen();
-    draw_str("hello world", 5, 30);
+    int col = add(0, 2);
+    // int col=20;
+    draw_str("hello world", 5, col);
     puts("I am here!");
     puts("\n\rhei, i am happy!");
     draw_str("I love you", 10, 8);
