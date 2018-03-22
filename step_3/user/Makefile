@@ -7,9 +7,12 @@ ASFLAGS=
 
 UTILITIES=../include
 
+all: user.o terminal.o
+
 user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
-
+terminal.o: terminal.c $(UTILITIES)/utilities.h
+	$(CC) $(CCFLAGS) -c $^
 
 clean:
 	rm *.bin -f 
