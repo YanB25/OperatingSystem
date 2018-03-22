@@ -5,6 +5,8 @@ CCFLAGS=-march=i386 -m16 -mpreferred-stack-boundary=2 -ffreestanding
 AS=nasm
 ASFLAGS=
 
+all: utilities.o
+
 utilities.o: utilities.asm
 	$(AS) $(ASFLAGS) -f elf32 -o $@ $^
 
