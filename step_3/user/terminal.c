@@ -60,11 +60,26 @@ int terminal() {
 
 void parseCMD(int CMDindex) {
     if (CMDindex == 0) return;
-    if (CMDindex == 1 && CMD_BUFFER[0] == 'q') {
-        stone();
-        clear_screen();
-
-    } else {
+    if (CMDindex == 1) {
+        const char ch = CMD_BUFFER[0];
+        if (ch == 'q') {
+            stoneQ();
+            clear_screen();
+        }
+        else if (ch == 'w') {
+            stoneW();
+            clear_screen();
+        }
+        else if (ch == 'a') {
+            stoneA();
+            clear_screen();
+        }
+        else if (ch == 's') {
+            stoneS();
+            clear_screen();
+        }
+    } 
+    else {
         puts("ybsh: command not found: ");
         putln(CMD_BUFFER);
         putln(HELP_MSG);

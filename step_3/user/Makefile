@@ -6,15 +6,22 @@ AS=nasm
 ASFLAGS=
 
 UTILITIES=../include
-
-all: user.o terminal.o stone.o
+STONE_OBJ=stoneQ.o stoneW.o stoneA.o stoneS.o
+all: user.o terminal.o $(STONE_OBJ)
 
 user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
 terminal.o: terminal.c $(UTILITIES)/utilities.h stone.h
 	$(CC) $(CCFLAGS) -c $^
-stone.o: stone.c $(UTILITIES)/utilities.h
-	$(CC) $(CCFLAGS) -c $^
+
+stoneQ.o: stone.c $(UTILITIES)/utilities.h stone_helper.h
+	$(CC) $(CCFLAGS) -c $< -D LU -o $@
+stoneW.o: stone.c $(UTILITIES)/utilities.h stone_helper.h
+	$(CC) $(CCFLAGS) -c $< -D RU -o $@
+stoneA.o: stone.c $(UTILITIES)/utilities.h stone_helper.h
+	$(CC) $(CCFLAGS) -c $< -D LD -o $@
+stoneS.o: stone.c $(UTILITIES)/utilities.h stone_helper.h
+	$(CC) $(CCFLAGS) -c $< -D RD -o $@
 
 clean:
 	rm *.bin -f 
