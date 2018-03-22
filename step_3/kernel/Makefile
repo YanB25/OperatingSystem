@@ -7,14 +7,18 @@ ASFLAGS=
 
 ROOT=..
 INCLUDE=../include
+USER=../user
 all: kernel.bin
 
-kernel.bin: kernel.o $(INCLUDE)/utilities.o 
+kernel.bin: kernel.o $(INCLUDE)/utilities.o $(USER)/user.o
 	$(LD) $(LDFLAGS) -Ttext 0xA100 --oformat binary -o $@ $^
-kernel.o: kernel.c kernel.h $(INCLUDE)/utilities.h
+kernel.o: kernel.c kernel.h $(INCLUDE)/utilities.h $(USER)/user.h
 	$(CC) $(CCFLAGS) -c $^
 $(INCLUDE)/utilities.o:
 	cd $(INCLUDE)/ && make
+	cd ../kernel
+$(USER)/user.o:
+	cd $(USER)/ && make
 	cd ../kernel
 clean:
 	rm *.bin -f 

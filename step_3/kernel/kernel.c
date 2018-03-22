@@ -1,10 +1,11 @@
 #include "kernel.h"
 #include "../include/utilities.h"
+#include "../user/user.h"
 #define true 1
 #define false 0
 int main() {
     clear_screen();
-    int col = add(0, 2);
+    int col = sum(10);
     // int col=20;
     draw_str("hello world", 5, col);
     puts("I am here!");
