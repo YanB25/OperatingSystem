@@ -70,7 +70,7 @@ readkb:
 
     xor eax, eax
     int 16H
-    
+    xor ah, ah ; IMPORTANT: ah should be 0
     leave
     retl
 
