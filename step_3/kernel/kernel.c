@@ -12,6 +12,7 @@ int main() {
     puts("\n\rhei, i am happy!");
     draw_str("I love you", 10, 8);
     puts("\n\rcan i still output?");
+    jumpToUser();
     while(true) {}
     return 0;
 }

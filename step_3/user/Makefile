@@ -5,8 +5,11 @@ CCFLAGS=-march=i386 -m16 -mpreferred-stack-boundary=2 -ffreestanding
 AS=nasm
 ASFLAGS=
 
-user.o: user.c
+UTILITIES=../include
+
+user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
+
 
 clean:
 	rm *.bin -f 
