@@ -22,4 +22,8 @@ static inline void puts(char* str) {
         str++;
     }
 }
+static inline void putln(char* str) {
+    puts(str);
+    puts("\n\r");
+}
 #endif

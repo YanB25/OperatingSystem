@@ -7,5 +7,5 @@ int sum(int end) {
     return sum;
 }
 void jumpToUser() {
-    puts("if you see me, i will be very happy");
+    putln("if you see me, i will be very happy");
 }
