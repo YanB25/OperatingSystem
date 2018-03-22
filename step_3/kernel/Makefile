@@ -8,9 +8,9 @@ ASFLAGS=
 ROOT=..
 INCLUDE=../include
 USER=../user
-
+STONE=../user/stone
 USER_HEADER=$(USER)/user.h $(USER)/terminal.h 
-STONE_OBJ=$(USER)/stoneQ.o $(USER)/stoneW.o $(USER)/stoneA.o $(USER)/stoneS.o
+STONE_OBJ=$(STONE)/*.o
 USER_OBJ=$(USER)/user.o $(USER)/terminal.o $(STONE_OBJ)
 
 all: kernel.bin

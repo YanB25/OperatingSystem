@@ -1,5 +1,5 @@
 #include "../include/utilities.h"
-#include "stone.h"
+#include "stone/stone.h"
 
 #define BACK_SPACE 8
 #define BUFFER_SIZE 64

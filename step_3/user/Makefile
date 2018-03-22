@@ -6,22 +6,19 @@ AS=nasm
 ASFLAGS=
 
 UTILITIES=../include
-STONE_OBJ=stoneQ.o stoneW.o stoneA.o stoneS.o
+STONE_OBJ=stone/%.o
 all: user.o terminal.o $(STONE_OBJ)
 
 user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
-terminal.o: terminal.c $(UTILITIES)/utilities.h stone.h
+terminal.o: terminal.c $(UTILITIES)/utilities.h stone/stone.h
 	$(CC) $(CCFLAGS) -c $^
 
-stoneQ.o: stone.c $(UTILITIES)/utilities.h stone_helper.h
-	$(CC) $(CCFLAGS) -c $< -D LU -o $@
-stoneW.o: stone.c $(UTILITIES)/utilities.h stone_helper.h
-	$(CC) $(CCFLAGS) -c $< -D RU -o $@
-stoneA.o: stone.c $(UTILITIES)/utilities.h stone_helper.h
-	$(CC) $(CCFLAGS) -c $< -D LD -o $@
-stoneS.o: stone.c $(UTILITIES)/utilities.h stone_helper.h
-	$(CC) $(CCFLAGS) -c $< -D RD -o $@
+$(STONE_OBJ): stone/stone.c $(UTILITIES)/utilities.h stone/stone_helper.h
+	$(CC) $(CCFLAGS) -c $< -D LU -o stone/stoneQ.o
+	$(CC) $(CCFLAGS) -c $< -D RU -o stone/stoneW.o
+	$(CC) $(CCFLAGS) -c $< -D LD -o stone/stoneA.o
+	$(CC) $(CCFLAGS) -c $< -D RD -o stone/stoneS.o
 
 clean:
 	rm *.bin -f 

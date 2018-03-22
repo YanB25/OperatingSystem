@@ -1,4 +1,4 @@
-#include "../include/utilities.h"
+#include "../../include/utilities.h"
 
 #ifndef __STONE_HELPER_H_
 #define __STONE_HELPER_H_
@@ -14,7 +14,7 @@
     #define DelY (1)
     #define FN_NAME_SUFFIX Q
 #elif defined(RU)
-    #define X (70)
+    #define X (65)
     #define Y (5)
     #define LeftBound (40)
     #define RightBound (79)
