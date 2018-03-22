@@ -4,11 +4,11 @@ void clear_screen();
 void hello_hybrid_programming();
 int add(int, int);
 void _draw_char(char, int);
-void draw_str(char*, int, int);
+// void draw_str(char*, int, int);
 void putch(char);
-void puts(char*);
+// void puts(char*);
 
-inline void draw_str(char* str, int row, int col) {
+static inline void draw_str(char* str, int row, int col) {
     int pos = (row * 80 + col) * 2;
     while (*str != '\0') {
         _draw_char(*str, pos);
@@ -16,7 +16,7 @@ inline void draw_str(char* str, int row, int col) {
         pos += 2;
     }
 }
-inline void puts(char* str) {
+static inline void puts(char* str) {
     while (*str) {
         putch(*str);
         str++;
