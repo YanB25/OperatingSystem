@@ -14,3 +14,9 @@ int strlen(const char* str) {
     while (str[index]) index++;
     return index;
 }
+void* memcpy(void* dst, void const * src, int n) {
+    for (int i = 0; i < n; ++i) {
+        ((char *)dst)[i] = ((char*)src)[i];
+    }
+    return dst;
+}

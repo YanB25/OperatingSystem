@@ -24,9 +24,12 @@ int main() {
     if (strcmp("hello", "hell") == 0) {
         putln("equal 3");
     }
-    puti(723);
-    puti(-321);
-    puti(13013000);
+    char s1[5] = "abcd";
+    char s2[5];
+    puti(strlen("hello world!"));
+    char* tar = memcpy(s2, s1, 5);
+    putln(tar);
+
     // terminal();
     return 0;
 }
