@@ -2,6 +2,7 @@
 #include "../include/utilities.h"
 #include "../user/user.h"
 #include "../user/terminal.h"
+#include "../include/mystring.h"
 #define true 1
 #define false 0
 int main() {
@@ -14,6 +15,18 @@ int main() {
     // draw_str("I love you", 10, 8);
     // putln("can i still output?");
     // jumpToUser();
-    terminal();
+    if (strcmp("hello", "hello") == 0) {
+        putln("equal 1");
+    }
+    if (strcmp("hello", "hello ") == 0) {
+        putln("equal 2");
+    }
+    if (strcmp("hello", "hell") == 0) {
+        putln("equal 3");
+    }
+    puti(723);
+    puti(-321);
+    puti(13013000);
+    // terminal();
     return 0;
 }

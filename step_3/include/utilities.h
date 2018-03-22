@@ -31,4 +31,23 @@ static inline void putln(char const* str) {
     puts(str);
     puts("\n\r");
 }
+static inline void puti(int num) {
+    char _buffer[30];
+    int index = 0;
+    if (num < 0) {
+        putch('-');
+        num = -num;
+    }
+    if (num == 0) {
+        putch('0');
+        return;
+    }
+    while (num) {
+        _buffer[index++] = num % 10 + '0';
+        num /= 10;
+    }
+    for (int i = index-1; i >= 0; --i) {
+        putch(_buffer[i]);
+    }
+}
 #endif

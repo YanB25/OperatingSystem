@@ -5,10 +5,13 @@ CCFLAGS=-march=i386 -m16 -mpreferred-stack-boundary=2 -ffreestanding
 AS=nasm
 ASFLAGS=
 
-all: utilities.o
+all: utilities.o mystring.o
 
 utilities.o: utilities.asm
 	$(AS) $(ASFLAGS) -f elf32 -o $@ $^
+
+mystring.o : mystring.c mystring.h
+	$(CC) $(CCFLAGS) -c $^
 
 clean:
 	rm *.bin -f 
