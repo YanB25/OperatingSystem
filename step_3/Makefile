@@ -9,7 +9,7 @@ INCLUDE=include
 KERNEL=kernel
 LOADER=loader
 ROOT=..
-all: $(KERNEL)/kernel.bin $(LOADER)/loader.bin build
+all: $(KERNEL)/kernel.bin $(LOADER)/loader.bin build cleangch
 
 $(KERNEL)/kernel.bin: 
 	cd $(KERNEL)/ && make
@@ -39,3 +39,5 @@ rebuild:
 auto:
 	make rebuild
 	make run
+cleangch:
+	find . -name "*.gch" -type f -delete
