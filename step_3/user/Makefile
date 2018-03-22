@@ -11,7 +11,7 @@ all: user.o terminal.o stone.o
 
 user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
-terminal.o: terminal.c $(UTILITIES)/utilities.h
+terminal.o: terminal.c $(UTILITIES)/utilities.h stone.h
 	$(CC) $(CCFLAGS) -c $^
 stone.o: stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
