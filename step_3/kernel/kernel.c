@@ -2,6 +2,7 @@
 #include "../include/utilities.h"
 #include "../user/user.h"
 #include "../user/terminal.h"
+#include "../user/stone.h"
 #define true 1
 #define false 0
 int main() {
@@ -14,6 +15,7 @@ int main() {
     draw_str("I love you", 10, 8);
     putln("can i still output?");
     jumpToUser();
-    terminal();
+    // terminal();
+    stone();
     return 0;
 }

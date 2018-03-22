@@ -7,11 +7,13 @@ ASFLAGS=
 
 UTILITIES=../include
 
-all: user.o terminal.o
+all: user.o terminal.o stone.o
 
 user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
 terminal.o: terminal.c $(UTILITIES)/utilities.h
+	$(CC) $(CCFLAGS) -c $^
+stone.o: stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
 
 clean:

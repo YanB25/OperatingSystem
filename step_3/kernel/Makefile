@@ -9,8 +9,8 @@ ROOT=..
 INCLUDE=../include
 USER=../user
 
-USER_HEADER=$(USER)/user.h $(USER)/terminal.h
-USER_OBJ=$(USER)/user.o $(USER)/terminal.o
+USER_HEADER=$(USER)/user.h $(USER)/terminal.h $(USER)/stone.h
+USER_OBJ=$(USER)/user.o $(USER)/terminal.o $(USER)/stone.o
 
 all: kernel.bin
 
