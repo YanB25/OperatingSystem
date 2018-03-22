@@ -5,6 +5,8 @@ global add
 global _draw_char
 global puts
 global putch
+global kbhit
+global readkb
 
 %include "bridge.inc"
 
@@ -62,6 +64,33 @@ putch:
 
     leave
     retl
+
+readkb:
+    enter 0, 0
+
+    xor eax, eax
+    int 16H
+    
+    leave
+    retl
+
+kbhit:
+    enter 0, 0
+
+    xor ax, ax
+    mov ah, 1
+    int 16H
+    cmp ah, 1
+    jne .ret
+
+.nokeypress:
+    xor eax, eax
+
+.ret:
+    leave
+    retl
+
+
 
 helloStr db "hello hybrid programming!"
 length equ $ - helloStr

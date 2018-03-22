@@ -4,10 +4,15 @@ void clear_screen();
 void hello_hybrid_programming();
 int add(int, int);
 void _draw_char(char, int);
-// void draw_str(char*, int, int);
 void putch(char);
-// void puts(char*);
-
+// unbocked function to test whether kb is hit
+// return zero if no kb is hit. return ascii
+// otherwise.
+// WARNING: this function will not remove kbhit
+// in buffer. you need to call readkb to do so.
+int kbhit();
+// blocked function to read hit kb.
+int readkb();
 static inline void draw_str(char* str, int row, int col) {
     int pos = (row * 80 + col) * 2;
     while (*str != '\0') {

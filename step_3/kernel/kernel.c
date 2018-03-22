@@ -13,6 +13,12 @@ int main() {
     draw_str("I love you", 10, 8);
     putln("can i still output?");
     jumpToUser();
-    while(true) {}
+    while(true) {
+        int try = kbhit();
+        if (try) {
+            int key = readkb();
+            putch(key);
+        }
+    }
     return 0;
 }
