@@ -13,7 +13,7 @@ void putch(char);
 int kbhit();
 // blocked function to read hit kb.
 int readkb();
-static inline void draw_str(char* str, int row, int col) {
+static inline void draw_str(char const* str, int row, int col) {
     int pos = (row * 80 + col) * 2;
     while (*str != '\0') {
         _draw_char(*str, pos);
@@ -21,13 +21,13 @@ static inline void draw_str(char* str, int row, int col) {
         pos += 2;
     }
 }
-static inline void puts(char* str) {
+static inline void puts(char const* str) {
     while (*str) {
         putch(*str);
         str++;
     }
 }
-static inline void putln(char* str) {
+static inline void putln(char const* str) {
     puts(str);
     puts("\n\r");
 }
