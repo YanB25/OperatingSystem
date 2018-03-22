@@ -8,9 +8,10 @@ ASFLAGS=
 ROOT=..
 INCLUDE=../include
 USER=../user
-
+STONE=../user/stone
 USER_HEADER=$(USER)/user.h $(USER)/terminal.h 
-USER_OBJ=$(USER)/user.o $(USER)/terminal.o $(USER)/stone.o
+STONE_OBJ=$(STONE)/*.o
+USER_OBJ=$(USER)/user.o $(USER)/terminal.o $(STONE_OBJ)
 
 all: kernel.bin
 
@@ -24,6 +25,11 @@ $(INCLUDE)/utilities.o:
 $(USER)/user.o:
 	cd $(USER)/ && make
 	cd ../kernel
+
+$(STONE_OBJ):
+	cd $(USER)/ && make
+	cd ../kernel
+
 clean:
 	rm *.bin -f 
 	rm *.o -f  
