@@ -4,8 +4,7 @@
 #define BACK_SPACE 8
 #define BUFFER_SIZE 64
 #define PROMT "yb@yb-thinkpad-e450:~$ "
-#define HELP_MSG "welcome to YB command line\n\r"\
-    "enter q, w, e, a, s, d to run program"
+#define HELP_MSG "enter q, w,  a, s to run program"
 
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
@@ -63,6 +62,8 @@ void parseCMD(int CMDindex) {
     if (CMDindex == 0) return;
     if (CMDindex == 1 && CMD_BUFFER[0] == 'q') {
         stone();
+        clear_screen();
+
     } else {
         puts("ybsh: command not found: ");
         putln(CMD_BUFFER);
