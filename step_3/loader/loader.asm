@@ -6,13 +6,23 @@ _start:
     mov ds, ax
     mov es, ax
 
+    mov dx, 1 ; count
     mov cl, 2
     mov bx, kernel_address
+.Loop:
+    push dx 
+    push cx
+
     call load_kernel
 
-    mov cl, 3
-    mov bx, kernel_address + 0200H
-    call load_kernel
+    pop cx
+    pop dx
+    inc dx
+    inc cl
+    add bx, 0200H
+    cmp dx, 10
+    jle .Loop
+
 .jmp2kernel:
     mov bx, kernel_address
     jmp bx
