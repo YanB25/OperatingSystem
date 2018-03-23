@@ -30,9 +30,8 @@ int main() {
     // puti(strlen("hello world!"));
     // char* tar = memcpy(s2, s1, 5);
     // putln(tar);
-    printf("the cordination is (%d, %d)\n", 2, 10);
-    printf("hard test %c%c%d%d%c\n", 'a', 'b', 10, 20, 't');
-
-    // terminal();
+    draw_str("enter help to get help", 0, 30);
+    putln("");
+    terminal();
     return 0;
 }
