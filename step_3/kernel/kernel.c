@@ -15,20 +15,23 @@ int main() {
     // draw_str("I love you", 10, 8);
     // putln("can i still output?");
     // jumpToUser();
-    if (strcmp("hello", "hello") == 0) {
-        putln("equal 1");
-    }
-    if (strcmp("hello", "hello ") == 0) {
-        putln("equal 2");
-    }
-    if (strcmp("hello", "hell") == 0) {
-        putln("equal 3");
-    }
-    char s1[5] = "abcd";
-    char s2[5];
-    puti(strlen("hello world!"));
-    char* tar = memcpy(s2, s1, 5);
-    putln(tar);
+
+    // if (strcmp("hello", "hello") == 0) {
+    //     putln("equal 1");
+    // }
+    // if (strcmp("hello", "hello ") == 0) {
+    //     putln("equal 2");
+    // }
+    // if (strcmp("hello", "hell") == 0) {
+    //     putln("equal 3");
+    // }
+    // char s1[5] = "abcd";
+    // char s2[5];
+    // puti(strlen("hello world!"));
+    // char* tar = memcpy(s2, s1, 5);
+    // putln(tar);
+    printf("the cordination is (%d, %d)\n", 2, 10);
+    printf("hard test %c%c%d%d%c\n", 'a', 'b', 10, 20, 't');
 
     // terminal();
     return 0;

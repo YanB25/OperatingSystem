@@ -1,5 +1,6 @@
 #ifndef __UTILITIES_H_
 #define __UTILITIES_H_
+#include <stdarg.h>
 void clear_screen();
 void hello_hybrid_programming();
 int add(int, int);
@@ -53,5 +54,47 @@ static inline void puti(int num) {
 static inline void putiln(int num) {
     puti(num);
     putln("");
+}
+static inline int printf(const char* format, ...) {
+    va_list valist;
+    int narg = 0;
+    int index = 0;
+    while (format[index]) {
+        if (format[index] == '%') narg++;
+        index++;
+    }
+
+    va_start(valist, narg);
+
+    index = 0;
+    while (format[index]) {
+        if (format[index] == '%') {
+            if (format[index+1] == 'd') {
+                int data = va_arg(valist, int);
+                puti(data);
+            } else if (format[index+1] == 'c') {
+                int c = va_arg(valist, int);
+                putch(c);
+            } else if (format[index+1] == 's') {
+                char* str = va_arg(valist, char*);
+                puts(str);
+            } else if (format[index+1] == '%'){
+                putch('%');
+            }
+            index += 2;
+            continue;
+        } else if (format[index] == '\n' || format[index] == '\r') {
+            putch('\n');
+            putch('\r');
+        } else {
+            putch(format[index]);
+        }
+        index++;
+    }
+    va_end(valist);
+    return 0;
+}
+static inline int getch() {
+    return readkb();
 }
 #endif
