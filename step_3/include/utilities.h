@@ -50,4 +50,8 @@ static inline void puti(int num) {
         putch(_buffer[i]);
     }
 }
+static inline void putiln(int num) {
+    puti(num);
+    putln("");
+}
 #endif
