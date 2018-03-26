@@ -25,7 +25,7 @@ $(LOADER)/loader.bin:
 
 build: $(LOADER)/loader.bin $(KERNEL)/kernel.bin
 	dd if=$(LOADER)/loader.bin of=OS.img conv=notrunc
-	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc oflag=seek_bytes seek=512
+	dd if=$(FILESYSTEM)/DBR.bin of=OS.img conv=notrunc oflag=seek_bytes seek=512
 clean:
 	find . -name "*.bin" -type f -delete
 	find . -name "*.o" -type f -delete
