@@ -20,10 +20,10 @@ struct FAT_ITEM {
 typedef struct FAT_ITEM FAT_ITEM;
 
 FAT_ITEM media_type = {
-    "null","res",0,0,0,0,0,0,0,0,0,0,0
+    "__media_","res",0,0,0,0,0,0,0,0,0,0,0
 };
 FAT_ITEM error_flags = {
-    "","",0,0,0,0,0,0,0,0,0,0,0
+    "__error_","res",0,0,0,0,0,0,0,0,0,0,0
 };
 FAT_ITEM item1= {
     "kernel",
