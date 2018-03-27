@@ -26,3 +26,6 @@ code:
     ; 0x7E3E
     calll DBRkernelLoader
     hlt    
+
+times 510-($-$$) db 0
+dw 0xAA55
