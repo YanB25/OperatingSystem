@@ -31,5 +31,6 @@ blank:
 partition_table:
 .first:
     ; TODO: finish me.
+    times 510-($-$$) db 0
 dw 0xAA55
 DBR_address equ 0x7E00

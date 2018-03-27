@@ -28,9 +28,20 @@ $(FILESYSTEM)/DBR.bin:
 	cd $(FILESYSTEM)/ && make
 	cd $(ROOT)/
 
-build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin
+$(FILESYSTEM)/FAT.bin:
+	cd $(FILESYSTEM)/ && make 
+	cd $(ROOT)/
+
+$(FILESYSTEM)/datablock.bin:
+	cd $(FILESYSTEM)/ && make 
+	cd $(ROOT)/
+
+build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin $(FILESYSTEM)/FAT.bin $(FILESYSTEM)/datablock.bin
 	dd if=$(LOADER)/loader.bin of=OS.img conv=notrunc
 	dd if=$(FILESYSTEM)/DBR.bin of=OS.img conv=notrunc oflag=seek_bytes seek=512
+	dd if=$(FILESYSTEM)/FAT.bin of=OS.img conv=notrunc oflag=seek_bytes seek=1536
+	dd if=$(FILESYSTEM)/FAT.bin of=OS.img conv=notrunc oflag=seek_bytes seek=3584
+	dd if=$(FILESYSTEM)/datablock.bin of=OS.img conv=notrunc oflag=seek_bytes seek=5632
 clean:
 	find . -name "*.bin" -type f -delete
 	find . -name "*.o" -type f -delete
