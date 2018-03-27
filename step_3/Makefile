@@ -9,7 +9,8 @@ INCLUDE=include
 KERNEL=kernel
 LOADER=loader
 ROOT=..
-all: $(KERNEL)/kernel.bin $(LOADER)/loader.bin build cleangch
+FILESYSTEM=filesystem
+all: $(LOADER)/loader.bin build cleangch
 
 $(KERNEL)/kernel.bin: 
 	cd $(KERNEL)/ && make
@@ -23,7 +24,11 @@ $(LOADER)/loader.bin:
 	cd $(LOADER) && make
 	cd $(ROOT)/
 
-build: $(LOADER)/loader.bin $(KERNEL)/kernel.bin
+$(FILESYSTEM)/DBR.bin:
+	cd $(FILESYSTEM)/ && make
+	cd $(ROOT)/
+
+build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin
 	dd if=$(LOADER)/loader.bin of=OS.img conv=notrunc
 	dd if=$(FILESYSTEM)/DBR.bin of=OS.img conv=notrunc oflag=seek_bytes seek=512
 clean:

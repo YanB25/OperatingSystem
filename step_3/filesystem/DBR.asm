@@ -1,3 +1,6 @@
+[BITS 16]
+extern DBRkernelLoader
+%include "../include/bridge.inc"
 begin:
     jmp code
     times 3 - ($ - $$) db 0
@@ -20,4 +23,6 @@ ExtBPB:
     times 26 db 0
     ;TODO: add extend info
 code:
-    
+    ; 0x7E3E
+    calll DBRkernelLoader
+    hlt    
