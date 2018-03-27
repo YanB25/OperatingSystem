@@ -19,6 +19,12 @@ struct FAT_ITEM {
 }__attribute__((packed));
 typedef struct FAT_ITEM FAT_ITEM;
 
+FAT_ITEM media_type = {
+    "null","res",0,0,0,0,0,0,0,0,0,0,0
+};
+FAT_ITEM error_flags = {
+    "","",0,0,0,0,0,0,0,0,0,0,0
+};
 FAT_ITEM item1= {
     "kernel",
     "bin",

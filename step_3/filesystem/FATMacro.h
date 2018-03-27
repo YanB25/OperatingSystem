@@ -7,4 +7,6 @@
 #define FAT_sys (1 << 2)
 #define FAT_fldr (1 << 4)
 
+#define FAT_ITEM_EMPTY {0,0,0,0,0,0,0,0,0,0,0,0,0}
+
 #endif
