@@ -1,7 +1,8 @@
 #include <stdint.h>
-int DBRkernelLoader() {
-    int b = 2;
-    int c = 3;
-    int d = b + c;
+extern uint16_t mydata;
+uint16_t DBRkernelLoader() {
+    uint16_t b = 2;
+    uint16_t d = b + mydata;
+    // int d = b + 3;
     return d;
 }
