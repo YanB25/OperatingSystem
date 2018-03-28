@@ -14,8 +14,8 @@ FAT_ITEM kernel_bin= {
     0, 0, 0, 0, 0, 0,
     0,
     0,
-    3,
-    1024
+    4,
+    4096 // 8 sectors
 };
 
 FAT_ITEM home_dir= {
@@ -25,6 +25,6 @@ FAT_ITEM home_dir= {
     0, 0, 0, 0, 0, 0,
     0,
     0,
-    5,
+    12,
     512
 };

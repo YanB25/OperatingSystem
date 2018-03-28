@@ -11,4 +11,6 @@ static inline void loadLogicSector(uint16_t lgsector, uint16_t addr, uint16_t nu
     uint16_t trackN = lgsector2track(lgsector);
     loadSector(trackN, headN, sectorN, addr, num);
 }
+
+#define filesize2sectors(X) (X/512)
 #endif

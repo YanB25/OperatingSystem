@@ -10,7 +10,7 @@ KERNEL=kernel
 LOADER=loader
 ROOT=..
 FILESYSTEM=filesystem
-all: $(LOADER)/loader.bin build cleangch
+all: $(KERNEL)/kernel.bin $(LOADER)/loader.bin build cleangch
 
 $(KERNEL)/kernel.bin: 
 	cd $(KERNEL)/ && make
@@ -41,7 +41,8 @@ build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin $(FILESYSTEM)/FAT.bin $(FILESY
 	dd if=$(FILESYSTEM)/DBR.bin of=OS.img conv=notrunc oflag=seek_bytes seek=512
 	dd if=$(FILESYSTEM)/FAT.bin of=OS.img conv=notrunc oflag=seek_bytes seek=1536
 	dd if=$(FILESYSTEM)/FAT.bin of=OS.img conv=notrunc oflag=seek_bytes seek=3584
-	dd if=$(FILESYSTEM)/datablock.bin of=OS.img conv=notrunc oflag=seek_bytes seek=5632
+	dd if=$(FILESYSTEM)/datablock.bin of=OS.img conv=notrunc oflag=seek_bytes seek=6656
+	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc oflag=seek_bytes seek=7680
 clean:
 	find . -name "*.bin" -type f -delete
 	find . -name "*.o" -type f -delete

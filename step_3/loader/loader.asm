@@ -15,7 +15,7 @@ load_kernel:
     mov ax, 0
     mov es, ax ; which segment to load
     mov ah, 2 ; function number
-    mov al, 1 ; load one sector
+    mov al, 2 ; load two sector
     mov dl, 0; 0 for fd
     mov dh, 0; head
     mov ch, 0 ; low 8 bits of cyl
