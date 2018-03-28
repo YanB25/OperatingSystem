@@ -27,8 +27,10 @@ uint16_t DBRkernelLoader() {
     // load datablock: root area into memory 0x8600
     loadLogicSector(rootSectorNth, ROOT_AREA_ADDRESS, 1);
 
-    //FIXME: IMPORTANT! do not assume file continues in datablock;
-    // should be fix
+    // WARNING, IMPORTANT: if you change cluster into 2 sectors
+    // you may also want to change the defination below:
+    // loadLogicSector(.., .. 1)  1 -> sectorPerCluster
+    // macro filesize2sectors()  func-name -> filesize2clusters()
     FAT_ITEM* pRootEntities = (FAT_ITEM*)(ROOT_AREA_ADDRESS);
     FAT_ITEM_T* FATRootItem = FAT_table + 4;
     for (int16_t i = 0; i < 3; ++i) {
@@ -43,7 +45,6 @@ uint16_t DBRkernelLoader() {
                 FATRootItem = FAT_table + cluster;
                 kernelSectorNth = dataBlockBase + (cluster * sectorPerCluster);
             }
-            // loadLogicSector(kernelSectorNth, kernelInMem, numOfSectors);
             break;
         }
     }
