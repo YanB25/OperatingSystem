@@ -1,6 +1,5 @@
 #include <stdint.h>
 #include "FATMacro.h"
-typedef struct FAT_ITEM FAT_ITEM;
 
 FAT_ITEM media_type = {
     "__media_","res",0,0,0,0,0,0,0,0,0,0,0

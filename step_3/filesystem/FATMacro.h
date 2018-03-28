@@ -19,12 +19,16 @@ struct FAT_ITEM {
     uint32_t filesize; // in bytes
 }__attribute__((packed));
 
-#define FAT_rw 0
-#define FAT_ro 1
+typedef struct FAT_ITEM FAT_ITEM;
+
+#define FAT_rw (0)
+#define FAT_ro (1)
 #define FAT_hid (1 << 1)
 #define FAT_sys (1 << 2)
 #define FAT_fldr (1 << 4)
 
 #define FAT_ITEM_EMPTY {0,0,0,0,0,0,0,0,0,0,0,0,0}
+
+#define FAT_ITEM_SIZE (32)
 
 #endif
