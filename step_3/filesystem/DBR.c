@@ -36,6 +36,7 @@ uint16_t DBRkernelLoader() {
             loadLogicSector(kernelSectorNth, kernelInMem, numOfSectors);
         }
     }
+    __asm__("jmpl $0, $0xA100");
     return 0;
 }
 
