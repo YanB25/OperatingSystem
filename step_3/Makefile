@@ -13,30 +13,37 @@ FILESYSTEM=filesystem
 all: $(KERNEL)/kernel.bin $(LOADER)/loader.bin build cleangch
 
 $(KERNEL)/kernel.bin: 
+	echo "\n"
 	cd $(KERNEL)/ && make
 	cd $(ROOT)/
 
 $(INCLUDE)/utilities.o: 
+	echo "\n"
 	cd $(INCLUDE)/ && make
 	cd $(ROOT)/
 
 $(LOADER)/loader.bin: 
+	echo "\n"
 	cd $(LOADER) && make
 	cd $(ROOT)/
 
 $(FILESYSTEM)/DBR.bin:
+	echo "\n"
 	cd $(FILESYSTEM)/ && make
 	cd $(ROOT)/
 
 $(FILESYSTEM)/FAT.bin:
+	echo "\n"
 	cd $(FILESYSTEM)/ && make 
 	cd $(ROOT)/
 
 $(FILESYSTEM)/datablock.bin:
+	echo "\n"
 	cd $(FILESYSTEM)/ && make 
 	cd $(ROOT)/
 
 build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin $(FILESYSTEM)/FAT.bin $(FILESYSTEM)/datablock.bin
+	echo "\n"
 	dd if=$(LOADER)/loader.bin of=OS.img conv=notrunc
 	dd if=$(FILESYSTEM)/DBR.bin of=OS.img conv=notrunc oflag=seek_bytes seek=512
 	dd if=$(FILESYSTEM)/FAT.bin of=OS.img conv=notrunc oflag=seek_bytes seek=1536
@@ -44,6 +51,7 @@ build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin $(FILESYSTEM)/FAT.bin $(FILESY
 	dd if=$(FILESYSTEM)/datablock.bin of=OS.img conv=notrunc oflag=seek_bytes seek=6656
 	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc oflag=seek_bytes seek=7680
 clean:
+	echo "\n"
 	find . -name "*.bin" -type f -delete
 	find . -name "*.o" -type f -delete
 	find . -name "*.gch" -type f -delete
