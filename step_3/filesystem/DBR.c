@@ -6,6 +6,7 @@
 #define FAT_TABLE_ADDRESS (0x8200)
 #define ROOT_AREA_ADDRESS (0x8600)
 #define KERNEL_ADDRESS (0xA100)
+
 int16_t __fs_strcmp(const char* s1, const char* s2);
 
 uint16_t DBRkernelLoader() {
