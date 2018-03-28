@@ -3,7 +3,8 @@
 #include "FATMacro.h"
 
 #define BPB_ADDRESS (0x7E0B)
-#define ROOT_AREA_ADDRESS (0x8200)
+#define FAT_TABLE_ADDRESS (0x8200)
+#define ROOT_AREA_ADDRESS (0x8600)
 #define KERNEL_ADDRESS (0xA100)
 int16_t __fs_strcmp(const char* s1, const char* s2);
 
@@ -17,11 +18,13 @@ uint16_t DBRkernelLoader() {
     uint16_t dataBlockBase = hiddenSector + reservedSector 
         + numberOfFAT * sectorPerFAT
         + 1;
-    uint16_t rootSectorN = dataBlockBase + 2 * sectorPerCluster;
+    uint16_t rootSectorNth = dataBlockBase + 2 * sectorPerCluster;
 
-
-    // load datablock: root area into memory 0x8200
-    loadLogicSector(rootSectorN, ROOT_AREA_ADDRESS, 1);
+    // load FAT table into memory 0x8200
+    uint16_t FATTableNth = hiddenSector + reservedSector + 1;
+    loadLogicSector(FATTableNth, FAT_TABLE_ADDRESS, 2);
+    // load datablock: root area into memory 0x8600
+    loadLogicSector(rootSectorNth, ROOT_AREA_ADDRESS, 1);
 
     //FIXME: IMPORTANT! do not assume file continues in datablock;
     // should be fix
