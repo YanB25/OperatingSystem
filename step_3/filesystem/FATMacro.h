@@ -1,6 +1,9 @@
 #ifndef __FAT_MACRO_H_
 #define __FAT_MACRO_H_
 #include <stdint.h>
+
+typedef uint16_t FAT_ITEM_T;
+
 struct FAT_ITEM {
     char filename[8];
     char extendname[3];

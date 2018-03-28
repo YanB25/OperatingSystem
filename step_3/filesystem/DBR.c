@@ -23,20 +23,28 @@ uint16_t DBRkernelLoader() {
     // load FAT table into memory 0x8200
     uint16_t FATTableNth = hiddenSector + reservedSector + 1;
     loadLogicSector(FATTableNth, FAT_TABLE_ADDRESS, 2);
+    FAT_ITEM_T* FAT_table = (FAT_ITEM_T*)(FAT_TABLE_ADDRESS);
     // load datablock: root area into memory 0x8600
     loadLogicSector(rootSectorNth, ROOT_AREA_ADDRESS, 1);
 
     //FIXME: IMPORTANT! do not assume file continues in datablock;
     // should be fix
     FAT_ITEM* pRootEntities = (FAT_ITEM*)(ROOT_AREA_ADDRESS);
+    FAT_ITEM_T* FATRootItem = FAT_table + 4;
     for (int16_t i = 0; i < 3; ++i) {
         FAT_ITEM* p = pRootEntities + i;
         if (__fs_strcmp(p->filename, "kernel") == 0) {
             uint16_t cluster = p->blow_cluster;
             uint16_t numOfSectors = filesize2sectors(p->filesize);
             uint16_t kernelSectorNth = dataBlockBase + (cluster * sectorPerCluster);
-            uint16_t kernelInMem = KERNEL_ADDRESS;
-            loadLogicSector(kernelSectorNth, kernelInMem, numOfSectors);
+            for (int16_t j = 0; j < numOfSectors; ++j) {
+                loadLogicSector(kernelSectorNth, KERNEL_ADDRESS + j * 0x200, 1);
+                cluster = *FATRootItem;
+                FATRootItem = FAT_table + cluster;
+                kernelSectorNth = dataBlockBase + (cluster * sectorPerCluster);
+            }
+            // loadLogicSector(kernelSectorNth, kernelInMem, numOfSectors);
+            break;
         }
     }
     __asm__("jmpl $0, $0xA100");
