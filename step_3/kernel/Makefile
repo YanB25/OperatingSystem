@@ -8,6 +8,7 @@ ASFLAGS=
 ROOT=..
 INCLUDE=../include
 USER=../user
+FILESYSTEM=../filesystem
 
 USER_HEADER=$(USER)/user.h $(USER)/terminal.h 
 USER_OBJ=$(USER)/user.o $(USER)/terminal.o $(USER)/stone.o
@@ -16,7 +17,7 @@ all: kernel.bin
 
 kernel.bin: kernel.o $(INCLUDE)/utilities.o $(USER_OBJ) $(INCLUDE)/mystring.o
 	$(LD) $(LDFLAGS) -Ttext 0xA100 --oformat binary -o $@ $^
-kernel.o: kernel.c kernel.h $(INCLUDE)/utilities.h $(USER_HEADER)
+kernel.o: kernel.c kernel.h $(INCLUDE)/utilities.h $(USER_HEADER) $(FILESYSTEM)/API/fsapi.h
 	$(CC) $(CCFLAGS) -c $^
 $(INCLUDE)/utilities.o:
 	cd $(INCLUDE)/ && make

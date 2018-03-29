@@ -2,10 +2,14 @@
 #include "FATMacro.h"
 
 FAT_ITEM media_type = {
-    "__media_","res",0,0,0,0,0,0,0,0,0,0,0
+    "__media_","res",
+    FAT_doc,
+    0,0,0,0,0,0,0,0,0,0
 };
 FAT_ITEM error_flags = {
-    "__error_","res",0,0,0,0,0,0,0,0,0,0,0
+    "__error_","res",
+    FAT_doc
+    ,0,0,0,0,0,0,0,0,0,0
 };
 FAT_ITEM kernel_bin= {
     "kernel",

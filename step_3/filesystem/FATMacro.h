@@ -32,7 +32,7 @@ typedef struct FAT_ITEM FAT_ITEM;
 #define FAT_hid (1 << 1)
 #define FAT_sys (1 << 2)
 #define FAT_fldr (1 << 4)
-
+#define FAT_doc (1 << 5)
 #define FAT_ITEM_EMPTY {0,0,0,0,0,0,0,0,0,0,0,0,0}
 
 #define FAT_ITEM_SIZE (32)

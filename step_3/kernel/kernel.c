@@ -3,33 +3,31 @@
 #include "../user/user.h"
 #include "../user/terminal.h"
 #include "../include/mystring.h"
+#include "../filesystem/API/fsapi.h"
 #define true 1
 #define false 0
 int main() {
     clear_screen();
-    // int col = sum(10);
-    // // int col=20;
-    // draw_str("hello world", 5, col);
-    // putln("I am here!");
-    // putln("hei, i am happy!");
-    // draw_str("I love you", 10, 8);
-    // putln("can i still output?");
-    // jumpToUser();
+    
+    FAT_ITEM* root = __get_root_dir();
+    if (__FAT_item_type(root) != TYPE_DOC) {
+        putln(root->filename);
+    }
+    while (__has_next_item(root)) {
+        root = __next_item(root);
+        if (__FAT_item_type(root) != TYPE_DOC) {
+            puts(root->filename);
+        }
+        if (__FAT_item_type(root) == TYPE_FLDR) {
+            putln("/");
+        } else if (__FAT_item_type(root) == TYPE_FILE) {
+            puts(".");
+            putln(root->extendname);
+        } else {
+            putln("");
+        }
+    }
 
-    // if (strcmp("hello", "hello") == 0) {
-    //     putln("equal 1");
-    // }
-    // if (strcmp("hello", "hello ") == 0) {
-    //     putln("equal 2");
-    // }
-    // if (strcmp("hello", "hell") == 0) {
-    //     putln("equal 3");
-    // }
-    // char s1[5] = "abcd";
-    // char s2[5];
-    // puti(strlen("hello world!"));
-    // char* tar = memcpy(s2, s1, 5);
-    // putln(tar);
     draw_str("enter help to get help", 0, 30);
     putln("");
     terminal();
