@@ -23,7 +23,7 @@ BPB:
     LargeSector dd 0; unused bpb + 21
 ExtBPB:
     times 26 db 0
-    ;TODO: add extend info
+    ;TODO: Ext BPB in DBR
 code:
     ; 0x7E3E
     calll DBRkernelLoader

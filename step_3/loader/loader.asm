@@ -30,7 +30,7 @@ blank:
     times 444-($-$$) db 0
 partition_table:
 .first:
-    ; TODO: finish me.
+    ; TODO: partition table in MBR
     times 510-($-$$) db 0
 dw 0xAA55
 DBR_address equ 0x7E00
