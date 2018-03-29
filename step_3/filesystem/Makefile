@@ -11,7 +11,7 @@ DBR.bin: DBR.o DBRkernelLoader.o fsutilities.o
 	$(LD) $(LDFLAGS) -Ttext 0x7E00 --oformat binary -o $@ $^ 
 DBR.o: DBR.asm 
 	$(AS) $(ASFLAGS) -f elf32 -o $@ $^
-DBRkernelLoader.o: DBR.c fsutilities.h
+DBRkernelLoader.o: DBR.c fsutilities.h filesystem.h
 	$(CC) $(CCFLAGS) -c $< -o $@ -Og
 
 datablock.o: datablock.c FATMacro.h

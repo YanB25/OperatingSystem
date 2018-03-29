@@ -2,12 +2,7 @@
 #include "fsutilities.h"
 #include "FATMacro.h"
 
-#define BPB_ADDRESS (0x7E0B)
-#define FAT_TABLE_ADDRESS (0x8200)
-#define ROOT_AREA_ADDRESS (0x8600)
-#define KERNEL_ADDRESS (0xA100)
-
-int16_t __fs_strcmp(const char* s1, const char* s2);
+#include "filesystem.h"
 
 uint16_t DBRkernelLoader() {
     void* bpb = (void*)(BPB_ADDRESS);
@@ -49,20 +44,7 @@ uint16_t DBRkernelLoader() {
             break;
         }
     }
-    __asm__("jmpl $0, $0xA100");
+    __asm__("jmpl $0, $" TO_STRING(KERNEL_ADDRESS) "\n");
     return 0;
-}
-
-int16_t __fs_strcmp(const char* s1, const char* s2) {
-    const char* lhs = s1;
-    const char* rhs = s2;
-    while (*lhs && *rhs) {
-        if (*lhs != * rhs) {
-            return *lhs - *rhs;
-        }
-        lhs++;
-        rhs++;
-    }
-    return *lhs - *rhs;
 }
 
