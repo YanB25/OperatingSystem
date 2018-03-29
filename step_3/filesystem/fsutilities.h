@@ -12,7 +12,7 @@ static inline void loadLogicSector(uint16_t lgsector, uint16_t addr, uint16_t nu
     loadSector(trackN, headN, sectorN, addr, num);
 }
 
-#define filesize2sectors(X) (X/512)
+#define filesize2sectors(X) ((X+511)/512)
 
 static inline int16_t __fs_strcmp(const char* s1, const char* s2) {
     const char* lhs = s1;
