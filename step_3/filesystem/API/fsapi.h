@@ -16,14 +16,30 @@ static inline FAT_ITEM* __get_root_dir() {
     return (FAT_ITEM*)(ROOT_AREA_ADDRESS);
 }
 static inline int16_t __has_next_item(const FAT_ITEM* p) {
+    while ((p+1)->filename[0] == S_DEL) {
+        p++;
+    }
     return (p+1)->filename[0] != S_UNUSED;
 }
 static inline int16_t __has_prev_item(const FAT_ITEM* p) {
-    return 0; //TODO: how to deal with it? return false forever
+    while ((p-1)->filename[0] == S_DEL) {
+        p--;
+    }
+    return (p-1)->filename[0] != S_UNUSED;
+    //TODO: how to deal with it? return false forever
 }
-
-#define __next_item(FAT_ITEM_P) (FAT_ITEM_P+1)
-#define __prev_item(FAT_ITEM_P) (FAT_ITEM_P-1)
+static inline FAT_ITEM* __next_item(FAT_ITEM* p) {
+    while ((p+1)->filename[0] == S_DEL) {
+        p++;
+    }
+    return p+1;
+}
+static inline FAT_ITEM* __prev_item(FAT_ITEM* p) {
+    while ((p-1)->filename[0] == S_DEL) {
+        p--;
+    }
+    return p-1;
+}
 
 static inline int16_t __FAT_item_type(const FAT_ITEM* p) {
     if (p->mod & FAT_fldr) {
@@ -53,14 +69,14 @@ static inline int16_t __rm_this_file(FAT_ITEM* p) {
     if (mod & FAT_doc) {
         return -3;
     }
-    const char* const fn = p->filename;
+    const uint8_t* const fn = p->filename;
     if (fn[0] == S_UNUSED) {
         return -4;
     }
     if (fn[0] == S_DEL) {
         return -5;
     }
-    p->filename[0] = S_DEL;
+    (p->filename[0]) = S_DEL;
     return 0;
 }
 #endif
