@@ -4,6 +4,9 @@
 
 typedef uint16_t FAT_ITEM_T;
 
+#define S_UNUSED 0x00
+#define S_DOTS 0x2E
+#define S_DEL 0xE5
 struct FAT_ITEM {
     char filename[8];
     char extendname[3];
