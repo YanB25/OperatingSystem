@@ -15,7 +15,7 @@ USER_OBJ=$(USER)/user.o $(USER)/terminal.o $(USER)/stone.o
 
 all: kernel.bin
 
-kernel.bin: kernel.o $(INCLUDE)/utilities.o $(USER_OBJ) $(INCLUDE)/mystring.o
+kernel.bin: kernel.o $(INCLUDE)/utilities.o $(USER_OBJ) $(INCLUDE)/mystring.o $(FILESYSTEM)/fsutilities.o
 	$(LD) $(LDFLAGS) -Ttext 0xA100 --oformat binary -o $@ $^
 kernel.o: kernel.c kernel.h $(INCLUDE)/utilities.h $(USER_HEADER) $(FILESYSTEM)/API/fsapi.h
 	$(CC) $(CCFLAGS) -c $^
@@ -27,6 +27,9 @@ $(USER)/user.o:
 	cd ../kernel
 $(INCLUDE)/mystring.o:
 	cd $(INCLUDE)/ && make 
+	cd ../kernel
+$(FILESYSTEM)/fsutilities.o:
+	cd $(FILESYSTEM)/ && make 
 	cd ../kernel
 clean:
 	rm *.bin -f 

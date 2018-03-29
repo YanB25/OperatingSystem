@@ -29,14 +29,13 @@ static inline int16_t __FAT_item_type(const FAT_ITEM* p) {
     }
     return TYPE_FILE;
 }
-//FIXME: here is a bug. can not load into memory
 static inline FAT_ITEM* __jmp_into_dir(const FAT_ITEM* p) {
     uint16_t cluster = p->blow_cluster;
     uint16_t numOfSector = filesize2sectors(p->filesize);
     uint16_t sectorNth = HIDDEN_SECTOR + RESERVED_SECTOR + 
         NUMBER_OF_FAT * SECTOR_PER_FAT + 
         cluster * SECTOR_PER_CLUSTER + 1;
-    loadLogicSector(sectorNth, DATA_BLOCK_ADDRESS, 1); //TODO: the 1 should be chagned to numOfSector
+    loadLogicSector(sectorNth, DATA_BLOCK_ADDRESS, numOfSector); 
     return (FAT_ITEM*)(DATA_BLOCK_ADDRESS);
 }
 #endif
