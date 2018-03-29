@@ -33,7 +33,7 @@ static inline void putln(char const* str) {
     puts(str);
     puts("\n\r");
 }
-static inline void puti(int num) {
+static inline void puti(int32_t num) {
     char _buffer[30];
     int index = 0;
     if (num < 0) {

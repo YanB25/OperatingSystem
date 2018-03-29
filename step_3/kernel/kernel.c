@@ -8,7 +8,7 @@
 #define false 0
 int main() {
     clear_screen();
-    
+    putln("what happen?");
     FAT_ITEM* root = __get_root_dir();
     if (__FAT_item_type(root) != TYPE_DOC) {
         putln(root->filename);

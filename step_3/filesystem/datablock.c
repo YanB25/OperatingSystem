@@ -41,7 +41,7 @@ FAT_ITEM dot = {
     0, 
     0, 
     2, 
-    0
+    512
 };
 FAT_ITEM dotdot = {
     "..",
@@ -50,5 +50,5 @@ FAT_ITEM dotdot = {
     , 0, 0, 0, 0, 0, 0, 
     0, 
     2, 
-    0
+    512
 };
