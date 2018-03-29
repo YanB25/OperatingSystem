@@ -4,12 +4,12 @@
 
 typedef uint16_t FAT_ITEM_T;
 
-#define S_UNUSED 0x00
-#define S_DOTS 0x2E
-#define S_DEL 0xE5
+#define S_UNUSED ((uint8_t)0x00)
+#define S_DOTS ((uint8_t)0x2E)
+#define S_DEL ((uint8_t)0xE5)
 struct FAT_ITEM {
-    char filename[8];
-    char extendname[3];
+    uint8_t filename[8];
+    uint8_t extendname[3];
     uint8_t mod;
     
     uint8_t res; //reserved
