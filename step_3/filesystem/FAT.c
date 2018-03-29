@@ -15,4 +15,5 @@ FAT_ITEM_T fat_items[] = {
     0xFFFF, // 11
     0xFFFF, // 12
     0xFFFF, // 13
+    0xFFFF, //14
 };

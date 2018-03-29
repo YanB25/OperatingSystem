@@ -53,3 +53,13 @@ FAT_ITEM dotdot = {
     2, 
     512
 };
+FAT_ITEM msg = {
+    "msg",
+    "txt",
+    FAT_rw,
+    0, 0, 0, 0, 0, 0,
+    0,
+    0,
+    13,
+    0
+};

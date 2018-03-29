@@ -18,8 +18,12 @@ static inline FAT_ITEM* __get_root_dir() {
 static inline int16_t __has_next_item(const FAT_ITEM* p) {
     return (p+1)->filename[0] != S_UNUSED;
 }
+static inline int16_t __has_prev_item(const FAT_ITEM* p) {
+    return 0; //TODO: how to deal with it? return false forever
+}
 
 #define __next_item(FAT_ITEM_P) (FAT_ITEM_P+1)
+#define __prev_item(FAT_ITEM_P) (FAT_ITEM_P-1)
 
 static inline int16_t __FAT_item_type(const FAT_ITEM* p) {
     if (p->mod & FAT_fldr) {
@@ -37,5 +41,26 @@ static inline FAT_ITEM* __jmp_into_dir(const FAT_ITEM* p) {
         cluster * SECTOR_PER_CLUSTER + 1;
     loadLogicSector(sectorNth, DATA_BLOCK_ADDRESS, numOfSector); 
     return (FAT_ITEM*)(DATA_BLOCK_ADDRESS);
+}
+static inline int16_t __rm_this_file(FAT_ITEM* p) {
+    uint16_t mod = p->mod;
+    if (mod & FAT_fldr) {
+        return -1;
+    }
+    if (mod & FAT_sys) {
+        return -2;
+    }
+    if (mod & FAT_doc) {
+        return -3;
+    }
+    const char* const fn = p->filename;
+    if (fn[0] == S_UNUSED) {
+        return -4;
+    }
+    if (fn[0] == S_DEL) {
+        return -5;
+    }
+    p->filename[0] = S_DEL;
+    return 0;
 }
 #endif
