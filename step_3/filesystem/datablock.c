@@ -14,7 +14,7 @@ FAT_ITEM error_flags = {
 FAT_ITEM kernel_bin= {
     "kernel",
     "bin",
-    FAT_rw || FAT_sys,
+    FAT_rw | FAT_sys,
     0, 0, 0, 0, 0, 0,
     0,
     0,
@@ -25,10 +25,30 @@ FAT_ITEM kernel_bin= {
 FAT_ITEM home_dir= {
     "home",
     "",
-    FAT_rw || FAT_fldr,
+    FAT_rw | FAT_fldr,
     0, 0, 0, 0, 0, 0,
     0,
     0,
     12,
     512
+};
+
+FAT_ITEM dot = {
+    ".",
+    "",
+    FAT_fldr
+    , 0, 0, 0, 0, 0, 
+    0, 
+    0, 
+    2, 
+    0
+};
+FAT_ITEM dotdot = {
+    "..",
+    "",
+    FAT_fldr
+    , 0, 0, 0, 0, 0, 0, 
+    0, 
+    2, 
+    0
 };

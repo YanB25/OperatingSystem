@@ -1,6 +1,7 @@
 #ifndef __UTILITIES_H_
 #define __UTILITIES_H_
 #include <stdarg.h>
+#include <stdint.h>
 void clear_screen();
 void hello_hybrid_programming();
 int add(int, int);
@@ -96,5 +97,10 @@ static inline int printf(const char* format, ...) {
 }
 static inline int getch() {
     return readkb();
+}
+static inline void putn(const char* s, uint16_t size) {
+    for (int i = 0; i < size; ++i) {
+        putch(s[i]);
+    }
 }
 #endif

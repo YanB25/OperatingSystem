@@ -22,7 +22,8 @@ int main() {
             putln("/");
         } else if (__FAT_item_type(root) == TYPE_FILE) {
             puts(".");
-            putln(root->extendname);
+            putn(root->extendname, 3);
+            putln("");
         } else {
             putln("");
         }
