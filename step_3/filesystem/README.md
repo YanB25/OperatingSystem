@@ -16,5 +16,7 @@ FAT表2 8-11扇区（4个）512*7 = 3584 [e00~1600]
 ## 内存结构
 1:0x7C00: MBR(loader)
 2:0x7E00: DBR
-2:0x8200: FAT table
-15.5:0x8600: filesystem memory(root area address initially)
+4:0x8200: FAT table
+4:0x8A00: root area
+8:0x9200
+:0xA200 kernel
