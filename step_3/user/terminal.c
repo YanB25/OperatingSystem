@@ -61,6 +61,7 @@ int terminal() {
 void parseCMD(int CMDindex) {
     if (CMDindex == 0) return;
     if (CMDindex == 1 && CMD_BUFFER[0] == 'q') {
+        int (*stone)() = (int (*)())(0x6c00);
         stone();
         clear_screen();
 

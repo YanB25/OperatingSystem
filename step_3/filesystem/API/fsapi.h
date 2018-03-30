@@ -79,4 +79,24 @@ static inline int16_t __rm_this_file(FAT_ITEM* p) {
     (p->filename[0]) = S_DEL;
     return 0;
 }
+static inline int16_t __run_this_file(FAT_ITEM* p) {
+    uint16_t mod = p->mod;
+    if (mod & FAT_sys) {
+        return -1;
+    }
+    if (mod & FAT_fldr) {
+        return -2;
+    }
+    if (mod & FAT_doc) {
+        return -3;
+    }
+    uint16_t cluster = p->blow_cluster;
+    uint16_t sectorNth = HIDDEN_SECTOR + RESERVED_SECTOR + 
+        NUMBER_OF_FAT * SECTOR_PER_FAT + 
+        cluster * SECTOR_PER_CLUSTER + 1;
+    uint16_t numOfSector = filesize2sectors(p->filesize);
+    loadLogicSector(sectorNth, USER_PROGRAM_ADDRESS, numOfSector);
+    return 0;
+
+}
 #endif

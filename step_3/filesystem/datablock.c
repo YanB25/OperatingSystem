@@ -63,3 +63,13 @@ FAT_ITEM msg = {
     13,
     0
 };
+FAT_ITEM user_program = {
+    "stone",
+    "bin",
+    FAT_rw,
+    0, 0, 0, 0, 0, 0,
+    0,
+    0,
+    14,
+    512*4 // 4 sectors
+};

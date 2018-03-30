@@ -8,51 +8,24 @@
 #define false 0
 int main() {
     clear_screen();
-    FAT_ITEM* root = __get_root_dir();
-    if (__FAT_item_type(root) != TYPE_DOC) {
-        putln(root->filename);
-    }
-    while (__has_next_item(root)) {
-        int16_t ret = __rm_this_file(root);
-        root = __next_item(root);
-        if (__FAT_item_type(root) != TYPE_DOC) {
-            puts(root->filename);
-        }
-        if (__FAT_item_type(root) == TYPE_FLDR) {
-            putln("/");
-        } else if (__FAT_item_type(root) == TYPE_FILE) {
-            puts(".");
-            putn(root->extendname, 3);
-            putln("");
-        } else {
-            putln("");
+    FAT_ITEM* pfat = __get_root_dir();
+    while (__fs_strcmp(pfat->filename, "stone") != 0) {
+        putln(pfat->filename);
+        pfat = __next_item(pfat);
+        if (__fs_strcmp(pfat->filename, "msg") == 0) {
+            putln("find msg");
+            puti(pfat->blow_cluster);
+            putln("finish");
         }
     }
-    int16_t ret = __rm_this_file(root);
+    putln(pfat->filename);
+    puti(pfat->blow_cluster);
+    int16_t ret = __run_this_file(pfat);
     putiln(ret);
-
-    root = __get_root_dir();
-    if (__FAT_item_type(root) != TYPE_DOC) {
-        putln(root->filename);
-    }
-    while (__has_next_item(root)) {
-        root = __next_item(root);
-        if (__FAT_item_type(root) != TYPE_DOC) {
-            puts(root->filename);
-        }
-        if (__FAT_item_type(root) == TYPE_FLDR) {
-            putln("/");
-        } else if (__FAT_item_type(root) == TYPE_FILE) {
-            puts(".");
-            putn(root->extendname, 3);
-            putln("");
-        } else {
-            putln("");
-        }
-    }
 
     draw_str("enter help to get help", 0, 30);
     putln("");
+
     terminal();
     return 0;
 }
