@@ -1,15 +1,21 @@
 #include "../include/utilities.h"
+#include "../include/mystring.h"
 #include "stone.h"
+#include "../filesystem/API/fsapi.h"
 
 #define BACK_SPACE 8
 #define BUFFER_SIZE 64
 #define PROMT "yb@yb-thinkpad-e450:~$ "
-#define HELP_MSG "enter q, w,  a, s to run program"
-
+#define HELP_MSG "run stone : run program stone\n\r" \
+    "ls : list all file in root directory"
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
 
+static FAT_ITEM* CUR_DIR = 0;
 int terminal() {
+    if (CUR_DIR == 0) {
+        CUR_DIR = __get_root_dir();
+    }
     puts(PROMT);
     int offsetx = 0;
     int offsety = 0;
@@ -60,13 +66,45 @@ int terminal() {
 
 void parseCMD(int CMDindex) {
     if (CMDindex == 0) return;
-    if (CMDindex == 1 && CMD_BUFFER[0] == 'q') {
-        stone();
-        clear_screen();
-
-    } else {
+    if (strstr(CMD_BUFFER, "run") == 0 && strchr(CMD_BUFFER, ' ') == 3) {
+        int16_t pos = strchr(CMD_BUFFER, ' ');
+        const char* fn = CMD_BUFFER + pos + 1;
+        int16_t code = __load_program(fn);
+        int (*userProgram)() = (int (*)())(0x6c00);
+        switch(code) {
+            case ERR_SYS_PROTC:
+                putln("ERROR: system protect file");
+                break;
+            case ERR_TYPE_FLDR:
+                putln("ERROR: folder not executable");
+                break;
+            case ERR_TYPE_DOC:
+                putln("ERROR: partition info protect");
+                break;
+            case ERR_NOT_FOUND:
+                putln("ERROR: file not found");
+                break;
+            case NO_ERR:
+                userProgram();
+                clear_screen();
+                break;
+        }
+    } else if (strcmp(CMD_BUFFER, "help") == 0) {
+        putln(HELP_MSG);
+    } else if (strcmp(CMD_BUFFER, "ls") == 0) {
+        FAT_ITEM* pfat = CUR_DIR;
+        if (__FAT_showable_item(pfat)) {
+            putln(pfat->filename);
+        }
+        while (__has_next_item(pfat)) {
+            pfat = __next_item(pfat);
+            if (__FAT_showable_item(pfat)) {
+                putln(pfat->filename);
+            }
+        }
+    }
+    else {
         puts("ybsh: command not found: ");
         putln(CMD_BUFFER);
-        putln(HELP_MSG);
     }
 }

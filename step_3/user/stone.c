@@ -1,3 +1,5 @@
+__asm__("jmpl $0, $stone\n");
+
 #include "../include/utilities.h"
 #define DELAY (1e5)
 int getKbHit();
@@ -8,6 +10,7 @@ int y;
 int deltax;
 int deltay;
 int stone() {
+    // return 0;
     x = 5;
     y = 5;
     deltax = 1;

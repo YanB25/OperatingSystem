@@ -7,15 +7,21 @@ ASFLAGS=
 
 UTILITIES=../include
 
-all: user.o terminal.o stone.o
+all: user.o terminal.o stone.bin
 
 user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
 terminal.o: terminal.c $(UTILITIES)/utilities.h stone.h
 	$(CC) $(CCFLAGS) -c $^
+
+stone.bin: stone.o $(UTILITIES)/utilities.o
+	$(LD) $(LDFLAGS) -Ttext 0x6C00 --oformat binary -o $@ $^
 stone.o: stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
 
+$(UTILITIES)/utilities.o:
+	cd $(UTILITIES)/ && make
+	cd ../user/
 clean:
 	rm *.bin -f 
 	rm *.o -f  
