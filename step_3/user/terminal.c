@@ -6,7 +6,7 @@
 #define BACK_SPACE 8
 #define BUFFER_SIZE 64
 #define PROMT "yb@yb-thinkpad-e450:~$ "
-#define HELP_MSG "run q : run program q\n\r" \
+#define HELP_MSG "run stone : run program stone\n\r" \
     "ls : list all file in root directory"
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
@@ -62,17 +62,28 @@ int terminal() {
 
 void parseCMD(int CMDindex) {
     if (CMDindex == 0) return;
-    if (strstr(CMD_BUFFER, "run") == 0) {
+    if (strstr(CMD_BUFFER, "run") == 0 && strchr(CMD_BUFFER, ' ') == 3) {
         int16_t pos = strchr(CMD_BUFFER, ' ');
         const char* fn = CMD_BUFFER + pos + 1;
         int16_t code = __load_program(fn);
-        putiln(code);
-        if (code == 0) {
-            int (*userProgram)() = (int (*)())(0x6c00);
-            userProgram();
-            clear_screen();
-        } else {
-            putln("error occur");
+        int (*userProgram)() = (int (*)())(0x6c00);
+        switch(code) {
+            case ERR_SYS_PROTC:
+                putln("ERROR: system protect file");
+                break;
+            case ERR_TYPE_FLDR:
+                putln("ERROR: folder not executable");
+                break;
+            case ERR_TYPE_DOC:
+                putln("ERROR: partition info protect");
+                break;
+            case ERR_NOT_FOUND:
+                putln("ERROR: file not found");
+                break;
+            case NO_ERR:
+                userProgram();
+                clear_screen();
+                break;
         }
     } else if (strcmp(CMD_BUFFER, "help") == 0) {
         putln(HELP_MSG);

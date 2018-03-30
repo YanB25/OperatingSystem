@@ -8,6 +8,7 @@
 #include "../fsutilities.h"
 #include "../filesystem.h"
 #include "../../include/mystring.h"
+#include "fsErrorCode.h"
 
 #define TYPE_FLDR 0
 #define TYPE_FILE 1
@@ -62,34 +63,34 @@ static inline FAT_ITEM* __jmp_into_dir(const FAT_ITEM* p) {
 static inline int16_t __rm_this_file(FAT_ITEM* p) {
     uint16_t mod = p->mod;
     if (mod & FAT_fldr) {
-        return -1;
+        return ERR_TYPE_FLDR;
     }
     if (mod & FAT_sys) {
-        return -2;
+        return ERR_SYS_PROTC;
     }
     if (mod & FAT_doc) {
-        return -3;
+        return ERR_TYPE_DOC;
     }
     const uint8_t* const fn = p->filename;
     if (fn[0] == S_UNUSED) {
-        return -4;
+        return ERR_NOT_FOUND;
     }
     if (fn[0] == S_DEL) {
-        return -5;
+        return ERR_NOT_FOUND;
     }
     (p->filename[0]) = S_DEL;
-    return 0;
+    return NO_ERR;
 }
 static inline int16_t __run_this_file(FAT_ITEM* p) {
     uint16_t mod = p->mod;
     if (mod & FAT_sys) {
-        return -1;
+        return ERR_SYS_PROTC;
     }
     if (mod & FAT_fldr) {
-        return -2;
+        return ERR_TYPE_FLDR;
     }
     if (mod & FAT_doc) {
-        return -3;
+        return ERR_TYPE_DOC;
     }
     uint16_t cluster = p->blow_cluster;
     uint16_t sectorNth = HIDDEN_SECTOR + RESERVED_SECTOR + 
@@ -111,7 +112,7 @@ static inline int16_t __load_program(const char* targetFilename) {
             return __run_this_file(pfat);
         }
     }
-    return -10;
+    return ERR_NOT_FOUND;
 
 }
 #endif
