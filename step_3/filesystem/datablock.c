@@ -54,7 +54,7 @@ FAT_ITEM dotdot = {
     512
 };
 FAT_ITEM msg = {
-    "msg",
+    "\xE5sg",
     "txt",
     FAT_rw,
     0, 0, 0, 0, 0, 0,

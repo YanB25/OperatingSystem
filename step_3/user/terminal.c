@@ -11,7 +11,11 @@
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
 
+static FAT_ITEM* CUR_DIR = 0;
 int terminal() {
+    if (CUR_DIR == 0) {
+        CUR_DIR = __get_root_dir();
+    }
     puts(PROMT);
     int offsetx = 0;
     int offsety = 0;
@@ -87,10 +91,20 @@ void parseCMD(int CMDindex) {
         }
     } else if (strcmp(CMD_BUFFER, "help") == 0) {
         putln(HELP_MSG);
+    } else if (strcmp(CMD_BUFFER, "ls") == 0) {
+        FAT_ITEM* pfat = CUR_DIR;
+        if (__FAT_showable_item(pfat)) {
+            putln(pfat->filename);
+        }
+        while (__has_next_item(pfat)) {
+            pfat = __next_item(pfat);
+            if (__FAT_showable_item(pfat)) {
+                putln(pfat->filename);
+            }
+        }
     }
     else {
         puts("ybsh: command not found: ");
         putln(CMD_BUFFER);
-        // putln(HELP_MSG);
     }
 }

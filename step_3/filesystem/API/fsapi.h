@@ -51,6 +51,9 @@ static inline int16_t __FAT_item_type(const FAT_ITEM* p) {
     }
     return TYPE_FILE;
 }
+static inline int16_t __FAT_showable_item(const FAT_ITEM* p) {
+    return __FAT_item_type(p) != TYPE_DOC;
+}
 static inline FAT_ITEM* __jmp_into_dir(const FAT_ITEM* p) {
     uint16_t cluster = p->blow_cluster;
     uint16_t numOfSector = filesize2sectors(p->filesize);
