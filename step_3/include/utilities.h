@@ -2,10 +2,11 @@
 #define __UTILITIES_H_
 #include <stdarg.h>
 #include <stdint.h>
+#define DEFAULT_STYLE 0x0F
 void clear_screen();
 void hello_hybrid_programming();
 int add(int, int);
-void _draw_char(char, int);
+void _draw_char(char ch, int offset, uint8_t style);
 void putch(char);
 // unbocked function to test whether kb is hit
 // return zero if no kb is hit. return ascii
@@ -18,10 +19,14 @@ int readkb();
 static inline void draw_str(char const* str, int row, int col) {
     int pos = (row * 80 + col) * 2;
     while (*str != '\0') {
-        _draw_char(*str, pos);
+        _draw_char(*str, pos, DEFAULT_STYLE);
         str++;
         pos += 2;
     }
+}
+static inline void draw_char_style(char ch, int row, int col, uint8_t style) {
+    int pos = (row * 80 + col) * 2;
+    _draw_char(ch, pos, style);
 }
 static inline void puts(char const* str) {
     while (*str) {
