@@ -10,7 +10,6 @@ int main() {
     clear_screen();
     draw_str("enter help to get help", 0, 30);
     newline();
-
     terminal();
     return 0;
 }

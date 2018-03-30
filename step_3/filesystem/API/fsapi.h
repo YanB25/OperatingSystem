@@ -7,6 +7,7 @@
 #include "../filesystem.h"
 #include "../fsutilities.h"
 #include "../filesystem.h"
+#include "../../include/mystring.h"
 
 #define TYPE_FLDR 0
 #define TYPE_FILE 1
@@ -97,6 +98,20 @@ static inline int16_t __run_this_file(FAT_ITEM* p) {
     uint16_t numOfSector = filesize2sectors(p->filesize);
     loadLogicSector(sectorNth, USER_PROGRAM_ADDRESS, numOfSector);
     return 0;
+
+}
+static inline int16_t __load_program(const char* targetFilename) {
+    FAT_ITEM* pfat = __get_root_dir();
+    if (strcmp(pfat->filename, targetFilename) == 0) {
+        return __run_this_file(pfat);
+    }
+    while (__has_next_item(pfat)) {
+        pfat = __next_item(pfat);
+        if (strcmp(pfat->filename, targetFilename) == 0) {
+            return __run_this_file(pfat);
+        }
+    }
+    return -10;
 
 }
 #endif

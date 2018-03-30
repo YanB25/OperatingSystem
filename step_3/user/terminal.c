@@ -1,6 +1,7 @@
 #include "../include/utilities.h"
 #include "../include/mystring.h"
 #include "stone.h"
+#include "../filesystem/API/fsapi.h"
 
 #define BACK_SPACE 8
 #define BUFFER_SIZE 64
@@ -61,11 +62,18 @@ int terminal() {
 
 void parseCMD(int CMDindex) {
     if (CMDindex == 0) return;
-    if (CMDindex == 1 && CMD_BUFFER[0] == 'q') {
-        int (*stone)() = (int (*)())(0x6c00);
-        stone();
-        clear_screen();
-
+    if (strstr(CMD_BUFFER, "run") == 0) {
+        int16_t pos = strchr(CMD_BUFFER, ' ');
+        const char* fn = CMD_BUFFER + pos + 1;
+        int16_t code = __load_program(fn);
+        putiln(code);
+        if (code == 0) {
+            int (*userProgram)() = (int (*)())(0x6c00);
+            userProgram();
+            clear_screen();
+        } else {
+            putln("error occur");
+        }
     } else if (strcmp(CMD_BUFFER, "help") == 0) {
         putln(HELP_MSG);
     }
