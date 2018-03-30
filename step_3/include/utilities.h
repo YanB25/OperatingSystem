@@ -103,4 +103,8 @@ static inline void putn(const char* s, uint16_t size) {
         putch(s[i]);
     }
 }
+static inline void newline() {
+    putch('\n');
+    putch('\r');
+}
 #endif

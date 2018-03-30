@@ -1,11 +1,12 @@
 #include "../include/utilities.h"
+#include "../include/mystring.h"
 #include "stone.h"
 
 #define BACK_SPACE 8
 #define BUFFER_SIZE 64
 #define PROMT "yb@yb-thinkpad-e450:~$ "
-#define HELP_MSG "enter q, w,  a, s to run program"
-
+#define HELP_MSG "run q : run program q\n\r" \
+    "ls : list all file in root directory"
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
 
@@ -65,9 +66,12 @@ void parseCMD(int CMDindex) {
         stone();
         clear_screen();
 
-    } else {
+    } else if (strcmp(CMD_BUFFER, "help") == 0) {
+        putln(HELP_MSG);
+    }
+    else {
         puts("ybsh: command not found: ");
         putln(CMD_BUFFER);
-        putln(HELP_MSG);
+        // putln(HELP_MSG);
     }
 }
