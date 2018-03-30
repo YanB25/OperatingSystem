@@ -2,6 +2,7 @@
 #define __UTILITIES_H_
 #include <stdarg.h>
 #include <stdint.h>
+#include "graphic.h"
 #define DEFAULT_STYLE 0x0F
 void clear_screen();
 void hello_hybrid_programming();
