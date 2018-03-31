@@ -47,7 +47,7 @@ _draw_char:
     push di
     mov ecx, [bp + 6]
     mov edi, [bp + 10]
-    mov ch, DEFAULT_STYLE
+    mov ch, [bp + 14]
     mov [gs:di], cx
 
     pop di

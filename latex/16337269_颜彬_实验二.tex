@@ -1,0 +1,623 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Programming/Coding Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when 
+% writing assignment content.
+%
+% This template uses a Perl script as an example snippet of code, most other
+% languages are also usable. Configure them in the "CODE INCLUSION 
+% CONFIGURATION" section.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper]{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\renewcommand*{\lstlistingname}{代码} % change "Listing <ref> to 代码 <ref>
+\usepackage{courier} % Required for the courier font
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage[UTF8]{ctex} % Required for Chinese character
+\usepackage{tocloft} % Required for beautiful toc
+\usepackage[hidelinks]{hyperref} % Required for clickable toc
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\usepackage[title]{appendix} % Required for appendix
+\usepackage{float}
+\usepackage{amsmath} % used for \text{} in math formula
+
+
+% used for beautiful table
+\usepackage{booktabs} 
+\usepackage[T1]{fontenc}
+\usepackage{tabu}
+\usepackage{longtable}
+\usepackage[table]{xcolor}
+
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkClassInstructor\ \hmwkClassTime): \hmwkTitle} % Top center head
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \protect\pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	CODE INCLUSION CONFIGURATION
+%----------------------------------------------------------------------------------------
+
+\definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0} % This is the color used for comments
+\lstloadlanguages{Perl} % Load Perl syntax for listings, for a list of other languages supported see: ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
+\lstset{language=Perl, % Use Perl in this example
+        frame=single, % Single frame around code
+        basicstyle=\small\ttfamily, % Use small true type font
+        keywordstyle=[1]\color{Blue}\bf, % Perl functions bold and blue
+        keywordstyle=[2]\color{Purple}, % Perl function arguments purple
+        keywordstyle=[3]\color{Blue}\underbar, % Custom functions underlined and blue
+        identifierstyle=, % Nothing special about identifiers                                         
+        commentstyle=\usefont{T1}{pcr}{m}{sl}\color{MyDarkGreen}\small, % Comments small dark green courier font
+        stringstyle=\color{Purple}, % Strings are purple
+        showstringspaces=false, % Don't put marks in string spaces
+        tabsize=5, % 5 spaces per tab
+        %
+        % Put standard Perl functions not included in the default language here
+        morekeywords={rand},
+        %
+        % Put Perl function parameters here
+        morekeywords=[2]{on, off, interp},
+        %
+        % Put user defined functions here
+        morekeywords=[3]{test},
+       	%
+        morecomment=[l][\color{Blue}]{...}, % Line continuation (...) like blue comment
+        numbers=left, % Line numbers on left
+        firstnumber=1, % Line numbers start with line 1
+        numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
+        stepnumber=2, % Line numbers go in steps of 5,
+        firstnumber=1
+}
+
+% Creates a new command to include a perl script, the first parameter is the filename of the script (without .pl), the second parameter is the caption
+
+\newcommand{\shfilescript}[3]{
+\begin{itemize}
+\item[]\lstinputlisting[caption=#2, label=lst:#1, language=sh]{#3}
+\end{itemize}
+}
+\newcommand{\shscript}[3]{
+\begin{itemize}
+\item[]\begin{lstlisting}[label=lst:#1, caption=#2] #3 \end{lstlisting}
+\end{itemize}
+}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 见下页\ldots}\nobreak{} 
+\nobreak\extramarks{接上页}{#1 见下页\ldots}\nobreak{}
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{接上页}{#1 见下页\ldots}\nobreak{}
+\nobreak\extramarks{#1}{}\nobreak{}
+}
+% TODO:code here enable the number before section, but it disable the numbering of problems
+%\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+
+\newenvironment{homeworkProblem}[1][Problem \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+
+\newcommand{\codev}[1]{\textsf{#1}}
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+% table color
+\definecolor{tableHeader}{RGB}{245, 245, 245}
+\definecolor{tableLineOne}{RGB}{245, 245, 245}
+\definecolor{tableLineTwo}{RGB}{224, 224, 224}
+\newcommand{\tableHeaderStyle}{
+    \rowfont{\leavevmode\color{white}\bfseries}
+    \rowcolor{tableHeader}
+}
+
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{操作系统原理实验\ \#3} % Assignment title
+\newcommand{\hmwkDueDate}{Monday,\ April\ 2,\ 2018} % Due date
+\newcommand{\hmwkClass}{16级计科\ 7班} % Course/class
+\newcommand{\hmwkClassTime}{周一9-10节} % Class/lecture time
+\newcommand{\hmwkClassInstructor}{凌应标} % Teacher/lecturer
+\newcommand{\hmwkAuthorName}{颜彬} % Your name
+\newcommand{\hmwkAuthorId}{16337269} % Your id 
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\usepackage{titling}
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+\vspace{3in}
+}
+
+\author{\textbf{\LARGE{\hmwkAuthorName}} \\ \\ \textbf{\LARGE{\hmwkAuthorId}}}
+\date{} % Insert date here if you want it to appear below your name
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+% \begin{titlingpage} % This is for ignore page number in first page. package titling
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+% \setcounter{tocdepth}{2} % Uncomment this line if you don't want subsections listed in the ToC
+% set depth in toc
+
+% \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % used for dots between <section> and <page>
+
+\renewcommand{\contentsname}{Content} % force the word to be "content
+\newpage
+\tableofcontents
+\addtocontents{toc}{~\hfill\textbf{Page}\par}
+\newpage
+
+% below are document body
+
+
+% To have just one problem per page, simply put a \clearpage after each problem
+\section{实验目的}
+把原来在引导扇区中实现的监控程序（内核）分离乘一个独立的执行体，存放那个在其他扇区中，为``后来''扩展内核提供发展空间。\\
+
+学习汇编与C混合编程技术，改写实验二的监控程序，拓展其命令处理能力，增加实现实验要求2中的部分或全部要求。
+\section{实验要求}
+在实验二的基础上进行，保留或拓展原有功能，实现部分新增功能。\\
+
+监控程序以独立的可执行程序实现，并由引导程序加载进内存适当位置，内核获得控制权后开始显示必要的操作提示信息，实现若干命令，
+方便使用者（测试者）操作。\\
+
+制作包包含引导程序，监控程序和若干可加载并执行的用户程序组成的1.44M软盘映像。\\
+
+\section{实验方案}
+    \subsection{基础原理}
+    \subsubsection{GCC与NASM的合作}
+    计算机本质上只能运行对应架构的机器码。C程序和汇编程序在运行时，都是先通过编译器将源码生成目标文件，
+    再用链接器将若干个（或一个）目标文件链接成可执行文件（或纯二进制文件）。由于C语言生成的目标文件和汇编
+    语言生成的目标文件本质上是一样的，这就允许我们将来自C和汇编的目标文件通过链接器连在一起，生成混编可执行文件。\\
+    
+    实验一、二实质上是使用32位处理器的16位模式执行16位代码。NASM产生的汇编的立即数和地址都是16位的。
+    然而GCC只能产生32位的代码。如果强行将16位汇编和32位GCC汇编连接，会在运行时出现问题。32位GCC汇编的
+    立即数都是32位的，处理器会读取32位立即数的低16位作为立即数，把立即数的高16位看作是``下一条指令的代码''。\\
+
+    幸运的是，我们使用的处理器是32位的（只是模式是16位），其可以用某种方式处理32位代码：如果一个条汇编语句带有
+    前缀``66''，处理器明白这条语句的立即数长度``与当前模式不一致''。由于当前模式是16位，故处理器知道这条语句的立即数
+    是32位的。处理器在识别立即数时可以往后读取32个比特。类似地，前缀67表示``地址''长度与默认模式不一致。66,67前缀可以
+    理解成，告诉处理器``暂时地''切换到32位模式执行当前代码。 \\
+
+    GCC的编译选项 $-m16$ 可以自动地在所有（必要的）指令前加前缀66，67。如此处理器即可正确地处理立即数长度和
+    地址长度。注意到，$-m16 $ 相当于在C代码的最开头内嵌一条汇编语句$.code16gcc$。显然采用编译指令的方式比手动
+    内嵌汇编指令方便得多。\\
+    
+    所有的编译参数见//TODO:compile options
+   
+    //TODO: 记得说清除return的坑点。需要先pop再jpm
+
+    //TODO: 记得说说文件头__ASM__中jmpl等相关信息
+    \subsubsection{链接器的作用}
+    由于我们还无法实现解析EXE头和ELF头，所以连接器应增加$-oformat \  binary$参数，以保证最终产生不带头的二进制文件。\\
+    
+    在混编中，链接器代替了以前的$ORG$伪指令的作用。当然，因为链接器需要全权负责地址偏移量的计算，所以链接器不允许
+    代码内出现任何的$ORG$，否则将报错。\\
+    
+    所有汇编程序先删除所有的$ORG$伪指令。在链接时通过$-Ttext\ <address>$的方式决定代码段的偏移量。\\
+    
+    链接主引导程序时，使用$-Ttext\ 0x7C00$参数。 \\
+
+    链接操作系统引导时（操作系统引导见//TODO:DBR)，使用$-Text\ 0x7E00$参数。此处假设主引导会把操作系统引导
+    载入到内存0x7E00处。\\ 
+    
+    链接操作系统内核时，使用$-Text\ 0xA200$参数。此处假设主引导会把内核载入0xA200处。\\ 
+
+    所有的链接参数见//TODO:link options
+    \subsubsection{FAT文件系统}\label{subsec:filesystem_intro}
+    本实验还实现了简单的FAT16文件系统，提供了若干接口，并完成了列出当前目录$ls$, 运行文件$run$，以及简单的文件权限检查等操作。
+    操作系统引导借助文件系统的接口，在根目录下搜索kernel.bin文件，并将其载入到内存中。\\
+    
+    在开机后，主引导程序首先将控制权交给操作系统引导程序。操作系统引导会从查找BPB表，找到第一个FAT表所在扇区和FAT表长度
+    ，把FAT表加载入内存;还会找到数据块区中的``根目录区''，把它也载入到内存中。
+    随后，操作系统引导会调用文件系统提供的接口，搜索根目录的前5个文件，查看其是否为kernel.bin。\\
+    
+    当操作系统引导找到根目录区中的kernel.bin项后，它会找到该项的$cluster$和$file\ size$。引导会再次读取BPB表，
+    找到该$cluster$所在扇区，计算内核的扇区数，把相关扇区载入到内存中。随后，操作系统引导将控制权交给内核。\\
+    
+    至此，所有引导工作全部完成。内核接管所有的控制权。文件系统的布局图见\ref{fig:FAT16layout}.
+    \subsection{实验环境}
+    \subsubsection{系统与虚拟机}
+    \begin{itemize} \item 操作系统 \\ 
+        本实验在Linux下完成。采用Ubuntu 16.04
+        \item 虚拟机\\
+        bochs.它是一款开源且跨平台的 IA-32 模拟器。
+    \end{itemize}
+    \subsubsection{相关工具、指令}
+        \begin{itemize}
+            \item 汇编器\\ 
+            NASM. NASM是一个轻量级的、模块化的 80x86 和 x86-64 汇编器。它的语法与
+            Intel 原语法十分相似，但更加简洁和易读。它对宏有十分强大的支持。
+            \item 编译器\\
+            GCC. GNU/GCC 是开源的C语言编译器。其产生的伪16位代码可以与NASM结合，混编生成伪16位程序。
+            \item 镜像文件产生工具\\ 
+            bximage. 该命令允许生成指定大小的软件镜像。
+            \item 二进制写入命令\\ 
+            dd. dd 允许指定源文件和目标文件，将源文件的二进制比特写入目标文件中的指定位置。
+            \item 二进制文件查看命令\\ 
+            xxd. xxd 允许将二进制文件中的内容按地址顺序依次输出，可读性强
+            \item 反汇编器\\
+            objdump. objump可以查看目标文件和二进制文件的反汇编代码，还能指令intel或at\&t格式显示。
+            \item 代码生成脚本\\
+            makefile. makefile脚本具有强大的功能，其可以识别文件依赖关系，自动构筑文件，自动执行shell脚本等。
+        \end{itemize}
+    \subsection{程序流程}\label{subsec:programProcedure}
+    文件系统在虚拟软盘中的镜像如图\ref{fig:FAT16layout}。全部引导的简要过程见图\ref{fig:loading}。
+    
+    \begin{figure}
+        \begin{center}
+        \includegraphics[scale=0.5]{asset/softImage.png}
+        \caption{FAT16文件系统布局\label{fig:FAT16layout}} 
+        \end{center} 
+    \end{figure} 
+    
+    
+    \begin{figure}
+        \begin{center}
+        \includegraphics[scale=0.6]{asset/loading.png}
+        \caption{引导内核的全过程\label{fig:loading}} 
+        \end{center} 
+    \end{figure} 
+    
+\section{实验过程}
+    \subsection{项目目录树介绍}\label{sec:pjtree}
+    项目的目录树见代码\ref{lst:pjtree}。\\
+    
+    filesystem/\\
+    存放的Models是与文件系统实现相关的文件。其中操作系统引导程序也放在这个目录下。
+    这是由于操作系统引导与文件系统密切相关。/filesystem/API/存放的是文件系统接口。
+    用户程序只需include接口即可使用文件系统的相关功能。\\
+    
+    include/\\
+    存放的是内核、用户程序都可能需要的代码。其中包括打印函数、清屏函数、字符串处理函数等。\\
+    
+    kernel/\\
+    存放的是内核程序。\\
+    
+    loader/\\
+    存放的是主引导程序。\\
+    
+    user/\\
+    存放的是用户程序。其中本项目还实现了简单的终端。终端程序也作为用户程序放在此处。user/stone/存放
+    的是项目一、二的stone程序。\\
+    
+    详细的整个目录树见附录\ref{sec:otherCode}代码\ref{lst:wholepjtree}。
+    \begin{figure}
+    \begin{itemize}
+    \item[] \begin{lstlisting}[label=lst:pjtree, caption=项目目录树介绍(仅文件夹)]
+.
+|-- filesystem/
+|   |-- API/
+|-- include/
+|-- kernel/
+|-- loader/
+|-- user/
+    |-- stone/
+
+7 directories
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
+    \subsection{构建GCC+NASM混编的全部指令}
+    本项目采用$makefile$构筑。本项目按照\ref{sec:pjtree}节讲述的方式分成若干子文件夹。每个子
+    文件夹中都有各自的$Makefile$文件。整体的$Makefile$会分别调用各个子文件夹中的$Makefile$，最终
+    构建出整个项目。
+    \subsubsection{GCC编译指令}
+    所有的C程序都采用了表\ref{tab:gcc}所示的编译指令。
+
+    \begin{table}[!htb]
+        \caption{GCC编译指令}\label{tab:gcc}
+    \begin{tabular}{@{} *5l @{}} 
+        \toprule
+    \emph{编译选项} & \emph{作用} &&&  \\
+        \midrule
+        -o    & D  \\ 
+        \\ 
+        -march=i386  & X产生原始Itel i376 CPU架构的代码\\ 
+        \\
+        -m16& 等价于汇编伪指令.code16gcc。
+            \\& 在所有必要的指令前加,前缀66, 67，
+            \\& 使得处理器能以32位的方式读取GCC产生的代码\\
+        \\
+        -mpreferred-stack-boundary=2 & 以$2^i$bytes作为对齐量，对齐栈的界限。
+            \\& 该选项默认为4(即默认$2^4$字节对齐栈界限).
+            \\& 为了节省空间，这里设置成2 \\
+        \\
+        -ffreestanding &  产生``自立''的程序文件.
+            \\& 即告知GCC不使用（几乎）所有的库头文件。
+            \\& 保证产生的代码不依赖于GCC的自带库 \\
+        \\
+        -c & 不产生可执行文件，只执行``编译''操作产生目标文件 \\ 
+        \\
+        -Og & 产生最小限度的优化.
+            \\& 即这个优化能化简汇编代码，但又
+            不影响汇编程序的可读性。\\
+        \\
+        -O0 & 不产生任何优化。
+            \\& 本项目文件系统FAT表的构建使用C语言的struct
+            完成。
+            \\& 为了保证产生的二进制表项和C代码中的struct严格一致
+            \\& 必须
+            采用本优化等级。\\
+
+        \bottomrule
+    \hline
+    \end{tabular}
+    \end{table}
+
+
+    \subsubsection{LD链接指令}
+    目标文件在链接时采用表\ref{tab:ld}所示的指令。
+    \begin{table}[!hbt]
+        \caption{LD链接指令}\label{tab:ld}
+    \begin{tabular}{@{} *5l @{}}    
+        \toprule
+    \emph{LD链接器选项} & \emph{解释} &&&  \\
+        \midrule
+        -melf\_i386    & 链接成intel 386架构的代码 \\ 
+        \\ 
+        -N & 关闭页对齐。禁止链接动态库。\\
+        \\
+        -oformat binary & 产生纯二进制文件，即不带文件头 \\
+        \\
+        -Ttext 0xA200 & 设text段（代码段）的偏移量为0xA200。
+            \\& 同理还有Tbss, Tdata等。 \\
+        \bottomrule
+    \hline
+    \end{tabular}
+    \end{table}
+
+    \subsection{文件系统API介绍}
+    文件系统提供了以下的API供内核和用户程序调用。操作系统主引导在
+    载入内核时需要搜索$kernel.bin$,也是采用这套接口完成搜索。\\
+
+    文件系统实现了最基本的功能，例如搜索文件，进入文件夹，将文件从
+    软盘载入内存中，执行文件等。但修改操作还未实现。所以不支持写文件
+    和删除文件.\\ 
+
+    由于考虑到进程控制块还未实现，系统的其他部分也都很简陋，故没有实现``文件描述符''
+    层次的API接口。只实现了很底层的接口，供内核暂时调用。\\
+    
+    函数开头都带有双下划线，暗示这是系统的底层接口。以后实现的高层接口不会带有双下划线。
+    \begin{table}[!htb]
+    \caption{FAT16文件系统接口 }\label{tab:fatAPI}
+    \begin{tabular}{@{} *5l @{}}
+        \toprule
+    \emph{函数声明} & \emph{功能} &&& \\
+        \midrule
+        FAT\_ITEM & FAT\_ITEM是一个类型
+            \\& 位于datablock中的长32字节的结构（表项）\\
+        \\
+        FAT\_ITEM* \_\_get\_root\_dir() & 返回根目录表项 \\
+        \\
+        int16\_t \_\_next\_item(const FAT\_ITEM* p) 
+            & 返回当前指针指向的下一个表项
+            \\& 该函数能自动跳过被删除的表项 \\
+        \\
+        int16\_t \_\_has\_next\_item(const FAT\_ITEM* p)
+            & 判断当前指针是否还有下一表项
+            \\& 返回0和1分别代表false和true
+            \\& 自动跳过被删除的表项 \\
+        \\
+        int16\_t \_\_FAT\_item\_type(const FAT\_ITEM* p)
+            & 返回指针指向表项的类型
+            \\& 例如文件、文件夹、系统文件等
+            \\& 文件类型有一套宏定义，增加可读性 \\
+        \\
+        FAT\_ITEM* \_\_jump\_into\_dir(const FAT\_ITEM* p)
+            & 跳入当前表项指向的目录
+            \\& 调用方有义务确保指针指向的是目录
+            \\& 若当前表项是目录，返回正确指针\\
+        \\ 
+        int16\_t \_\_rm\_this\_file(FAT\_ITEM* p) 
+            & 删除指针指向的文件 
+            \\& 若指针指向的不是文件，返回错误码
+            \\& 错误码有一套宏定义，增加可读性\\
+        \\ 
+        int16\_t \_\_run\_this\_file(FAT\_ITEM* p)
+            & 运行指针指向的文件
+            \\& 若当前指向的文件不可执行，返回错误码
+            \\& 系统文件、文件夹都不可执行 \\
+        \bottomrule
+    \hline
+    \end{tabular}
+    \end{table}
+    \subsection{实现的系统库介绍}
+    为了给以后的实验奠定基础，本项目实现了功能比较全面的字符串库和
+    IO库。\\
+    
+    其中字符串库的函数命名与C库命名一致。实现了strlen, strstr, 
+    strchr, strcmp等常用函数。\\
+    
+    IO库实现了printf, puts, putch, puti, putln, putiln, newline等库。
+    各自用来输出字符串，整数，空行等。函数名中带i的表示输出整数，带ln的表示
+    会换行，s和ch分别表示字符串和字符。其中printf支持\%d, \%s和\%c.
+    \subsection{终端介绍}
+    本项目实现了终端。终端支持基本的指令，例如$ls$和$help$和$run$等。\\
+    
+    终端的实现充分依赖于文件系统。\\
+    $ls$指令会搜索当前目录，列出所有的文件和文件夹。
+    $run$指令在运行文件前，会检查文件类型。对于不同的文件类型（尤其是
+    不可运行的文件），终端会给出不同的错误信息。例如``系统文件不可执行''， 
+    ``文件夹不可执行''， ``文件不存在''等。//TODO:list photo and ref
+\section{实验结果} 
+    图\label{fig:helpls}为输入help和ls命令的截图。输入help后，终端会输出帮助信息。输入ls后
+    终端会输出根目录的所有文件和文件夹。\\
+    
+    图\label{fig:runfiles}为输入run命令的截图。当用户run一个文件夹时，终端会报出无法运行文件夹的
+    错误。若run一个系统文件（如kernel.bin)，终端会报出无法运行系统保护文件的错误。运行不存在的文件
+    会报出文件不存在。仅当运行的文件存在且能被执行时，程序才会被执行。
+
+    
+    \begin{figure}[!htb]
+        \begin{center}
+        \includegraphics[scale=0.5]{asset/helpls.png}
+        \caption{help和ls命令的截图\label{fig:helpls}} 
+        \end{center} 
+    \end{figure} 
+
+    
+    
+    \begin{figure}[!htb]
+        \begin{center}
+        \includegraphics[scale=0.5]{asset/runfiles.png}
+        \caption{run命令的截图\label{fig:runfiles}} 
+        \end{center} 
+    \end{figure} 
+    
+    
+\section{实验总结}
+    \subsection{亮点介绍}
+    \subsubsection{makefile}
+    项目按照更合理的方式分为各文件夹，并改用makefile的方式构建项目。为makefile提供了rebuild, clean, auto等指令，
+    分别用于重新构筑项目，清空临时文件和自动构建并运行等操作。
+    \subsubsection{GCC+NASM混合编程}
+    成功地研究出了在Linux下使用GCC和NASM混编的方法。
+    makefile,混编，文件系统，终端，printf，字符显示。
+    \subsection{心得体会}
+    \subsection{BUG总结} \label{sec:bug}
+
+\begin{appendices}
+\section{参考文献} \label{sec:reference}
+\section{其他代码} \label{sec:otherCode}
+\begin{figure}
+\begin{itemize}
+\item[] \begin{lstlisting}[label=lst:wholepjtree, caption=项目总目录树]
+.
+├── bochsout.log
+├── filesystem/
+│   ├── API/
+│   │   ├── fsapi.h
+│   │   └── fsErrorCode.h
+│   ├── datablock.c
+│   ├── DBR.asm
+│   ├── DBR.c
+│   ├── FAT.c
+│   ├── FATMacro.h
+│   ├── filesystem.h
+│   ├── fsutilities.asm
+│   ├── fsutilities.h
+│   ├── Makefile
+│   └── README.md
+├── include/
+│   ├── bridge.inc
+│   ├── graphic.h
+│   ├── Makefile
+│   ├── mystring.c
+│   ├── mystring.h
+│   ├── utilities.asm
+│   └── utilities.h
+├── kernel/
+│   ├── kernel.c
+│   ├── kernel.h
+│   └── Makefile
+├── loader/
+│   ├── loader.asm
+│   └── Makefile
+├── Makefile
+├── OS.img
+└── user/
+    ├── Makefile
+    ├── stone
+    ├── stone.c
+    ├── stone.h
+    ├── terminal.c
+    ├── terminal.h
+    ├── user.c
+    └── user.h
+
+7 directories, 34 files
+\end{lstlisting}
+\end{itemize}
+\end{figure}
+\end{appendices}
+\end{document}
