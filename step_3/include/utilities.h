@@ -25,6 +25,14 @@ static inline void draw_str(char const* str, int row, int col) {
         pos += 2;
     }
 }
+static inline void draw_str_style(char const* str, int row, int col, uint8_t style) {
+    int pos = (row * 80 + col) * 2;
+    while (*str != '\0') {
+        _draw_char(*str, pos, style);
+        str++;
+        pos += 2;
+    }
+}
 static inline void draw_char_style(char ch, int row, int col, uint8_t style) {
     int pos = (row * 80 + col) * 2;
     _draw_char(ch, pos, style);
