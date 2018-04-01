@@ -30,6 +30,7 @@
       //   }
       ],
       "todohighlight.include": [
-        "step_3/**/*"
+        "step_3/**/*",
+        "latex/*.tex"
       ]
 }
