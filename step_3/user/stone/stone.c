@@ -2,7 +2,7 @@ __asm__("jmpl $0, $stone\n");
 
 #include "../../include/utilities.h"
 #include "stone.h"
-#define DELAY (1e5)
+#define DELAY (5 * 1e5)
 int getKbHit();
 void checkBound();
 
@@ -16,6 +16,7 @@ int stone() {
     y = _Y;
     deltax = 1;
     deltay = 1;
+    uint8_t style = 0;
 
     clear_screen();
     while(1) {
@@ -25,11 +26,13 @@ int stone() {
         int delay = DELAY;
         while ((--delay) >= 0) continue;
 
+        draw_str(" ", y, x);
         x += deltax;
         y += deltay;
 
         checkBound();
-        draw_str("A", y, x);
+        draw_str_style("A", y, x, style & 15);
+        style++;
     }
 }
 
