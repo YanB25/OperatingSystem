@@ -12,7 +12,8 @@ ROOT=..
 FILESYSTEM=filesystem
 USER=user
 STONE=stone
-all: $(USER)/$(STONE)/stoneQ.bin $(KERNEL)/kernel.bin $(LOADER)/loader.bin build cleangch
+STONE_OBJ=$(USER)/$(STONE)/stoneQ.bin $(USER)/$(STONE)/stoneW.bin
+all: $(STONE_OBJ) $(KERNEL)/kernel.bin $(LOADER)/loader.bin build cleangch
 
 $(KERNEL)/kernel.bin: 
 	echo "\n"
@@ -48,8 +49,13 @@ $(USER)/$(STONE)/stoneQ.bin:
 	echo "\n"
 	cd $(USER)/ && make 
 	cd $(ROOT)/
+$(USER)/$(STONE)/stoneW.bin:
+	echo "\n"
+	cd $(USER)/ && make 
+	cd $(ROOT)/
 
-build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin $(FILESYSTEM)/FAT.bin $(FILESYSTEM)/datablock.bin
+
+build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin $(FILESYSTEM)/FAT.bin $(FILESYSTEM)/datablock.bin $(STONE_OBJ)
 	echo "\n"
 	dd if=$(LOADER)/loader.bin of=OS.img conv=notrunc
 	dd if=$(FILESYSTEM)/DBR.bin of=OS.img conv=notrunc oflag=seek_bytes seek=512
@@ -58,6 +64,7 @@ build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin $(FILESYSTEM)/FAT.bin $(FILESY
 	dd if=$(FILESYSTEM)/datablock.bin of=OS.img conv=notrunc oflag=seek_bytes seek=6656
 	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc oflag=seek_bytes seek=7680
 	dd if=$(USER)/$(STONE)/stoneQ.bin of=OS.img conv=notrunc oflag=seek_bytes seek=12800
+	dd if=$(USER)/$(STONE)/stoneW.bin of=OS.img conv=notrunc oflag=seek_bytes seek=14848
 clean:
 	echo "\n"
 	find . -name "*.bin" -type f -delete

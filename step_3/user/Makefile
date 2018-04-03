@@ -7,7 +7,7 @@ ASFLAGS=
 
 UTILITIES=../include
 STONE=stone
-all: user.o terminal.o $(STONE)/stoneQ.bin
+all: user.o terminal.o $(STONE)/stoneQ.bin $(STONE)/stoneW.bin
 
 user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
@@ -18,6 +18,16 @@ $(STONE)/stoneQ.bin: $(STONE)/stoneQ.o $(UTILITIES)/utilities.o
 	$(LD) $(LDFLAGS) -Ttext 0x6C00 --oformat binary -o $@ $^
 $(STONE)/stoneQ.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $< -D UL -o $@
+
+$(STONE)/stoneW.bin: $(STONE)/stoneW.o $(UTILITIES)/utilities.o
+	$(LD) $(LDFLAGS) -Ttext 0x6C00 --oformat binary -o $@ $^
+$(STONE)/stoneW.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
+	$(CC) $(CCFLAGS) -c $< -D UR -o $@
+
+
+
+
+
 
 $(UTILITIES)/utilities.o:
 	cd $(UTILITIES)/ && make
