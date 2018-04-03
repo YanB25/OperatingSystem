@@ -9,9 +9,10 @@ ROOT=..
 INCLUDE=../include
 USER=../user
 FILESYSTEM=../filesystem
+STONE=stone
 
 USER_HEADER=$(USER)/user.h $(USER)/terminal.h 
-USER_OBJ=$(USER)/user.o $(USER)/terminal.o $(USER)/stone.o
+USER_OBJ=$(USER)/user.o $(USER)/terminal.o $(USER)/$(STONE)/stoneQ.o
 
 all: kernel.bin
 
@@ -30,6 +31,9 @@ $(INCLUDE)/mystring.o:
 	cd ../kernel
 $(FILESYSTEM)/fsutilities.o:
 	cd $(FILESYSTEM)/ && make 
+	cd ../kernel
+$(USER)/$(STONE)/stoneQ.o:
+	cd $(USER)/ && make
 	cd ../kernel
 clean:
 	rm *.bin -f 

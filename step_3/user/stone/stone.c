@@ -1,6 +1,7 @@
 __asm__("jmpl $0, $stone\n");
 
-#include "../include/utilities.h"
+#include "../../include/utilities.h"
+#include "stone.h"
 #define DELAY (1e5)
 int getKbHit();
 void checkBound();
@@ -11,8 +12,8 @@ int deltax;
 int deltay;
 int stone() {
     // return 0;
-    x = 5;
-    y = 5;
+    x = _X;
+    y = _Y;
     deltax = 1;
     deltay = 1;
 
@@ -41,8 +42,8 @@ int getKbHit() {
     return 0;
 }
 void checkBound() {
-    if (x == 0) deltax = 1;
-    if (x == 79) deltax = -1;
-    if (y == 0) deltay = 1;
-    if (y == 24) deltay = -1;
+    if (x <= LEFT_B) deltax = 1;
+    if (x >= RIGHT_B) deltax = -1;
+    if (y <= UP_B) deltay = 1;
+    if (y >= DOWN_B) deltay = -1;
 }

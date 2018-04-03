@@ -11,7 +11,8 @@ LOADER=loader
 ROOT=..
 FILESYSTEM=filesystem
 USER=user
-all: $(USER)/stone.bin $(KERNEL)/kernel.bin $(LOADER)/loader.bin build cleangch
+STONE=stone
+all: $(USER)/$(STONE)/stoneQ.bin $(KERNEL)/kernel.bin $(LOADER)/loader.bin build cleangch
 
 $(KERNEL)/kernel.bin: 
 	echo "\n"
@@ -43,7 +44,7 @@ $(FILESYSTEM)/datablock.bin:
 	cd $(FILESYSTEM)/ && make 
 	cd $(ROOT)/
 
-$(USER)/stone.bin:
+$(USER)/$(STONE)/stoneQ.bin:
 	echo "\n"
 	cd $(USER)/ && make 
 	cd $(ROOT)/
@@ -56,7 +57,7 @@ build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin $(FILESYSTEM)/FAT.bin $(FILESY
 	dd if=$(FILESYSTEM)/FAT.bin of=OS.img conv=notrunc oflag=seek_bytes seek=3584
 	dd if=$(FILESYSTEM)/datablock.bin of=OS.img conv=notrunc oflag=seek_bytes seek=6656
 	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc oflag=seek_bytes seek=7680
-	dd if=$(USER)/stone.bin of=OS.img conv=notrunc oflag=seek_bytes seek=12800
+	dd if=$(USER)/$(STONE)/stoneQ.bin of=OS.img conv=notrunc oflag=seek_bytes seek=12800
 clean:
 	echo "\n"
 	find . -name "*.bin" -type f -delete

@@ -64,7 +64,7 @@ FAT_ITEM msg = {
     0
 };
 FAT_ITEM user_program = {
-    "stone",
+    "stoneQ",
     "bin",
     FAT_rw,
     0, 0, 0, 0, 0, 0,

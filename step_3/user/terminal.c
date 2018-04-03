@@ -1,6 +1,5 @@
 #include "../include/utilities.h"
 #include "../include/mystring.h"
-#include "stone.h"
 #include "../filesystem/API/fsapi.h"
 
 #define BACK_SPACE 8
