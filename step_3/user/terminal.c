@@ -87,7 +87,7 @@ void parseCMD(int CMDindex) {
                 break;
             case NO_ERR:
                 userProgram();
-                clear_screen();
+                // clear_screen();
                 putln("you entered");
                 break;
         }

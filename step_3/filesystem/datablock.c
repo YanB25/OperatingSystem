@@ -84,3 +84,23 @@ FAT_ITEM user_programW = {
     18,
     512*4 // 4 sectors
 };
+FAT_ITEM user_programA = {
+    "stoneA",
+    "bin",
+    FAT_rw,
+    0, 0, 0, 0, 0, 0,
+    0,
+    0,
+    22,
+    512*4 // 4 sectors
+};
+FAT_ITEM user_programS = {
+    "stoneS",
+    "bin",
+    FAT_rw,
+    0, 0, 0, 0, 0, 0,
+    0,
+    0,
+    26,
+    512*4 // 4 sectors
+};

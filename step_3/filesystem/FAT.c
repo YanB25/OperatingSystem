@@ -23,9 +23,24 @@ FAT_ITEM_T fat_items[] = {
     0x0014, // 19
     0x0015, // 20
     0xFFFF, // 21
-    0xFFFF, // 22
-    0xFFFF, // 23
-    0xFFFF, // 24
+    0x0017, // 22
+    0x0018, // 23
+    0x0019, // 24
     0xFFFF, // 25
-    0xFFFF, // 26
+    0x001B, // 26
+    0x001C, // 27
+    0x001D, // 28
+    0xFFFF, // 29
+    0xFFFF, // 30
+    0xFFFF, // 31
+    0xFFFF, // 32
+    0xFFFF, // 33
+    0xFFFF, // 34
+    0xFFFF, // 35
+    0xFFFF, // 36
+    0xFFFF, // 37
+    0xFFFF, // 38
+    0xFFFF, // 39
+    0xFFFF, // 40
+    0xFFFF, // 41
 };
