@@ -347,7 +347,7 @@
     能第一时间跳转到main函数，避免执行错误的代码和数据。\\
     
     \_\_asm\_\_语法也支持采用intel汇编来书写。方法是，采用\_\_asm\_\_(".intel\_syntax noprefix\\n");。需要注意的是，
-    在内嵌汇编执行完后，要手动把语法再改成at\&t语法，否则其后的所有（GCC生成的）汇编无法正确工作。方法是，\_\_asm(".att\_syntax\\n")\_\_;
+    在内嵌汇编执行完后，要手动把语法再改成at\&t语法，否则其后的所有（GCC生成的）汇编无法正确工作。方法是，\_\_asm\_\_(".att\_syntax\textbackslash n");
 
     \begin{figure}[!hbt]
     \begin{itemize}
@@ -764,8 +764,10 @@ static inline int printf(const char* format, ...) {
     本项目超前地实现了FAT16文件系统。完成了基本的内核加载、文件读取、文件搜索、目录跳转等功能。
     \ref{sec:fsapi}节详细地介绍了文件系统的实现。
     \subsubsection{终端的实现}
-    本项目实现了一个简单的终端，它支持输入help, ls, run等简单命令。它会对无法识别的命令报错。
-    也会对无法运行的文件报错。终端支持退格键修改和删除命令。
+    本项目实现了一个简单的终端，它支持输入help, ls, run等简单命令。\\
+    
+    终端会对无法识别的命令报错。在使用run时，会对无法运行的文件报出不同的错误，例如文件不存在和文件是文件夹等。
+    终端支持退格键修改和删除命令。用户体验较好。
     \subsubsection{简单printf实现}
     \ref{sec:library}节介绍了printf的实现。
 
