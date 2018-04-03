@@ -73,8 +73,8 @@ build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin $(FILESYSTEM)/FAT.bin $(FILESY
 	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc oflag=seek_bytes seek=7680
 	dd if=$(USER)/$(STONE)/stoneQ.bin of=OS.img conv=notrunc oflag=seek_bytes seek=12800
 	dd if=$(USER)/$(STONE)/stoneW.bin of=OS.img conv=notrunc oflag=seek_bytes seek=14848
-	dd if=$(USER)/$(STONE)/stoneS.bin of=OS.img conv=notrunc oflag=seek_bytes seek=16896
-	dd if=$(USER)/$(STONE)/stoneA.bin of=OS.img conv=notrunc oflag=seek_bytes seek=18944
+	dd if=$(USER)/$(STONE)/stoneA.bin of=OS.img conv=notrunc oflag=seek_bytes seek=16896
+	dd if=$(USER)/$(STONE)/stoneS.bin of=OS.img conv=notrunc oflag=seek_bytes seek=18944
 clean:
 	echo "\n"
 	find . -name "*.bin" -type f -delete

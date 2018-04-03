@@ -68,9 +68,7 @@ void parseCMD(int CMDindex) {
     if (strstr(CMD_BUFFER, "run") == 0 && strchr(CMD_BUFFER, ' ') == 3) {
         int16_t pos = strchr(CMD_BUFFER, ' ');
         const char* fn = CMD_BUFFER + pos + 1;
-        putln(fn);
         int16_t code = __load_program(fn);
-        putiln(code);
         int (*userProgram)() = (int (*)())(0x6c00);
         switch(code) {
             case ERR_SYS_PROTC:
@@ -87,8 +85,7 @@ void parseCMD(int CMDindex) {
                 break;
             case NO_ERR:
                 userProgram();
-                // clear_screen();
-                putln("you entered");
+                clear_screen();
                 break;
         }
     } else if (strcmp(CMD_BUFFER, "help") == 0) {
@@ -97,11 +94,15 @@ void parseCMD(int CMDindex) {
         FAT_ITEM* pfat = CUR_DIR;
         if (__FAT_showable_item(pfat)) {
             putln(pfat->filename);
+            // putiln(pfat->blow_cluster);
+            // putiln(pfat->filesize);
         }
         while (__has_next_item(pfat)) {
             pfat = __next_item(pfat);
             if (__FAT_showable_item(pfat)) {
                 putln(pfat->filename);
+                // putiln(pfat->blow_cluster);
+                // putiln(pfat->filesize);
             }
         }
     }

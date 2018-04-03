@@ -7,6 +7,7 @@
 #define true 1
 #define false 0
 int main() {
+    // __load_program("stoneS");
     clear_screen();
     draw_str("enter help to get help", 0, 30);
     //draw_char_style('A', 0, 10, G_DEFAULT);
