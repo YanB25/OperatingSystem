@@ -1,6 +1,5 @@
 #include "../include/utilities.h"
 #include "../include/mystring.h"
-#include "stone.h"
 #include "../filesystem/API/fsapi.h"
 
 #define BACK_SPACE 8
@@ -95,11 +94,15 @@ void parseCMD(int CMDindex) {
         FAT_ITEM* pfat = CUR_DIR;
         if (__FAT_showable_item(pfat)) {
             putln(pfat->filename);
+            // putiln(pfat->blow_cluster);
+            // putiln(pfat->filesize);
         }
         while (__has_next_item(pfat)) {
             pfat = __next_item(pfat);
             if (__FAT_showable_item(pfat)) {
                 putln(pfat->filename);
+                // putiln(pfat->blow_cluster);
+                // putiln(pfat->filesize);
             }
         }
     }

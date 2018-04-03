@@ -6,18 +6,35 @@ AS=nasm
 ASFLAGS=
 
 UTILITIES=../include
-
-all: user.o terminal.o stone.bin
+STONE=stone
+STONE_BIN = $(STONE)/stoneQ.bin $(STONE)/stoneW.bin $(STONE)/stoneA.bin $(STONE)/stoneS.bin
+all: user.o terminal.o $(STONE_BIN)
 
 user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
-terminal.o: terminal.c $(UTILITIES)/utilities.h stone.h
+terminal.o: terminal.c $(UTILITIES)/utilities.h 
 	$(CC) $(CCFLAGS) -c $^
 
-stone.bin: stone.o $(UTILITIES)/utilities.o
+$(STONE)/stoneQ.bin: $(STONE)/stoneQ.o $(UTILITIES)/utilities.o
 	$(LD) $(LDFLAGS) -Ttext 0x6C00 --oformat binary -o $@ $^
-stone.o: stone.c $(UTILITIES)/utilities.h
-	$(CC) $(CCFLAGS) -c $^
+$(STONE)/stoneQ.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
+	$(CC) $(CCFLAGS) -c $< -D UL -o $@
+
+$(STONE)/stoneW.bin: $(STONE)/stoneW.o $(UTILITIES)/utilities.o
+	$(LD) $(LDFLAGS) -Ttext 0x6C00 --oformat binary -o $@ $^
+$(STONE)/stoneW.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
+	$(CC) $(CCFLAGS) -c $< -D UR -o $@
+
+$(STONE)/stoneS.bin: $(STONE)/stoneS.o $(UTILITIES)/utilities.o
+	$(LD) $(LDFLAGS) -Ttext 0x6C00 --oformat binary -o $@ $^
+$(STONE)/stoneS.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
+	$(CC) $(CCFLAGS) -c $< -D DR -o $@
+
+$(STONE)/stoneA.bin: $(STONE)/stoneA.o $(UTILITIES)/utilities.o
+	$(LD) $(LDFLAGS) -Ttext 0x6C00 --oformat binary -o $@ $^
+$(STONE)/stoneA.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
+	$(CC) $(CCFLAGS) -c $< -D DL -o $@
+
 
 $(UTILITIES)/utilities.o:
 	cd $(UTILITIES)/ && make
