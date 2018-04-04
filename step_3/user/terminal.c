@@ -5,7 +5,8 @@
 #define BACK_SPACE 8
 #define BUFFER_SIZE 64
 #define PROMT "yb@yb-thinkpad-e450:~$ "
-#define HELP_MSG "run stone : run program stone\n\r" \
+#define HELP_MSG "run <program> : run program <program>\n\r" \
+    "run stoneQ: run program stoneQ.bin\n\r" \
     "ls : list all file in root directory"
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
@@ -95,7 +96,7 @@ void parseCMD(int CMDindex) {
         FAT_ITEM* pfat = CUR_DIR;
         if (__FAT_showable_item(pfat)) {
             puts(pfat->filename);
-            puti(pfat->filename);
+            puti(pfat->filesize);
             puts("    ");
             puti(pfat->blow_cluster);
             newline();
@@ -107,7 +108,7 @@ void parseCMD(int CMDindex) {
             if (__FAT_showable_item(pfat)) {
                 puts(pfat->filename);
                 puts("    ");
-                puti(pfat->filename);
+                puti(pfat->filesize);
                 puts("    ");
                 puti(pfat->blow_cluster);
                 newline();

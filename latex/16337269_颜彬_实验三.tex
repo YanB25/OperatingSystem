@@ -663,7 +663,7 @@ uint16_t reservedSector = *(uint16_t*)(bpb+3);
 
 uint16_t dataBlockBase = hiddenSector + reservedSector 
     + numberOfFAT * sectorPerFAT
-    + 1;
+    + 10节;
 uint16_t rootSectorNth = dataBlockBase + 2 * sectorPerCluster;
 
     \end{lstlisting}
@@ -722,7 +722,9 @@ static inline int printf(const char* format, ...) {
     
     图\label{fig:runfiles}为输入run命令的截图。当用户run一个文件夹时，终端会报出无法运行文件夹的
     错误。若run一个系统文件（如kernel.bin)，终端会报出无法运行系统保护文件的错误。运行不存在的文件
-    会报出文件不存在。仅当运行的文件存在且能被执行时，程序才会被执行。
+    会报出文件不存在。仅当运行的文件存在且能被执行时，程序才会被执行。 \\ 
+
+    \textbf{这次实验将stone文件改成了一个字母在屏幕中飘动。由于截图效果不好，请自行运行查看。}
 
     
     \begin{figure}[!htb]
