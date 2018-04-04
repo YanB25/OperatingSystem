@@ -91,16 +91,26 @@ void parseCMD(int CMDindex) {
     } else if (strcmp(CMD_BUFFER, "help") == 0) {
         putln(HELP_MSG);
     } else if (strcmp(CMD_BUFFER, "ls") == 0) {
+        putln("filename | filesize(bytes) | begin cluster");
         FAT_ITEM* pfat = CUR_DIR;
         if (__FAT_showable_item(pfat)) {
-            putln(pfat->filename);
+            puts(pfat->filename);
+            puti(pfat->filename);
+            puts("    ");
+            puti(pfat->blow_cluster);
+            newline();
             // putiln(pfat->blow_cluster);
             // putiln(pfat->filesize);
         }
         while (__has_next_item(pfat)) {
             pfat = __next_item(pfat);
             if (__FAT_showable_item(pfat)) {
-                putln(pfat->filename);
+                puts(pfat->filename);
+                puts("    ");
+                puti(pfat->filename);
+                puts("    ");
+                puti(pfat->blow_cluster);
+                newline();
                 // putiln(pfat->blow_cluster);
                 // putiln(pfat->filesize);
             }
