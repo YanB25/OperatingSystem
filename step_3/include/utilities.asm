@@ -52,6 +52,7 @@ _draw_char:
 
     pop di
     leave
+    mov ax, 1
     retl
 
 putch:
@@ -63,6 +64,7 @@ putch:
     int 10H
 
     leave
+    mov ax, 1
     retl
 
 readkb:
