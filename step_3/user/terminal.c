@@ -99,6 +99,8 @@ void parseCMD(int CMDindex) {
             puti(pfat->filesize);
             puts("    ");
             puti(pfat->blow_cluster);
+            puts("    ");
+            __print_file_cluster_list(pfat);
             newline();
             // putiln(pfat->blow_cluster);
             // putiln(pfat->filesize);
@@ -111,6 +113,8 @@ void parseCMD(int CMDindex) {
                 puti(pfat->filesize);
                 puts("    ");
                 puti(pfat->blow_cluster);
+                puts("    ");
+                __print_file_cluster_list(pfat);
                 newline();
                 // putiln(pfat->blow_cluster);
                 // putiln(pfat->filesize);
