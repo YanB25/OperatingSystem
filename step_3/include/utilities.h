@@ -17,6 +17,29 @@ int16_t putch(char);
 int kbhit();
 // blocked function to read hit kb.
 int readkb();
+static inline int16_t padding(int16_t num) {
+    for (int16_t i = 0; i < num; ++i) {
+        putch(' ');
+    }
+    return num;
+}
+static inline int16_t __uts_read_int(const char* s, int16_t* readNum) {
+    int16_t fac = 1;
+    int16_t cnt = 0;
+    if (*s == '-') {
+        fac = -1;
+        s++;
+        cnt++;
+    }
+    int16_t ret = 0;
+    while (*s && *s >= '0' && *s <= '9') {
+        ret = ret * 10 + (*s - '0');
+        s++;
+        cnt++;
+    }
+    *readNum = ret;
+    return cnt;
+}
 static inline int16_t draw_str(char const* str, int row, int col) {
     int pos = (row * 80 + col) * 2;
     int16_t index = 0;
@@ -103,20 +126,32 @@ static inline int printf(const char* format, ...) {
 
     index = 0;
     while (format[index]) {
+        int16_t putSize = 0;
+        int16_t delta = 0;
+        int16_t digitLength = 0;
         if (format[index] == '%') {
-            if (format[index+1] == 'd') {
-                int data = va_arg(valist, int);
-                pcnt += puti(data);
-            } else if (format[index+1] == 'c') {
-                int c = va_arg(valist, int);
-                pcnt += putch(c);
-            } else if (format[index+1] == 's') {
-                char* str = va_arg(valist, char*);
-                pcnt += puts(str);
-            } else if (format[index+1] == '%'){
-                pcnt += putch('%');
+            if ((format[index+1] >= '0' && format[index+1] <= '9') | format[index+1] == '-') {
+                // putln("get digit!");
+                digitLength = __uts_read_int(format + index + 1, &putSize);
+                // putiln(digitLength);
             }
-            index += 2;
+            if (format[index + digitLength + 1] == 'd') {
+                int data = va_arg(valist, int);
+                delta = puti(data);
+            } else if (format[index+ digitLength + 1] == 'c') {
+                int c = va_arg(valist, int);
+                delta = putch(c);
+            } else if (format[index + digitLength + 1] == 's') {
+                char* str = va_arg(valist, char*);
+                delta = puts(str);
+            } else if (format[index + digitLength + 1] == '%'){
+                delta = putch('%');
+            }
+            if (delta < putSize) {
+                padding(putSize - delta);
+            }
+            pcnt += delta;
+            index += 2 + digitLength;
             continue;
         } else if (format[index] == '\n' || format[index] == '\r') {
             pcnt += putch('\n');
