@@ -83,13 +83,15 @@ static inline int16_t puti(int32_t num) {
     }
     return index;
 }
-static inline void putiln(int num) {
+static inline int16_t putiln(int num) {
     int16_t cnt = 0;
     cnt += puti(num);
     cnt += newline();
+    return cnt;
 }
 static inline int printf(const char* format, ...) {
     va_list valist;
+    int16_t pcnt = 0;
     int narg = 0;
     int index = 0;
     while (format[index]) {
@@ -104,28 +106,28 @@ static inline int printf(const char* format, ...) {
         if (format[index] == '%') {
             if (format[index+1] == 'd') {
                 int data = va_arg(valist, int);
-                puti(data);
+                pcnt += puti(data);
             } else if (format[index+1] == 'c') {
                 int c = va_arg(valist, int);
-                putch(c);
+                pcnt += putch(c);
             } else if (format[index+1] == 's') {
                 char* str = va_arg(valist, char*);
-                puts(str);
+                pcnt += puts(str);
             } else if (format[index+1] == '%'){
-                putch('%');
+                pcnt += putch('%');
             }
             index += 2;
             continue;
         } else if (format[index] == '\n' || format[index] == '\r') {
-            putch('\n');
-            putch('\r');
+            pcnt += putch('\n');
+            pcnt += putch('\r');
         } else {
-            putch(format[index]);
+            pcnt += putch(format[index]);
         }
         index++;
     }
     va_end(valist);
-    return 0;
+    return pcnt;
 }
 static inline int getch() {
     return readkb();
