@@ -70,11 +70,12 @@ build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin $(FILESYSTEM)/FAT.bin $(FILESY
 	dd if=$(FILESYSTEM)/FAT.bin of=OS.img conv=notrunc seek=3 bs=512
 	dd if=$(FILESYSTEM)/FAT.bin of=OS.img conv=notrunc seek=7 bs=512
 	dd if=$(FILESYSTEM)/datablock.bin of=OS.img conv=notrunc bs=512 seek=13
-	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc seek=15 bs=512
+	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc seek=15 bs=512 count=8
 	dd if=$(USER)/$(STONE)/stoneQ.bin of=OS.img conv=notrunc seek=25 bs=512
 	dd if=$(USER)/$(STONE)/stoneW.bin of=OS.img conv=notrunc seek=29 bs=512
 	dd if=$(USER)/$(STONE)/stoneA.bin of=OS.img conv=notrunc seek=33 bs=512
 	dd if=$(USER)/$(STONE)/stoneS.bin of=OS.img conv=notrunc seek=37 bs=512
+	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc skip=8 seek=41 bs=512
 clean:
 	echo "\n"
 	find . -name "*.bin" -type f -delete
