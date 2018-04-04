@@ -66,15 +66,15 @@ $(USER)/$(STONE)/stoneS.bin:
 build: $(LOADER)/loader.bin $(FILESYSTEM)/DBR.bin $(FILESYSTEM)/FAT.bin $(FILESYSTEM)/datablock.bin $(STONE_OBJ)
 	echo "\n"
 	dd if=$(LOADER)/loader.bin of=OS.img conv=notrunc
-	dd if=$(FILESYSTEM)/DBR.bin of=OS.img conv=notrunc oflag=seek_bytes seek=512
-	dd if=$(FILESYSTEM)/FAT.bin of=OS.img conv=notrunc oflag=seek_bytes seek=1536
-	dd if=$(FILESYSTEM)/FAT.bin of=OS.img conv=notrunc oflag=seek_bytes seek=3584
-	dd if=$(FILESYSTEM)/datablock.bin of=OS.img conv=notrunc oflag=seek_bytes seek=6656
-	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc oflag=seek_bytes seek=7680
-	dd if=$(USER)/$(STONE)/stoneQ.bin of=OS.img conv=notrunc oflag=seek_bytes seek=12800
-	dd if=$(USER)/$(STONE)/stoneW.bin of=OS.img conv=notrunc oflag=seek_bytes seek=14848
-	dd if=$(USER)/$(STONE)/stoneA.bin of=OS.img conv=notrunc oflag=seek_bytes seek=16896
-	dd if=$(USER)/$(STONE)/stoneS.bin of=OS.img conv=notrunc oflag=seek_bytes seek=18944
+	dd if=$(FILESYSTEM)/DBR.bin of=OS.img bs=512 conv=notrunc seek=1
+	dd if=$(FILESYSTEM)/FAT.bin of=OS.img conv=notrunc seek=3 bs=512
+	dd if=$(FILESYSTEM)/FAT.bin of=OS.img conv=notrunc seek=7 bs=512
+	dd if=$(FILESYSTEM)/datablock.bin of=OS.img conv=notrunc bs=512 seek=13
+	dd if=$(KERNEL)/kernel.bin of=OS.img conv=notrunc seek=15 bs=512
+	dd if=$(USER)/$(STONE)/stoneQ.bin of=OS.img conv=notrunc seek=25 bs=512
+	dd if=$(USER)/$(STONE)/stoneW.bin of=OS.img conv=notrunc seek=29 bs=512
+	dd if=$(USER)/$(STONE)/stoneA.bin of=OS.img conv=notrunc seek=33 bs=512
+	dd if=$(USER)/$(STONE)/stoneS.bin of=OS.img conv=notrunc seek=37 bs=512
 clean:
 	echo "\n"
 	find . -name "*.bin" -type f -delete
