@@ -5,6 +5,8 @@ install_interupt:
     push ds
     pusha
 
+    mov ax, cs
+    mov ds, ax
     xor ax, ax 
     mov es, ax 
     ; ;cli
@@ -12,8 +14,6 @@ install_interupt:
     mov word [es: 20H], timeOut
     mov ax, cs
     mov word [es: 22H], ax
-    mov ds, ax 
-    mov es, ax 
 
     popa
     pop ds 
@@ -29,10 +29,9 @@ timeOut:
     ; mov al, [char]
     ; mov [gs:0], al
     ; mov byte [gs:1], 0FH
-    mov al, 20H
-    out 20H, al 
-    out 0A0H, al 
-    iret
+    jmp 0F000H:0fea5H
 
 data:
     char db 'A'
+    old_CS dw 0
+    old_IP dw 0
