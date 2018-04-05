@@ -4,7 +4,7 @@
 %endmacro
 
 %macro calll 1
-    push word 0
+    push cs
     call %1
 %endmacro
 

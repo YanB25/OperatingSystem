@@ -9,6 +9,7 @@
 #include "../filesystem.h"
 #include "../../include/mystring.h"
 #include "fsErrorCode.h"
+#include "../../include/utilities.h"
 
 #define TYPE_FLDR 0
 #define TYPE_FILE 1
@@ -116,6 +117,20 @@ static inline int16_t __load_program(const char* targetFilename) {
         }
     }
     return ERR_NOT_FOUND;
+
+}
+static inline void __print_file_cluster_list(const FAT_ITEM* pfat) {
+    FAT_ITEM_T* FAT_table = (FAT_ITEM_T*)(FAT_TABLE_ADDRESS);
+    int16_t cluster = pfat->blow_cluster;
+    FAT_ITEM_T* pFAT_ITEM = FAT_table + cluster;
+    puti(cluster);
+    puts(" -> ");
+    while (*pFAT_ITEM != 0xFFFF) {
+        puti(*pFAT_ITEM);
+        puts(" -> ");
+        pFAT_ITEM = FAT_table + *pFAT_ITEM;
+    }
+    puts("NULL");
 
 }
 #endif

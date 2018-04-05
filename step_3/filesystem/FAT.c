@@ -12,7 +12,7 @@ FAT_ITEM_T fat_items[] = {
     0x0009, // 8
     0x000A, // 9
     0x000B, // 10
-    0xFFFF, // 11
+    0x001E, // 11 //TODO: kernel jmp to 1E
     0xFFFF, // 12
     0xFFFF, // 13
     0x000F, // 14
@@ -31,16 +31,38 @@ FAT_ITEM_T fat_items[] = {
     0x001C, // 27
     0x001D, // 28
     0xFFFF, // 29
-    0xFFFF, // 30
-    0xFFFF, // 31
-    0xFFFF, // 32
-    0xFFFF, // 33
-    0xFFFF, // 34
-    0xFFFF, // 35
-    0xFFFF, // 36
-    0xFFFF, // 37
-    0xFFFF, // 38
-    0xFFFF, // 39
-    0xFFFF, // 40
+    0x001F, // 30 //TODO: kernel part 2
+    0x0020, // 31
+    0x0021, // 32
+    0x0022, // 33
+    0x0023, // 34
+    0x0024, // 35
+    0x0025, // 36
+    0x0026, // 37
+    0x0027, // 38
+    0x0028, // 39
+    0x0029, // 40
+    0x002A, // 41
+    0x002B, // 42
+    0x002C, // 43
+    0x002D, // 44
+    0xFFFF, // 45 // kernel end
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
+    0xFFFF, // 41
     0xFFFF, // 41
 };
