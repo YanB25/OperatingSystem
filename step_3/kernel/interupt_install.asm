@@ -23,12 +23,24 @@ install_interupt:
     jmp cx
 
 timeOut:
-    ; mov ax, 0B800H
-    ; mov gs, ax 
-    ; inc byte [char]
-    ; mov al, [char]
-    ; mov [gs:0], al
-    ; mov byte [gs:1], 0FH
+
+    pusha
+    push gs
+
+    mov ax, 0B800H
+    mov gs, ax 
+    inc byte [char]
+    cmp byte [char], 'Z'+1
+    jnz .print
+    mov byte[char], 'A'
+.print:
+    mov al, [char]
+    mov [gs:0], al
+    mov byte [gs:1], 0FH
+
+    pop gs
+    popa
+
     jmp 0F000H:0fea5H
 
 data:
