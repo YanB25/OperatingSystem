@@ -1,5 +1,6 @@
 [BITS 16]
 global install_interupt
+extern timeout
 install_interupt:
     push es
     push ds
@@ -27,16 +28,8 @@ timeOut:
     pusha
     push gs
 
-    mov ax, 0B800H
-    mov gs, ax 
-    inc byte [char]
-    cmp byte [char], 'Z'+1
-    jnz .print
-    mov byte[char], 'A'
-.print:
-    mov al, [char]
-    mov [gs:0], al
-    mov byte [gs:1], 0FH
+    push cs 
+    call timeout
 
     pop gs
     popa

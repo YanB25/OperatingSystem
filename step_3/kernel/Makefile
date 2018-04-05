@@ -16,12 +16,14 @@ USER_OBJ=$(USER)/user.o $(USER)/terminal.o
 
 all: kernel.bin
 
-kernel.bin: kernel.o $(INCLUDE)/utilities.o $(USER_OBJ) $(INCLUDE)/mystring.o $(FILESYSTEM)/fsutilities.o interupt_install.o
+kernel.bin: kernel.o $(INCLUDE)/utilities.o $(USER_OBJ) $(INCLUDE)/mystring.o $(FILESYSTEM)/fsutilities.o interupt_install.o timeout.o
 	$(LD) $(LDFLAGS) -Ttext 0xA200 --oformat binary -o $@ $^
 kernel.o: kernel.c kernel.h $(INCLUDE)/utilities.h $(USER_HEADER) $(FILESYSTEM)/API/fsapi.h
 	$(CC) $(CCFLAGS) -c $^
 interupt_install.o: interupt_install.asm 
 	$(AS) $(ASFLAGS) -f elf32 -o $@ $^
+timeout.o: timeout.c
+	$(CC) $(CCFLAGS) -c $^
 
 $(INCLUDE)/utilities.o:
 	cd $(INCLUDE)/ && make
