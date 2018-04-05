@@ -39,15 +39,8 @@ timeOut:
     push cs 
     call timeout
 
-<<<<<<< HEAD
-    mov al, 20H
-    out 20H, al
-    out 0A0H, al
-
-=======
     pop es
     pop ds
->>>>>>> find-bug-in-ds-seg-and-fix
     pop gs
     popa
 
