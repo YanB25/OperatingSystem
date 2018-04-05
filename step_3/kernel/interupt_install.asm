@@ -24,6 +24,8 @@ install_interupt:
     jmp cx
 
 timeOut:
+    push ds 
+    push es
 
     pusha
     push gs
@@ -31,10 +33,18 @@ timeOut:
     push cs 
     call timeout
 
+    mov al, 20H
+    out 20H, al
+    out 0A0H, al
+
     pop gs
     popa
 
-    jmp 0F000H:0fea5H
+    pop es 
+    pop ds
+
+    iret
+    ; jmp 0F000H:0fea5H
 
 data:
     char db 'A'
