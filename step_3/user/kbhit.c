@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include "../include/utilities.h"
-extern int16_t row = 8;
-extern int16_t column = 10;
+int16_t row = 8;
+int16_t column = 10;
 int16_t evenFlag = 1;
 void kb_custom_interupt() {
     if (evenFlag) {

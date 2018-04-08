@@ -8,11 +8,11 @@ ASFLAGS=
 UTILITIES=../include
 STONE=stone
 STONE_BIN = $(STONE)/stoneQ.bin $(STONE)/stoneW.bin $(STONE)/stoneA.bin $(STONE)/stoneS.bin
-all: user.o terminal.o $(STONE_BIN)
+all: user.o terminal.o $(STONE_BIN) kb_interupt_installer.o kbhit.o
 
 user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
-terminal.o: terminal.c $(UTILITIES)/utilities.h 
+terminal.o: terminal.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
 
 $(STONE)/stoneQ.bin: $(STONE)/stoneQ.o $(UTILITIES)/utilities.o
@@ -35,6 +35,10 @@ $(STONE)/stoneA.bin: $(STONE)/stoneA.o $(UTILITIES)/utilities.o
 $(STONE)/stoneA.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $< -D DL -o $@
 
+kb_interupt_installer.o: kb_interupt_installer.asm
+	$(AS) $(ASFLAGS) -f elf32 -o $@ $^
+kbhit.o: kbhit.c 
+	$(CC) $(CCFLAGS) -c $^
 
 $(UTILITIES)/utilities.o:
 	cd $(UTILITIES)/ && make
