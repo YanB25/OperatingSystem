@@ -1,6 +1,8 @@
 [BITS 16]
 global install_interupt
 extern timeout
+extern kb_custom_interupt
+%include "../include/bridge.inc"
 install_interupt:
     push es
     push ds
@@ -61,9 +63,10 @@ kbCallback:
     push ax
     mov ax, cs 
     mov ds, ax
+    
+    calll kb_custom_interupt
 
     pushf
-    ; jmp [old_09_cs: old_09r_ip] ;TODO: ERROR! how to jump!!
     call far [ds:old_09_ip]
 
     pop ax 
