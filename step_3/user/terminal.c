@@ -14,7 +14,7 @@ void parseCMD(int );
 
 static FAT_ITEM* CUR_DIR = 0;
 int terminal() {
-    kb_interupt_install(); //TODO: for debug
+    kb_interupt_install();
     if (CUR_DIR == 0) {
         CUR_DIR = __get_root_dir();
     }
@@ -87,7 +87,7 @@ void parseCMD(int CMDindex) {
                 putln("ERROR: file not found");
                 break;
             case NO_ERR:
-                kb_interupt_install();
+                // kb_interupt_install(); //TODO:debug
                 userProgram();
                 clear_screen();
                 break;

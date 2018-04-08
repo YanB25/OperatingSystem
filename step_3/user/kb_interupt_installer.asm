@@ -4,6 +4,8 @@ extern kb_custom_interupt
 global kb_interupt_install
 kb_interupt_install:
     ; install int 09: keyboard interupt
+    push gs
+    push es
     push ds
     pusha
 
@@ -20,20 +22,28 @@ kb_interupt_install:
 
     popa
     pop ds
-    retl
-;ff5c
+    pop es
+    pop gs
+
+    pop ecx
+    jmp cx
+
 kbCallback:
     pusha
     push ds
+    push es
+    push gs
 
     mov ax, 0 
     mov ds, ax
     
-    ;calll kb_custom_interupt
+    calll kb_custom_interupt
 
     pushf
     call far [ds:old_09_ip]
 
+    pop gs
+    pop es
     pop ds
     popa
 

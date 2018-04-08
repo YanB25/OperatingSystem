@@ -9,7 +9,6 @@
 extern void install_interupt();
 int main() {
     install_interupt();
-    terminal(); //TODO: for debug
     // __asm__("int $0x8\n");
     // __load_program("stoneS");
     clear_screen();
