@@ -10,11 +10,23 @@ install_interupt:
     mov ds, ax
     xor ax, ax 
     mov es, ax 
-    ; ;cli
-    ; sti
+
+    ; install int 08: clock interupt
     mov word [es: 20H], timeOut
     mov ax, cs
     mov word [es: 22H], ax
+
+    ; install int 09: keyboard interupt
+    mov ax, 0
+    mov ds, ax 
+    mov ax, [ds: 24H]
+    mov [old_09_ip], ax
+    mov ax, [ds: 26H]
+    mov [old_09_cs], ax
+
+    mov word [ds: 24H] , kbCallback
+    mov ax, cs
+    mov word [ds: 26H] , ax
 
     popa
     pop ds 
@@ -44,7 +56,23 @@ timeOut:
 
     jmp 0F000H:0fea5H
 
+kbCallback:
+    push ds
+    push ax
+    mov ax, cs 
+    mov ds, ax
+
+    pushf
+    ; jmp [old_09_cs: old_09r_ip] ;TODO: ERROR! how to jump!!
+    call far [ds:old_09_ip]
+
+    pop ax 
+    pop ds
+
+    iret
+
+
 data:
     char db 'A'
-    old_CS dw 0
-    old_IP dw 0
+    old_09_ip dw 0
+    old_09_cs dw 0
