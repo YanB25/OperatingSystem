@@ -1,10 +1,10 @@
 #include "../include/utilities.h"
 char ch = 'A';
 #define DELAY 2
-#define LeftBound 39
-#define RightBound 40
-int16_t left = 0;
-int16_t right = 0;
+#define UpBound 12
+#define DownBound 13
+int16_t up = 0;
+int16_t down = 0;
 int16_t delay = DELAY;
 void callback();
 void timeout() {
@@ -14,18 +14,18 @@ void timeout() {
 void callback() {
     if (delay --> 0) return;
     delay = DELAY;
-    if (left - 1 >= 0) {
-        draw_char_style(' ', 24, left-1, DEFAULT_STYLE);
+    if (up - 1 >= 0) {
+        draw_char_style(' ', up-1, 78, DEFAULT_STYLE);
     } else {
-        draw_char_style(' ', 24, LeftBound, DEFAULT_STYLE);
+        draw_char_style(' ', UpBound - 1, 78, DEFAULT_STYLE);
     }
-    if (right + 1 <= 79) {
-        draw_char_style(' ', 24, right + 1, DEFAULT_STYLE);
+    if (down + 1 <= 24) {
+        draw_char_style(' ', down+1, 78, DEFAULT_STYLE);
     } else {
-        draw_char_style(' ', 24, RightBound, DEFAULT_STYLE);
+        draw_char_style(' ', DownBound , 78, DEFAULT_STYLE);
     }
-    draw_char_style(' ', 24, left, G_BG_WHITE | G_DARK);
-    draw_char_style(' ', 24, right, G_BG_WHITE | G_DARK);
-    left = (left+1) % (LeftBound + 1);
-    right = (right-1) < RightBound ? 79 : right-1;
+    draw_char_style(' ', up, 78, G_BG_WHITE | G_DARK);
+    draw_char_style(' ', down, 78, G_BG_WHITE | G_DARK);
+    up = (up+1) % UpBound;
+    down = (down-1) < DownBound ? 24 : down-1;
 }
