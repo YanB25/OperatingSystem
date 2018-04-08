@@ -9,12 +9,12 @@
     "run stoneQ: run program stoneQ.bin\n\r" \
     "ls : list all file in root directory"
 extern void kb_interupt_install();
+extern void kb_interupt_uninstall();
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
 
 static FAT_ITEM* CUR_DIR = 0;
 int terminal() {
-    kb_interupt_install();
     if (CUR_DIR == 0) {
         CUR_DIR = __get_root_dir();
     }
@@ -87,8 +87,9 @@ void parseCMD(int CMDindex) {
                 putln("ERROR: file not found");
                 break;
             case NO_ERR:
-                // kb_interupt_install(); //TODO:debug
+                kb_interupt_install();
                 userProgram();
+                kb_interupt_uninstall();
                 clear_screen();
                 break;
         }

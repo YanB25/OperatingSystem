@@ -2,6 +2,7 @@
 %include "../include/bridge.inc"
 extern kb_custom_interupt
 global kb_interupt_install
+global kb_interupt_uninstall
 kb_interupt_install:
     ; install int 09: keyboard interupt
     push gs
@@ -27,6 +28,20 @@ kb_interupt_install:
 
     pop ecx
     jmp cx
+kb_interupt_uninstall:
+    push ax
+    push ds
+
+    mov ax, 0
+    mov ds, ax 
+    mov ax, [old_09_ip]
+    mov [ds: 24H], ax
+    mov ax, [old_09_cs]
+    mov [ds:26H], ax
+
+    pop ds
+    pop ax
+    retl
 
 kbCallback:
     pusha
