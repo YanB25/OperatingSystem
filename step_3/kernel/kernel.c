@@ -6,8 +6,16 @@
 #include "../filesystem/API/fsapi.h"
 #define true 1
 #define false 0
-extern void install_interupt();
+extern void clock_install_interupt();
+extern void global_custom_int_install();
 int main() {
+    global_custom_int_install();
+    __asm__ volatile (
+        "pushw %ax\n"
+        "mov $0, %ax\n"
+        "INT $0x2B\n"
+        "popw %ax\n"
+    );
     clock_install_interupt();
     // __asm__("int $0x8\n");
     // __load_program("stoneS");
