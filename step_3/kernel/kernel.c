@@ -8,7 +8,7 @@
 #define false 0
 extern void install_interupt();
 int main() {
-    install_interupt();
+    clock_install_interupt();
     // __asm__("int $0x8\n");
     // __load_program("stoneS");
     clear_screen();

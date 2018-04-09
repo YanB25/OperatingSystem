@@ -1,9 +1,9 @@
 [BITS 16]
-global install_interupt
+global clock_install_interupt
 extern timeout
 extern kb_custom_interupt
 %include "../include/bridge.inc"
-install_interupt:
+clock_install_interupt:
     push es
     push ds
     pusha
@@ -45,7 +45,7 @@ timeOut:
     pop gs
     popa
 
-    jmp 0F000H:0fea5H
+    jmp 0F000H:0fea5H ;TODO: should not hard code
 
 data:
     char db 'A'
