@@ -8,7 +8,7 @@ ASFLAGS=
 UTILITIES=../include
 STONE=stone
 STONE_BIN = $(STONE)/stoneQ.bin $(STONE)/stoneW.bin $(STONE)/stoneA.bin $(STONE)/stoneS.bin
-all: user.o terminal.o $(STONE_BIN) kb_interupt_installer.o kbhit.o
+all: terminal.o $(STONE_BIN) kb_interupt_installer.o kbhit.o
 
 user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^

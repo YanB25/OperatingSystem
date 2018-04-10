@@ -1,4 +1,5 @@
 #include "../include/utilities.h"
+#include "../include/stdio.h"
 char ch = 'A';
 #define DELAY 2
 #define UpBound 12

@@ -10,6 +10,7 @@
 #include "../../include/mystring.h"
 #include "fsErrorCode.h"
 #include "../../include/utilities.h"
+#include "../../include/stdio.h"
 
 #define TYPE_FLDR 0
 #define TYPE_FILE 1

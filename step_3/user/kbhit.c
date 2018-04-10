@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "../include/stdio.h"
 #include "../include/utilities.h"
 int16_t row = 8;
 int16_t column = 10;

@@ -1,3 +1,4 @@
+// DEPLECATED
 #include "../include/utilities.h"
 int sum(int end) {
     int sum = 0;

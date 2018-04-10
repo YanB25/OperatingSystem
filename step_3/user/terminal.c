@@ -11,6 +11,7 @@
 #define LOW_8_MASK (0b11111111)
 #define GET_LOW_8BITS(X) (X & LOW_8_MASK)
 #define GET_HIGH_8BITS(X) (X >> 8)
+#include "../include/stdio.h"
 extern void kb_interupt_install();
 extern void kb_interupt_uninstall();
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};

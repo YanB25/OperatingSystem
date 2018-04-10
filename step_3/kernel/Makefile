@@ -11,8 +11,8 @@ USER=../user
 FILESYSTEM=../filesystem
 STONE=stone
 
-USER_HEADER=$(USER)/user.h $(USER)/terminal.h 
-USER_OBJ=$(USER)/user.o $(USER)/terminal.o $(USER)/kb_interupt_installer.o $(USER)/kbhit.o
+USER_HEADER=$(USER)/terminal.h 
+USER_OBJ=$(USER)/terminal.o $(USER)/kb_interupt_installer.o $(USER)/kbhit.o
 INT_OBJ=clock_interupt_installer.o global_custom_int_installer.o timeout.o
 all: kernel.bin
 

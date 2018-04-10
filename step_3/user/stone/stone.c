@@ -2,6 +2,7 @@ __asm__("jmpl $0, $stone\n");
 
 #include "../../include/utilities.h"
 #include "stone.h"
+#include "../../include/stdio.h"
 #define DELAY (5 * 1e5)
 int getKbHit();
 void checkBound();
