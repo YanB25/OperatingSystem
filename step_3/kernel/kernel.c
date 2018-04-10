@@ -25,6 +25,7 @@ int main() {
     //draw_char_style('A', 0, 10, G_DEFAULT);
     // draw_char_style('A', 0, 11, G_DEFAULT_DARK);
     newline();
+    // set_cursor(0, 10);
     terminal();
     return 0;
 }

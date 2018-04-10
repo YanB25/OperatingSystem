@@ -187,4 +187,35 @@ static inline int16_t putn(const char* s, uint16_t size) {
     }
     return size;
 }
+static inline void set_cursor(uint8_t row, uint8_t col) {
+    uint16_t _DX_ = col | (row << 8);
+    __asm__ volatile(
+        "pushw %%bx\n"
+        "pushw %%ax\n"
+        "movb $0x02, %%ah\n"
+        "movw $0, %%bx\n"
+        "int $0x10\n"
+        "popw %%ax\n"
+        "popw %%bx\n"
+        : /* no output */
+        : "d"(_DX_)
+        : "cc", "memory"
+    );
+}
+static inline uint16_t get_cursor(){
+    uint16_t cursor_pos;
+    __asm__ volatile(
+        "pushw %%ax\n"
+        "pushw %%bx\n"
+        "movb $0x03, %%ah\n"
+        "movb $0, %%bh\n"
+        "int $0x10\n"
+        "popw %%bx\n"
+        "popw %%ax\n"
+        : "=d"(cursor_pos)
+        : /* no input */
+        : "cc", "cx"
+    );
+    return cursor_pos;
+}
 #endif

@@ -8,6 +8,9 @@
 #define HELP_MSG "run <program> : run program <program>\n\r" \
     "run stoneQ: run program stoneQ.bin\n\r" \
     "ls : list all file in root directory"
+#define LOW_8_MASK (0b11111111)
+#define GET_LOW_8BITS(X) (X & LOW_8_MASK)
+#define GET_HIGH_8BITS(X) (X >> 8)
 extern void kb_interupt_install();
 extern void kb_interupt_uninstall();
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
@@ -113,6 +116,12 @@ void parseCMD(int CMDindex) {
                 // putiln(pfat->filesize);
             }
         }
+    }
+    else if (strcmp(CMD_BUFFER, "gc") == 0) {
+        uint16_t cursor_position = get_cursor();
+        uint16_t col = GET_LOW_8BITS(cursor_position);
+        uint16_t row = GET_HIGH_8BITS(cursor_position);
+        printf("cursor row is %d, col is %d\n", row, col);
     }
     else {
         puts("ybsh: command not found: ");
