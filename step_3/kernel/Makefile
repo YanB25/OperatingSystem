@@ -12,15 +12,17 @@ FILESYSTEM=../filesystem
 STONE=stone
 
 USER_HEADER=$(USER)/user.h $(USER)/terminal.h 
-USER_OBJ=$(USER)/user.o $(USER)/terminal.o 
-
+USER_OBJ=$(USER)/user.o $(USER)/terminal.o $(USER)/kb_interupt_installer.o $(USER)/kbhit.o
+INT_OBJ=clock_interupt_installer.o global_custom_int_installer.o timeout.o
 all: kernel.bin
 
-kernel.bin: kernel.o $(INCLUDE)/utilities.o $(USER_OBJ) $(INCLUDE)/mystring.o $(FILESYSTEM)/fsutilities.o interupt_install.o timeout.o
+kernel.bin: kernel.o $(INCLUDE)/utilities.o $(USER_OBJ) $(INCLUDE)/mystring.o $(FILESYSTEM)/fsutilities.o $(INT_OBJ)
 	$(LD) $(LDFLAGS) -Ttext 0xA200 --oformat binary -o $@ $^
 kernel.o: kernel.c kernel.h $(INCLUDE)/utilities.h $(USER_HEADER) $(FILESYSTEM)/API/fsapi.h
 	$(CC) $(CCFLAGS) -c $^
-interupt_install.o: interupt_install.asm 
+clock_interupt_installer.o: clock_interupt_installer.asm 
+	$(AS) $(ASFLAGS) -f elf32 -o $@ $^
+global_custom_int_installer.o: global_custom_int_installer.asm 
 	$(AS) $(ASFLAGS) -f elf32 -o $@ $^
 timeout.o: timeout.c
 	$(CC) $(CCFLAGS) -c $^
@@ -39,6 +41,12 @@ $(FILESYSTEM)/fsutilities.o:
 	cd ../kernel
 $(USER)/$(STONE)/stoneQ.o:
 	cd $(USER)/ && make
+	cd ../kernel
+$(USER)/kb_interupt_installer.o:
+	cd $(USER)/ && make 
+	cd ../kernel
+$(USER)/kbkit.o:
+	cd $(USER)/ && make 
 	cd ../kernel
 clean:
 	rm *.bin -f 

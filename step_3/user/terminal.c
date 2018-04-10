@@ -8,6 +8,11 @@
 #define HELP_MSG "run <program> : run program <program>\n\r" \
     "run stoneQ: run program stoneQ.bin\n\r" \
     "ls : list all file in root directory"
+#define LOW_8_MASK (0b11111111)
+#define GET_LOW_8BITS(X) (X & LOW_8_MASK)
+#define GET_HIGH_8BITS(X) (X >> 8)
+extern void kb_interupt_install();
+extern void kb_interupt_uninstall();
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
 
@@ -85,7 +90,9 @@ void parseCMD(int CMDindex) {
                 putln("ERROR: file not found");
                 break;
             case NO_ERR:
+                kb_interupt_install();
                 userProgram();
+                kb_interupt_uninstall();
                 clear_screen();
                 break;
         }
@@ -109,6 +116,22 @@ void parseCMD(int CMDindex) {
                 // putiln(pfat->filesize);
             }
         }
+    }
+    else if (strcmp(CMD_BUFFER, "gc") == 0) {
+        uint16_t cursor_position = get_cursor();
+        uint16_t col = GET_LOW_8BITS(cursor_position);
+        uint16_t row = GET_HIGH_8BITS(cursor_position);
+        printf("cursor row is %d, col is %d\n", row, col);
+    }
+    else if (strcmp(CMD_BUFFER, "scu") == 0) {
+        uint16_t ocursor_position = get_cursor();
+        uint16_t ocol = GET_LOW_8BITS(ocursor_position);
+        uint16_t orow = GET_HIGH_8BITS(ocursor_position);
+        __screen_scroll(0, (24 << 8) + 79, 1, 0);
+        uint16_t ncursor_position = get_cursor();
+        uint16_t ncol = GET_LOW_8BITS(ncursor_position);
+        uint16_t nrow = GET_HIGH_8BITS(ncursor_position);
+        printf("old row %d col %d, new row %d col %d\n", orow, ocol, nrow, ncol);
     }
     else {
         puts("ybsh: command not found: ");

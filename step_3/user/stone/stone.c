@@ -21,7 +21,7 @@ int stone() {
     clear_screen();
     while(1) {
         int key = getKbHit();
-        if (key) return key;
+        if (key == 'q') return key;
 
         int delay = DELAY;
         while ((--delay) >= 0) continue;
