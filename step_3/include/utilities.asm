@@ -2,7 +2,7 @@
 global clear_screen
 global hello_hybrid_programming
 global add
-global _draw_char
+; global _draw_char
 global puts
 global putch
 global kbhit
@@ -38,39 +38,39 @@ add:
     mov eax, [esp]
     leave
     retl
-
-_draw_char:
-    ; enter 0, 0
-
-    ; mov ax, 0B800H
-    ; mov gs, ax
-    ; push di
-    ; mov ecx, [bp + 6] ; char
-    ; mov edi, [bp + 10] ; offset
-    ; mov ch, [bp + 14] ; style
-    ; mov [gs:di], cx
-
-    ; pop di
-    ; leave
-    ; mov ax, 1
-    ; retl
-
-    ;;; new version:
-    enter 0, 0
-    push edi
-
-    mov ecx, [bp + 6]
-    mov edi, [bp + 10]
-    mov ch, [bp + 14]
-
-    mov ah, 1
-    int 2BH
-
-    pop edi
-    leave 
-    mov ax, 1
-    retl
-
+; TODO: deprecated!
+; _draw_char:
+;     ; enter 0, 0
+; 
+;     ; mov ax, 0B800H
+;     ; mov gs, ax
+;     ; push di
+;     ; mov ecx, [bp + 6] ; char
+;     ; mov edi, [bp + 10] ; offset
+;     ; mov ch, [bp + 14] ; style
+;     ; mov [gs:di], cx
+; 
+;     ; pop di
+;     ; leave
+;     ; mov ax, 1
+;     ; retl
+; 
+;     ;;; new version:
+;     enter 0, 0
+;     push edi
+; 
+;     mov ecx, [bp + 6]
+;     mov edi, [bp + 10]
+;     mov ch, [bp + 14]
+; 
+;     mov ah, 1
+;     int 2BH
+; 
+;     pop edi
+;     leave 
+;     mov ax, 1
+;     retl
+; 
 putch:
     enter 0, 0
 

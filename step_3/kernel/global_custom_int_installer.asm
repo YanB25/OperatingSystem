@@ -54,9 +54,10 @@ testcase:
     retf
 _int_draw_char:
     ;input
-        ; cx store showing char
+        ; cx written data
+            ; cl store showing char
+            ; ch store showing style
         ; di store offset from B800(byte)
-        ; ch store showing style
     ;modify
         ; None
     ;description:

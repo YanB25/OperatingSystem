@@ -7,7 +7,18 @@
 void clear_screen();
 void hello_hybrid_programming();
 int add(int, int);
-int16_t _draw_char(char ch, int offset, uint8_t style);
+static inline int16_t _draw_char(char ch, int offset, uint8_t style) {
+    uint16_t written_data = ch | (style << 8);
+    __asm__ volatile (
+        "movb $1, %%ah\n"
+        "int $0x2B\n"
+        : /* no output */
+        : "c"(written_data), "D"(offset)
+        : "cc", "ax", "memory"
+    );
+    return 1;
+
+}
 int16_t putch(char);
 // unbocked function to test whether kb is hit
 // return zero if no kb is hit. return ascii
