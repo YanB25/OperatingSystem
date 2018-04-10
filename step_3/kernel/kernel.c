@@ -9,6 +9,7 @@
 extern void clock_install_interupt();
 extern void global_custom_int_install();
 int main() {
+    __screen_scroll(0, (20 << 8) + 20, 5, 0);
     global_custom_int_install();
     // __asm__ volatile (
     //     "pushw %ax\n"

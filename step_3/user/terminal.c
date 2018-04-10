@@ -123,6 +123,16 @@ void parseCMD(int CMDindex) {
         uint16_t row = GET_HIGH_8BITS(cursor_position);
         printf("cursor row is %d, col is %d\n", row, col);
     }
+    else if (strcmp(CMD_BUFFER, "scu") == 0) {
+        uint16_t ocursor_position = get_cursor();
+        uint16_t ocol = GET_LOW_8BITS(ocursor_position);
+        uint16_t orow = GET_HIGH_8BITS(ocursor_position);
+        __screen_scroll(0, (24 << 8) + 79, 1, 0);
+        uint16_t ncursor_position = get_cursor();
+        uint16_t ncol = GET_LOW_8BITS(ncursor_position);
+        uint16_t nrow = GET_HIGH_8BITS(ncursor_position);
+        printf("old row %d col %d, new row %d col %d\n", orow, ocol, nrow, ncol);
+    }
     else {
         puts("ybsh: command not found: ");
         putln(CMD_BUFFER);

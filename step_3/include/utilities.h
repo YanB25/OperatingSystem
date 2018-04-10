@@ -1,5 +1,6 @@
 #ifndef __UTILITIES_H_
 #define __UTILITIES_H_
+
 #include <stdarg.h>
 #include <stdint.h>
 #include "graphic.h"
@@ -217,5 +218,30 @@ static inline uint16_t get_cursor(){
         : "cc", "cx"
     );
     return cursor_pos;
+}
+// row_col_lu: high: row, low: col
+// row_col_rd: high: row, low: col
+static inline void __screen_scroll(
+    uint16_t row_col_lu, // for DX
+    uint16_t row_col_rd, // for CX
+    uint8_t lines, // for AL
+    uint16_t direction
+    ){
+    uint8_t funCode;
+    if (direction == 0) {
+        funCode = 0x06;
+    } else {
+        funCode = 0x07;
+    }
+    __asm__ volatile(
+        "pushw %%bx\n"
+        "movb %[funCode], %%ah\n"
+        "movb $0x07, %%bh\n"
+        "int $0x10\n"
+        "popw %%bx\n"
+        : /*no output*/
+        : "a"(lines), "c"(row_col_lu), "d"(row_col_rd), [funCode]"rm"(funCode)
+        : "cc", "memory", "bx"
+    );
 }
 #endif
