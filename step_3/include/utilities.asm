@@ -40,18 +40,34 @@ add:
     retl
 
 _draw_char:
-    enter 0, 0
+    ; enter 0, 0
 
-    mov ax, 0B800H
-    mov gs, ax
-    push di
+    ; mov ax, 0B800H
+    ; mov gs, ax
+    ; push di
+    ; mov ecx, [bp + 6] ; char
+    ; mov edi, [bp + 10] ; offset
+    ; mov ch, [bp + 14] ; style
+    ; mov [gs:di], cx
+
+    ; pop di
+    ; leave
+    ; mov ax, 1
+    ; retl
+
+    ;;; new version:
+    enter 0, 0
+    push edi
+
     mov ecx, [bp + 6]
     mov edi, [bp + 10]
     mov ch, [bp + 14]
-    mov [gs:di], cx
 
-    pop di
-    leave
+    mov ah, 1
+    int 2BH
+
+    pop edi
+    leave 
     mov ax, 1
     retl
 

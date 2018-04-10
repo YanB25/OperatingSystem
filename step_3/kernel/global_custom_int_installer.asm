@@ -17,6 +17,7 @@ global_custom_int_install:
     retl
 custom_int_handler:
     ;TODO:warning, not to use bx, maybe bug
+    ; ah=01H: _draw_char
     push bx
     push ax
     push dx 
@@ -38,6 +39,11 @@ custom_int_handler:
     iret
 
 testcase:
+    ;input
+        ; None
+    ;modify
+        ; None
+    ;description: test
     pusha
     pusha
     pusha
@@ -46,6 +52,28 @@ testcase:
     popa
 
     retf
+_int_draw_char:
+    ;input
+        ; cx store showing char
+        ; di store offset from B800(byte)
+        ; ch store showing style
+    ;modify
+        ; None
+    ;description:
+        ; draw a char with style at B800H + offset
+    push ax 
+    push gs
+
+    mov ax, 0B800H
+    mov gs, ax    
+    mov [gs:di], cx
+
+    pop gs 
+    pop ax 
+
+    retf
 custom_int_table:
     dw testcase
+    dw 0x0000
+    dw _int_draw_char
     dw 0x0000
