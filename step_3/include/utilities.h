@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include "graphic.h"
+#include "ctype.h"
 #define DEFAULT_STYLE 0x0F
 void clear_screen();
 void hello_hybrid_programming();
