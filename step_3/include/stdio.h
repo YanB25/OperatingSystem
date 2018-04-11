@@ -3,7 +3,8 @@
 #include "graphic.h"
 #include "utilities.h"
 #include <stdarg.h>
-#define DEFAULT_STYLE (G_DEFAULT | G_DARK)
+#define DEFAULT_STYLE_DARK (G_DEFAULT | G_DARK)
+#define DEFAULT_STYLE (G_DEFAULT)
 static inline int16_t _draw_char(char ch, int offset, uint8_t style) {
     uint16_t written_data = ch | (style << 8);
     __asm__ volatile (
@@ -16,7 +17,7 @@ static inline int16_t _draw_char(char ch, int offset, uint8_t style) {
     return 1;
 
 }
-static inline int16_t putch(char ch) {
+static inline int16_t putch_style(char ch, uint8_t style) {
     uint16_t cursor = get_cursor();
     uint8_t crow = cursor >> 8;
     uint8_t ccol = cursor & 0b11111111;
@@ -32,7 +33,7 @@ static inline int16_t putch(char ch) {
         set_cursor(crow, ccol-1);
     }
     else {
-        _draw_char(ch, (crow * 80 + ccol)*2, DEFAULT_STYLE);
+        _draw_char(ch, (crow * 80 + ccol)*2, style);
         ccol++;
         if (ccol == 79) {
             crow++;
@@ -41,6 +42,9 @@ static inline int16_t putch(char ch) {
         set_cursor(crow, ccol);
     }
     return 1;
+}
+static inline int16_t putch(char ch) {
+    return putch_style(ch, DEFAULT_STYLE);
 }
 
 static inline int16_t padding(int16_t num) {
@@ -71,7 +75,7 @@ static inline int16_t draw_str(char const* str, int row, int col) {
     int pos = (row * 80 + col) * 2;
     int16_t index = 0;
     while (*str != '\0') {
-        _draw_char(*str, pos, DEFAULT_STYLE);
+        _draw_char(*str, pos, DEFAULT_STYLE_DARK);
         str++;
         index++;
         pos += 2;
@@ -98,14 +102,17 @@ static inline int16_t draw_char_style(char ch, int row, int col, uint8_t style) 
     int pos = (row * 80 + col) * 2;
     return _draw_char(ch, pos, style);
 }
-static inline int16_t puts(char const* str) {
+static inline int16_t puts_style(char const* str, uint8_t style) {
     int16_t index = 0;
     while (*str) {
-        putch(*str);
+        putch_style(*str, style);
         str++;
         index++;
     }
     return index;
+}
+static inline int16_t puts(char const* str) {
+    return puts_style(str, DEFAULT_STYLE);
 }
 static inline int16_t putln(char const* str) {
     int16_t cnt = 0;

@@ -12,6 +12,8 @@
 #define GET_LOW_8BITS(X) (X & LOW_8_MASK)
 #define GET_HIGH_8BITS(X) (X >> 8)
 #include "../include/stdio.h"
+#include "../include/graphic.h"
+#define TERMINAL_STYLE (TO_FN(G_PINKISH))
 extern void kb_interupt_install();
 extern void kb_interupt_uninstall();
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
@@ -23,7 +25,7 @@ int terminal() {
     if (CUR_DIR == 0) {
         CUR_DIR = __get_root_dir();
     }
-    puts(PROMT);
+    puts_style(PROMT, TERMINAL_STYLE);
     int offsetx = 0;
     int offsety = 0;
     int CMDindex = 0;
@@ -42,7 +44,7 @@ int terminal() {
                 offsety++;
 
                 parseCMD(CMDindex);
-                puts(PROMT);
+                puts_style(PROMT, TERMINAL_STYLE);
 
                 CMDindex = 0;
                 CMD_BUFFER[CMDindex] = 0;
