@@ -71,17 +71,17 @@ add:
 ;     mov ax, 1
 ;     retl
 ; 
-putch:
-    enter 0, 0
-
-    mov ax, [bp+6]
-    mov ah, 0EH
-    mov bl, 0
-    int 10H
-
-    leave
-    mov ax, 1
-    retl
+; putch:
+;     enter 0, 0
+; 
+;     mov ax, [bp+6]
+;     mov ah, 0EH
+;     mov bl, 0
+;     int 10H
+; 
+;     leave
+;     mov ax, 1
+;     retl
 
 readkb:
     enter 0, 0

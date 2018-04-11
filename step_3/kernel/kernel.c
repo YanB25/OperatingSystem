@@ -22,11 +22,11 @@ int main() {
     // __asm__("int $0x8\n");
     // __load_program("stoneS");
     clear_screen();
-    draw_str("enter help to get help", 0, 30);
+    draw_str("enter help to get help", 1, 30);
     //draw_char_style('A', 0, 10, G_DEFAULT);
     // draw_char_style('A', 0, 11, G_DEFAULT_DARK);
     newline();
-    // set_cursor(0, 10);
+    set_cursor(2, 1);
     terminal();
     return 0;
 }

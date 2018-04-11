@@ -16,7 +16,28 @@ static inline int16_t _draw_char(char ch, int offset, uint8_t style) {
     return 1;
 
 }
-int16_t putch(char);
+static inline int16_t putch(char ch) {
+    uint16_t cursor = get_cursor();
+    uint8_t crow = cursor >> 8;
+    uint8_t ccol = cursor & 0b11111111;
+    if (ch == '\r') {
+        set_cursor(crow, 1);
+    } else if (ch == '\n') {
+        set_cursor(crow + 1, ccol);
+    } else if (ch == '\b') {
+        set_cursor(crow, ccol-1);
+    }
+    else {
+        _draw_char(ch, (crow * 80 + ccol)*2, DEFAULT_STYLE);
+        ccol++;
+        if (ccol == 79) {
+            crow++;
+            ccol = 1;
+        }
+        set_cursor(crow, ccol);
+    }
+    return 1;
+}
 
 static inline int16_t padding(int16_t num) {
     for (int16_t i = 0; i < num; ++i) {

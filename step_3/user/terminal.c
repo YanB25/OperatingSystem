@@ -18,6 +18,7 @@ char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
 
 static FAT_ITEM* CUR_DIR = 0;
+void resetTerminal();
 int terminal() {
     if (CUR_DIR == 0) {
         CUR_DIR = __get_root_dir();
@@ -94,7 +95,7 @@ void parseCMD(int CMDindex) {
                 kb_interupt_install();
                 userProgram();
                 kb_interupt_uninstall();
-                clear_screen();
+                resetTerminal();
                 break;
         }
     } else if (strcmp(CMD_BUFFER, "help") == 0) {
@@ -138,4 +139,8 @@ void parseCMD(int CMDindex) {
         puts("ybsh: command not found: ");
         putln(CMD_BUFFER);
     }
+}
+void resetTerminal() {
+    clear_screen();
+    set_cursor(1, 1);
 }
