@@ -23,7 +23,11 @@ static inline int16_t putch(char ch) {
     if (ch == '\r') {
         set_cursor(crow, 1);
     } else if (ch == '\n') {
-        set_cursor(crow + 1, ccol);
+        if (crow >= 23) {
+            scroll_up_one_line();
+        } else {
+            set_cursor(crow + 1, ccol);
+        }
     } else if (ch == '\b') {
         set_cursor(crow, ccol-1);
     }

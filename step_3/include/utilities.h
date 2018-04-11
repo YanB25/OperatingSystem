@@ -70,4 +70,7 @@ static inline void __screen_scroll(
         : "cc", "memory", "bx"
     );
 }
+static inline void scroll_up_one_line() {
+    __screen_scroll((2 << 8) + 1, (23 << 8) + 78, 1, 0);
+}
 #endif
