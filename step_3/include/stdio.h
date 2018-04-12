@@ -32,6 +32,9 @@ static inline int16_t putch_style(char ch, uint8_t style) {
     } else if (ch == '\b') {
         set_cursor(crow, ccol-1);
     }
+    else if (ch == '\t') {
+        set_cursor(crow, ccol + 4);
+    }
     else {
         _draw_char(ch, (crow * 80 + ccol)*2, style);
         ccol++;
