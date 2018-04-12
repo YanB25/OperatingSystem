@@ -13,7 +13,7 @@ STONE=stone
 
 USER_HEADER=$(USER)/terminal.h 
 USER_OBJ=$(USER)/terminal.o $(USER)/kb_interupt_installer.o $(USER)/kbhit.o
-INT_OBJ=clock_interupt_installer.o global_custom_int_installer.o timeout.o
+INT_OBJ=clock_interupt_installer.o global_custom_int_installer.o timeout.o custom_interupt.o
 all: kernel.bin
 
 kernel.bin: kernel.o $(INCLUDE)/utilities.o $(USER_OBJ) $(INCLUDE)/mystring.o $(FILESYSTEM)/fsutilities.o $(INT_OBJ)
@@ -25,6 +25,8 @@ clock_interupt_installer.o: clock_interupt_installer.asm
 global_custom_int_installer.o: global_custom_int_installer.asm 
 	$(AS) $(ASFLAGS) -f elf32 -o $@ $^
 timeout.o: timeout.c
+	$(CC) $(CCFLAGS) -c $^
+custom_interupt.o : custom_interupt.c
 	$(CC) $(CCFLAGS) -c $^
 
 $(INCLUDE)/utilities.o:
