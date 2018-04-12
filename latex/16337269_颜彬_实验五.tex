@@ -1,0 +1,362 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Programming/Coding Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when 
+% writing assignment content.
+%
+% This template uses a Perl script as an example snippet of code, most other
+% languages are also usable. Configure them in the "CODE INCLUSION 
+% CONFIGURATION" section.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper]{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\renewcommand*{\lstlistingname}{代码} % change "Listing <ref> to 代码 <ref>
+\usepackage{courier} % Required for the courier font
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage[UTF8]{ctex} % Required for Chinese character
+\usepackage{tocloft} % Required for beautiful toc
+\usepackage[hidelinks]{hyperref} % Required for clickable toc
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\usepackage[title]{appendix} % Required for appendix
+\usepackage{float}
+\usepackage{amsmath} % used for \text{} in math formula
+
+
+% used for beautiful table
+\usepackage{booktabs} 
+\usepackage[T1]{fontenc}
+\usepackage{tabu}
+\usepackage{longtable}
+\usepackage[table]{xcolor}
+
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkClassInstructor\ \hmwkClassTime): \hmwkTitle} % Top center head
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \protect\pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	CODE INCLUSION CONFIGURATION
+%----------------------------------------------------------------------------------------
+
+\definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0} % This is the color used for comments
+\lstloadlanguages{c} % Load Perl syntax for listings, for a list of other languages supported see: ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
+\lstset{language=c, % Use Perl in this example
+        frame=single, % Single frame around code
+        basicstyle=\small\ttfamily, % Use small true type font
+        keywordstyle=[1]\color{Blue}\bf, % Perl functions bold and blue
+        keywordstyle=[2]\color{Purple}, % Perl function arguments purple
+        keywordstyle=[3]\color{Blue}\underbar, % Custom functions underlined and blue
+        identifierstyle=, % Nothing special about identifiers                                         
+        commentstyle=\usefont{T1}{pcr}{m}{sl}\color{MyDarkGreen}\small, % Comments small dark green courier font
+        stringstyle=\color{Purple}, % Strings are purple
+        showstringspaces=false, % Don't put marks in string spaces
+        tabsize=4, % 5 spaces per tab
+        %
+        % Put standard Perl functions not included in the default language here
+        % morekeywords={rand},
+        morekeywords = [1]{uint16_t, uint32_t, uint8_t, int16_t, int8_t, int32_t}
+        %
+        % Put Perl function parameters here
+        morekeywords=[2]{on, off, interp, __attribute__},
+        %
+        % Put user defined functions here
+        morekeywords=[3]{test},
+       	%
+        morecomment=[l][\color{Blue}]{...}, % Line continuation (...) like blue comment
+        numbers=left, % Line numbers on left
+        firstnumber=1, % Line numbers start with line 1
+        numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
+        stepnumber=2, % Line numbers go in steps of 5,
+        firstnumber=1
+}
+
+% define C style
+\definecolor{main-color}{rgb}{0.6627, 0.7176, 0.7764}
+\definecolor{back-color}{rgb}{0.1686, 0.1686, 0.1686}
+\definecolor{string-color}{rgb}{0.3333, 0.5254, 0.345}
+\definecolor{key-color}{rgb}{0.8, 0.47, 0.196}
+\lstdefinestyle{mystyle}
+{
+    language = C++,
+    basicstyle = {\small\ttfamily},
+    stringstyle = {\color{Mahogany}},
+    keywordstyle = {\color{blue}},
+    keywordstyle = [2]{\color{Mahogany}},
+    keywordstyle = [3]{\color{blue}},
+    keywordstyle = [4]{\color{blue}},
+    otherkeywords = {__attribute__,<<,>>,++},
+    morekeywords = [2]{__attribute__},
+    morekeywords = [3]{<<, >>},
+    morekeywords = [4]{++, uint16_t, uint32_t, uint8_t, \#define},
+}
+
+
+% Creates a new command to include a perl script, the first parameter is the filename of the script (without .pl), the second parameter is the caption
+
+\newcommand{\shfilescript}[3]{
+\begin{itemize}
+\item[]\lstinputlisting[caption=#2, label=lst:#1, language=sh]{#3}
+\end{itemize}
+}
+\newcommand{\shscript}[3]{
+\begin{itemize}
+\item[]\begin{lstlisting}[label=lst:#1, caption=#2] #3 \end{lstlisting}
+\end{itemize}
+}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 见下页\ldots}\nobreak{} 
+\nobreak\extramarks{接上页}{#1 见下页\ldots}\nobreak{}
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{接上页}{#1 见下页\ldots}\nobreak{}
+\nobreak\extramarks{#1}{}\nobreak{}
+}
+% TODO:code here enable the number before section, but it disable the numbering of problems
+%\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+
+\newenvironment{homeworkProblem}[1][Problem \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+
+\newcommand{\codev}[1]{\textsf{#1}}
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+% table color
+\definecolor{tableHeader}{RGB}{245, 245, 245}
+\definecolor{tableLineOne}{RGB}{245, 245, 245}
+\definecolor{tableLineTwo}{RGB}{224, 224, 224}
+\newcommand{\tableHeaderStyle}{
+    \rowfont{\leavevmode\color{white}\bfseries}
+    \rowcolor{tableHeader}
+}
+
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{操作系统原理实验\ \#5} % Assignment title
+\newcommand{\hmwkDueDate}{Friday,\ April\ 13,\ 2018} % Due date
+\newcommand{\hmwkClass}{16级计科\ 7班} % Course/class
+\newcommand{\hmwkClassTime}{周一9-10节} % Class/lecture time
+\newcommand{\hmwkClassInstructor}{凌应标} % Teacher/lecturer
+\newcommand{\hmwkAuthorName}{颜彬} % Your name
+\newcommand{\hmwkAuthorId}{16337269} % Your id 
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\usepackage{titling}
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+\vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+\vspace{3in}
+}
+
+\author{\textbf{\LARGE{\hmwkAuthorName}} \\ \\ \textbf{\LARGE{\hmwkAuthorId}}}
+\date{} % Insert date here if you want it to appear below your name
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+% \begin{titlingpage} % This is for ignore page number in first page. package titling
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+% \setcounter{tocdepth}{2} % Uncomment this line if you don't want subsections listed in the ToC
+% set depth in toc
+
+% \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % used for dots between <section> and <page>
+
+\renewcommand{\contentsname}{Content} % force the word to be "content
+\newpage
+\tableofcontents
+\addtocontents{toc}{~\hfill\textbf{Page}\par}
+\newpage
+
+% below are document body
+
+
+% To have just one problem per page, simply put a \clearpage after each problem
+\section{实验目的}
+
+\section{实验要求}
+\section{实验方案}
+    \subsection{基础原理}
+    \subsection{实验环境}
+    \subsubsection{系统与虚拟机}
+    \begin{itemize} \item 操作系统 \\ 
+        本实验在Linux下完成。采用Ubuntu 16.04
+        \item 虚拟机\\
+        bochs.它是一款开源且跨平台的 IA-32 模拟器。
+    \end{itemize}
+    \subsubsection{相关工具、指令}
+        \begin{itemize}
+            \item 汇编器\\ 
+            NASM. NASM是一个轻量级的、模块化的 80x86 和 x86-64 汇编器。它的语法与
+            Intel 原语法十分相似，但更加简洁和易读。它对宏有十分强大的支持。
+            \item 编译器\\
+            GCC. GNU/GCC 是开源的C语言编译器。其产生的伪16位代码可以与NASM结合，混编生成伪16位程序。
+            \item 镜像文件产生工具\\ 
+            bximage. 该命令允许生成指定大小的软件镜像。
+            \item 二进制写入命令\\ 
+            dd. dd 允许指定源文件和目标文件，将源文件的二进制比特写入目标文件中的指定位置。
+            \item 二进制文件查看命令\\ 
+            xxd. xxd 允许将二进制文件中的内容按地址顺序依次输出，可读性强
+            \item 反汇编器\\
+            objdump. objump可以查看目标文件和二进制文件的反汇编代码，还能指令intel或at\&t格式显示。
+            \item 代码生成脚本\\
+            makefile. makefile脚本具有强大的功能，其可以识别文件依赖关系，自动构筑文件，自动执行shell脚本等。
+        \end{itemize}
+    \subsection{程序流程}\label{subsec:programProcedure}
+    文件系统在虚拟软盘中的镜像如图\ref{fig:FAT16layout}。全部引导的简要过程见图\ref{fig:loading}。
+    
+ 
+\section{实验过程}
+    \begin{table}[!htb]
+        \caption{GCC编译指令}\label{tab:gcc}
+    \begin{tabular}{@{} *5l @{}} 
+        \toprule
+    \emph{编译选项} & \emph{作用} &&&  \\
+        \midrule
+        -o    & D  \\ 
+        \\ 
+        -march=i386  & X产生原始Itel i376 CPU架构的代码\\ 
+        \\
+        -m16& 等价于汇编伪指令.code16gcc。
+            \\& 在所有必要的指令前加,前缀66, 67，
+            \\& 使得处理器能以32位的方式读取GCC产生的代码\\
+        \\
+        -mpreferred-stack-boundary=2 & 以$2^i$bytes作为对齐量，对齐栈的界限。
+            \\& 该选项默认为4(即默认$2^4$字节对齐栈界限).
+            \\& 为了节省空间，这里设置成2 \\
+        \\
+        -ffreestanding &  产生``自立''的程序文件.
+            \\& 即告知GCC不使用（几乎）所有的库头文件。
+            \\& 保证产生的代码不依赖于GCC的自带库 \\
+        \\
+        -c & 不产生可执行文件，只执行``编译''操作产生目标文件 \\ 
+        \\
+        -Og & 产生最小限度的优化.
+            \\& 即这个优化能化简汇编代码，但又
+            不影响汇编程序的可读性。\\
+        \\
+        -O0 & 不产生任何优化。
+            \\& 本项目文件系统FAT表的构建使用C语言的struct
+            完成。
+            \\& 为了保证产生的二进制表项和C代码中的struct严格一致
+            \\& 必须
+            采用本优化等级。\\
+
+        \bottomrule
+    \hline
+    \end{tabular}
+    \end{table}
+
+\section{实验总结}
+    \subsection{亮点介绍}
+   
+
+    \subsection{心得体会}
+ 
+    \subsection{BUG汇总}
+\begin{appendices}
+\section{参考文献} \label{sec:reference}
+sasadf
+\begin{enumerate}
+    \item https://blog.csdn.net/longintchar/article/details/50602851 \\
+    16位和32位汇编指令的不同（尤其是push指令）
+    \item https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html\#s1 \\
+    GCC 内嵌汇编的书写。
+    \item http://blog.51cto.com/dengqi/1349327
+    FAT32文件系统讲解
+    \item https://blog.csdn.net/yeruby/article/details/41978199
+    FAT16文件系统讲解
+  \end{enumerate}
+\section{其他代码} \label{sec:otherCode}
+\end{appendices}
+\end{document}
