@@ -3,6 +3,7 @@
 [BITS 16]
 %include "../include/bridge.inc"
 global global_custom_int_install
+extern draw_my_info
 global_custom_int_install:
     push ds
 
@@ -73,8 +74,28 @@ _int_draw_char:
     pop ax 
 
     retf
+_int_draw_my_info:
+    ;input
+        ;None
+    ;modify
+        ;None
+    ;description:
+        ;print out my student id in 3-D mod
+    pusha 
+    push es
+    push ds 
+
+    calll draw_my_info
+
+    pop ds 
+    pop es
+    popa
+
+    retf
 custom_int_table:
     dw testcase
     dw 0x0000
     dw _int_draw_char
+    dw 0x0000
+    dw _int_draw_my_info
     dw 0x0000

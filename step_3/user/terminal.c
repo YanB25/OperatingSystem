@@ -5,9 +5,11 @@
 #define BACK_SPACE 8
 #define BUFFER_SIZE 64
 #define PROMT "yb@yb-thinkpad-e450:~$ "
-#define HELP_MSG "run <program> : run program <program>\n\r" \
-    "run stoneQ: run program stoneQ.bin\n\r" \
-    "ls : list all file in root directory"
+#define HELP_MSG "  run <program> : run program <program>\n\r" \
+    "  \t e.g. run stoneQ: run program stoneQ.bin\n\r" \
+    "  \t in program, press Q to exit\n\r" \
+    "  ls : list all file in root directory\n\r"\
+    "  showinfo: print my id 16337269 in 3-D mod"
 #define LOW_8_MASK (0b11111111)
 #define GET_LOW_8BITS(X) (X & LOW_8_MASK)
 #define GET_HIGH_8BITS(X) (X >> 8)
@@ -18,7 +20,6 @@ extern void kb_interupt_install();
 extern void kb_interupt_uninstall();
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
-
 static FAT_ITEM* CUR_DIR = 0;
 void resetTerminal();
 int terminal() {
@@ -136,6 +137,16 @@ void parseCMD(int CMDindex) {
         uint16_t ncol = GET_LOW_8BITS(ncursor_position);
         uint16_t nrow = GET_HIGH_8BITS(ncursor_position);
         printf("old row %d col %d, new row %d col %d\n", orow, ocol, nrow, ncol);
+    } else if (strcmp(CMD_BUFFER, "showinfo") == 0) {
+        __asm__ volatile(
+            "pushw %%ax\n"
+            "movb $2, %%ah\n"
+            "int $0x2B\n"
+            "popw %%ax\n"
+            : /* no output */
+            : /* no input */
+            : "cc"
+        );
     }
     else {
         puts("ybsh: command not found: ");
