@@ -1,3 +1,6 @@
+/** @file
+ * @brief FAT table
+ */
 #include <stdint.h>
 #include "FATMacro.h"
 FAT_ITEM_T fat_items[] = {

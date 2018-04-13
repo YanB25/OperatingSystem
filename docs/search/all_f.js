@@ -1,11 +1,15 @@
 var searchData=
 [
-  ['readkb',['readkb',['../utilities_8h.html#ae1f62902b54c95a1ade4f1efb5238671',1,'utilities.h']]],
-  ['recent_5faccess_5fymd',['recent_access_ymd',['../structFAT__ITEM.html#a66c3299b6fba20f1fbd7d3207b057641',1,'FAT_ITEM::recent_access_ymd()'],['../FATMacro_8h.html#ac7712d222620362331436a3fdedd6750',1,'recent_access_ymd():&#160;FATMacro.h']]],
-  ['res',['res',['../structFAT__ITEM.html#a4816433ed3b998fa2a91ba1542274f65',1,'FAT_ITEM::res()'],['../FATMacro_8h.html#a29850f3918435f089b2e206b9da59936',1,'res():&#160;FATMacro.h']]],
-  ['reserved_5fsector',['RESERVED_SECTOR',['../filesystem_8h.html#a38ae6d97afaf6b396db299358275c8e8',1,'filesystem.h']]],
-  ['resetterminal',['resetTerminal',['../terminal_8c.html#aca99b33c2628f81c32a097025cd99664',1,'terminal.c']]],
-  ['root_5farea_5faddress',['ROOT_AREA_ADDRESS',['../filesystem_8h.html#abf8f6913254daf589e4c2d01a22721a0',1,'filesystem.h']]],
-  ['root_5fentries',['ROOT_ENTRIES',['../filesystem_8h.html#af8d91b24ef1bd40fb1e409a60f525405',1,'filesystem.h']]],
-  ['row',['row',['../kbhit_8c.html#acc38b28927bf55a0a8a775fb8425476e',1,'kbhit.c']]]
+  ['padding',['padding',['../stdio_8h.html#a0d5027dbb6ea79f6609f03d408eeb786',1,'stdio.h']]],
+  ['parsecmd',['parseCMD',['../terminal_8c.html#ac86c2518b13bf57f46a14bd44c719767',1,'terminal.c']]],
+  ['printf',['printf',['../stdio_8h.html#a23d2d9d5699f88839da97ec2718d7af7',1,'stdio.h']]],
+  ['promt',['PROMT',['../terminal_8c.html#aac1b9baca390a3e52fec87d235941c91',1,'terminal.c']]],
+  ['putch',['putch',['../stdio_8h.html#a81ec9828355c08c02542e9fd66165c13',1,'stdio.h']]],
+  ['putch_5fstyle',['putch_style',['../stdio_8h.html#a92d5182fc0f2fdaf4892ff7077f1575c',1,'stdio.h']]],
+  ['puti',['puti',['../stdio_8h.html#ae3bac739978f11002e3646cd20940ee8',1,'stdio.h']]],
+  ['putiln',['putiln',['../stdio_8h.html#a152efb1974f3df553ccd2e376f6e7641',1,'stdio.h']]],
+  ['putln',['putln',['../stdio_8h.html#af3eb504bdd17cc3904e4610ba6214ec5',1,'stdio.h']]],
+  ['putn',['putn',['../stdio_8h.html#a26a7b3f23b22d25097878dda81c114a8',1,'stdio.h']]],
+  ['puts',['puts',['../stdio_8h.html#ad51e22925bd6ef7184be7e3195c77f2d',1,'stdio.h']]],
+  ['puts_5fstyle',['puts_style',['../stdio_8h.html#a932d958d3d390921ed2f76fe1ba4fe05',1,'stdio.h']]]
 ];

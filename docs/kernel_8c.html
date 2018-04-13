@@ -72,6 +72,9 @@ $(function() {
 <div class="title">kernel.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>KERNEL of the operating system.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="kernel_8h_source.html">kernel.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="utilities_8h_source.html">../include/utilities.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="user_8h_source.html">../user/user.h</a>&quot;</code><br />
@@ -91,13 +94,21 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a3669f1ea764b0a3567d54ba02f378241"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kernel_8c.html#a3669f1ea764b0a3567d54ba02f378241">clock_install_interupt</a> ()</td></tr>
+<tr class="memdesc:a3669f1ea764b0a3567d54ba02f378241"><td class="mdescLeft">&#160;</td><td class="mdescRight">used to install clock  <a href="#a3669f1ea764b0a3567d54ba02f378241">More...</a><br /></td></tr>
 <tr class="separator:a3669f1ea764b0a3567d54ba02f378241"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c3b8bd76c0b69e14fb50ecc908140ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kernel_8c.html#a2c3b8bd76c0b69e14fb50ecc908140ca">global_custom_int_install</a> ()</td></tr>
+<tr class="memdesc:a2c3b8bd76c0b69e14fb50ecc908140ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">used to install cumstom interupt  <a href="#a2c3b8bd76c0b69e14fb50ecc908140ca">More...</a><br /></td></tr>
 <tr class="separator:a2c3b8bd76c0b69e14fb50ecc908140ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kernel_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a> ()</td></tr>
+<tr class="memdesc:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">kernel entry  <a href="#ae66f6b31b5ad750f1fe042a706a4e3d4">More...</a><br /></td></tr>
 <tr class="separator:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p class="">KERNEL of the operating system. </p>
+<p class="">currently, it will clear screen, output some infomation, than pass control to terminal. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="terminal_8h.html">terminal.h</a> </dd></dl>
+
+<p class="definition">Definition in file <a class="el" href="kernel_8c_source.html">kernel.c</a>.</p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a65e9886d74aaee76545e83dd09011727"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a65e9886d74aaee76545e83dd09011727">&#9670;&nbsp;</a></span>false</h2>
 
@@ -110,7 +121,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="kernel_8c_source.html#l00008">8</a> of file <a class="el" href="kernel_8c_source.html">kernel.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="kernel_8c_source.html#l00016">16</a> of file <a class="el" href="kernel_8c_source.html">kernel.c</a>.</p>
 
 </div>
 </div>
@@ -126,7 +137,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="kernel_8c_source.html#l00007">7</a> of file <a class="el" href="kernel_8c_source.html">kernel.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="kernel_8c_source.html#l00015">15</a> of file <a class="el" href="kernel_8c_source.html">kernel.c</a>.</p>
 
 </div>
 </div>
@@ -146,6 +157,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>used to install clock </p>
+
 </div>
 </div>
 <a id="a2c3b8bd76c0b69e14fb50ecc908140ca"></a>
@@ -162,6 +175,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>used to install cumstom interupt </p>
 
 </div>
 </div>
@@ -180,7 +195,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="kernel_8c_source.html#l00011">11</a> of file <a class="el" href="kernel_8c_source.html">kernel.c</a>.</p>
+<p>kernel entry </p>
+
+<p class="definition">Definition at line <a class="el" href="kernel_8c_source.html#l00021">21</a> of file <a class="el" href="kernel_8c_source.html">kernel.c</a>.</p>
 
 </div>
 </div>

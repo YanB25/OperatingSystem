@@ -16,8 +16,10 @@ var searchData=
   ['g_5fpinkish',['G_PINKISH',['../graphic_8h.html#a0ef2534ba3338e5e4cf4f0599333dd4b',1,'graphic.h']]],
   ['g_5fred',['G_RED',['../graphic_8h.html#a0ce83d0083fec2716a546c740c24b48f',1,'graphic.h']]],
   ['g_5fwhite',['G_WHITE',['../graphic_8h.html#a45747cf846ab851955ba233f04f07a02',1,'graphic.h']]],
+  ['get_5fcursor',['get_cursor',['../utilities_8h.html#aa97cd4e969256b6ec80bcec9e6b90432',1,'utilities.h']]],
   ['get_5fhigh_5f8bits',['GET_HIGH_8BITS',['../terminal_8c.html#a0a6d387c23caf7c1a1dd0a8e86a2b013',1,'terminal.c']]],
   ['get_5flow_5f8bits',['GET_LOW_8BITS',['../terminal_8c.html#a35eb2fafbfc151c67989fb643a20cf36',1,'terminal.c']]],
+  ['getch',['getch',['../stdio_8h.html#aca8ac8de5202a8aa092f29c97b845fd4',1,'stdio.h']]],
   ['getkbhit',['getKbHit',['../stone_8c.html#a0334df10b7b2b9ff1e258b104ed562a0',1,'stone.c']]],
   ['global_5fcustom_5fint_5finstall',['global_custom_int_install',['../kernel_8c.html#a2c3b8bd76c0b69e14fb50ecc908140ca',1,'kernel.c']]],
   ['graphic_2eh',['graphic.h',['../graphic_8h.html',1,'']]]

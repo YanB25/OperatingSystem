@@ -1,9 +1,19 @@
+/**
+ * @file
+ * @brief
+ * terminal.
+ * 
+ * parce user command.
+ * load files into memory.
+ * run files.
+ * do whatever and never really returned
+ */
 #include "../include/utilities.h"
 #include "../include/mystring.h"
 #include "../filesystem/API/fsapi.h"
 
-#define BACK_SPACE 8
-#define BUFFER_SIZE 64
+#define BACK_SPACE 8 ///< '\b' ascii
+#define BUFFER_SIZE 64 ///< buffer size for parcing command
 #define PROMT "yb@yb-thinkpad-e450:~$ "
 #define HELP_MSG "  run <program> : run program <program>\n\r" \
     "  \t e.g. run stoneQ: run program stoneQ.bin\n\r" \
@@ -20,8 +30,8 @@ extern void kb_interupt_install();
 extern void kb_interupt_uninstall();
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
-static FAT_ITEM* CUR_DIR = 0;
-void resetTerminal();
+static FAT_ITEM* CUR_DIR = 0; ///< current directory pointer
+void resetTerminal(); 
 int terminal() {
     if (CUR_DIR == 0) {
         CUR_DIR = __get_root_dir();

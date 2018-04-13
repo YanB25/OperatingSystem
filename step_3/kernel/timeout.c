@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @brief
+ * called when clock interupt occur.
+ * draw beautiful graph in terminal. 
+ */
 #include "../include/utilities.h"
 #include "../include/stdio.h"
 char ch = 'A';

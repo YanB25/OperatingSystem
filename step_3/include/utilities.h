@@ -1,19 +1,28 @@
+/**
+ * @file
+ * @brief most importantly low level function used in kernel
+ */
 #ifndef __UTILITIES_H_
 #define __UTILITIES_H_
 
 #include <stdint.h>
 #include "ctype.h"
 void clear_screen();
-void hello_hybrid_programming();
-int add(int, int);
-// unbocked function to test whether kb is hit
-// return zero if no kb is hit. return ascii
-// otherwise.
-// WARNING: this function will not remove kbhit
-// in buffer. you need to call readkb to do so.
+void hello_hybrid_programming(); ///< testcase
+int add(int, int); ///< testcase
+/// unbocked function to test whether kb is hit.
+/// WARNING: this function will not remove kbhit
+/// in buffer. you need to call readkb to do so.
+/// @return return zero if no kb is hit. return ascii
+/// otherwise.
 int kbhit();
 // blocked function to read hit kb.
 int readkb();
+/** 
+ * directly set cursor
+ * @param row range 0~24
+ * @param col range 0~79
+ */
 static inline void set_cursor(uint8_t row, uint8_t col) {
     uint16_t _DX_ = col | (row << 8);
     __asm__ volatile(
@@ -29,6 +38,10 @@ static inline void set_cursor(uint8_t row, uint8_t col) {
         : "cc", "memory"
     );
 }
+/** get the current cursor
+ * @return a 16 bits int. the high 8 bits store the row.
+ * the low 8 bits store the column.
+ */
 static inline uint16_t get_cursor(){
     uint16_t cursor_pos;
     __asm__ volatile(
@@ -45,8 +58,13 @@ static inline uint16_t get_cursor(){
     );
     return cursor_pos;
 }
-// row_col_lu: high: row, low: col
-// row_col_rd: high: row, low: col
+/** no need to use.
+ * screen the scrool.
+ * @param row_col_lu 16bits. high: row, low: col. left upper point.
+ * @param row_col_rd high  16bits row, low: col. right down point.
+ * @param lines how many lines to scrool
+ * @param direction 0 if scroll up. any int otherwise.
+ */
 static inline void __screen_scroll(
     uint16_t row_col_lu, // for DX
     uint16_t row_col_rd, // for CX

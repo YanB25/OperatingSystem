@@ -1,3 +1,10 @@
+/** @file
+ * @brief operating system loader
+ * 
+ * check for BPB table. try to load the whole
+ * kernel into memory. give control to operating
+ * system.
+ */
 #include <stdint.h>
 #include "fsutilities.h"
 #include "FATMacro.h"

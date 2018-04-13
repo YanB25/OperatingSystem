@@ -1,3 +1,11 @@
+/**
+ * @file
+ * @brief KERNEL of the operating system
+ * 
+ * currently, it will clear screen, output some infomation,
+ * than pass control to terminal. 
+ * @see terminal.h
+ */
 #include "kernel.h"
 #include "../include/utilities.h"
 #include "../user/user.h"
@@ -6,8 +14,10 @@
 #include "../filesystem/API/fsapi.h"
 #define true 1
 #define false 0
-extern void clock_install_interupt();
-extern void global_custom_int_install();
+extern void clock_install_interupt(); ///< used to install clock 
+extern void global_custom_int_install(); ///< used to install cumstom interupt
+
+/// kernel entry
 int main() {
     __screen_scroll(0, (20 << 8) + 20, 5, 0);
     global_custom_int_install();

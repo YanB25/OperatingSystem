@@ -1,3 +1,10 @@
+/**
+ * @file
+ * @brief
+ * keyboard cunstom interupt callback.
+ * 
+ * currently, it only output "outch!" in user program
+ */
 #include <stdint.h>
 #include "../include/stdio.h"
 #include "../include/utilities.h"

@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief my stdio.h implementation
+ * 
+ */
 #ifndef __STDIO_H_
 #define __STDIO_H_
 #include "graphic.h"
@@ -5,6 +10,14 @@
 #include <stdarg.h>
 #define DEFAULT_STYLE_DARK (G_DEFAULT | G_DARK)
 #define DEFAULT_STYLE (G_DEFAULT)
+/**
+ * low level char output function
+ * @param ch that character that want to draw
+ * @param offset the offset from (0, 0) in terminal
+ * counted by ((row * 80) + column) * 2
+ * @param style print style
+ * @return always 1
+ */
 static inline int16_t _draw_char(char ch, int offset, uint8_t style) {
     uint16_t written_data = ch | (style << 8);
     __asm__ volatile (
@@ -50,6 +63,11 @@ static inline int16_t putch(char ch) {
     return putch_style(ch, DEFAULT_STYLE);
 }
 
+/**
+ * output space specified by num
+ * @param num how much space to output
+ * @return same as num
+ */
 static inline int16_t padding(int16_t num) {
     for (int16_t i = 0; i < num; ++i) {
         putch(' ');
@@ -57,6 +75,10 @@ static inline int16_t padding(int16_t num) {
     return num;
 }
 
+/**
+ * no need to used this.
+ * inner function that used to parce int from string
+ */
 static inline int16_t __uts_read_int(const char* s, int16_t* readNum) {
     int16_t fac = 1;
     int16_t cnt = 0;
@@ -74,6 +96,11 @@ static inline int16_t __uts_read_int(const char* s, int16_t* readNum) {
     *readNum = ret;
     return cnt;
 }
+/**
+ * @param str string to output
+ * @param row the starting row in terminal (0 based, count from left)
+ * @param col (0 based, count from up)
+ */
 static inline int16_t draw_str(char const* str, int row, int col) {
     int pos = (row * 80 + col) * 2;
     int16_t index = 0;
@@ -105,6 +132,8 @@ static inline int16_t draw_char_style(char ch, int row, int col, uint8_t style) 
     int pos = (row * 80 + col) * 2;
     return _draw_char(ch, pos, style);
 }
+/** put string with style
+ */
 static inline int16_t puts_style(char const* str, uint8_t style) {
     int16_t index = 0;
     while (*str) {
@@ -123,6 +152,10 @@ static inline int16_t putln(char const* str) {
     cnt += puts("\n\r");
     return cnt;
 }
+/**
+ * put integer.
+ * @param num the int to be print
+ */
 static inline int16_t puti(int32_t num) {
     char _buffer[30];
     int index = 0;
@@ -149,6 +182,11 @@ static inline int16_t putiln(int num) {
     cnt += newline();
     return cnt;
 }
+/**
+ * almost same as printf.
+ * currently support %d, %s, %c, and %<num>d ...
+ * @return TODO: BUG.
+ */
 static inline int printf(const char* format, ...) {
     va_list valist;
     int16_t pcnt = 0;

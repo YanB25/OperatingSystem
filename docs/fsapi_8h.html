@@ -66,11 +66,15 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a>  </div>
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">fsapi.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>below define the api for filesystem. they are low level api.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="FATMacro_8h_source.html">../FATMacro.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="filesystem_8h_source.html">../filesystem.h</a>&quot;</code><br />
@@ -85,15 +89,50 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a47744541258a26adfce215564d8d05f4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a47744541258a26adfce215564d8d05f4">ERR_NOT_FOUND</a>&#160;&#160;&#160;-1</td></tr>
+<tr class="memdesc:a47744541258a26adfce215564d8d05f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">file not found  <a href="#a47744541258a26adfce215564d8d05f4">More...</a><br /></td></tr>
 <tr class="separator:a47744541258a26adfce215564d8d05f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1efe38564b740d4fe6f8d609c4118a2a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a1efe38564b740d4fe6f8d609c4118a2a">TYPE_FLDR</a>&#160;&#160;&#160;0</td></tr>
-<tr class="separator:a1efe38564b740d4fe6f8d609c4118a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c4b9a03f9d2107bf4c139bb00c7ec4c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a1c4b9a03f9d2107bf4c139bb00c7ec4c">TYPE_FILE</a>&#160;&#160;&#160;1</td></tr>
-<tr class="separator:a1c4b9a03f9d2107bf4c139bb00c7ec4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99175dd632b9406722bab986f152d73f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a99175dd632b9406722bab986f152d73f">TYPE_DOC</a>&#160;&#160;&#160;2</td></tr>
-<tr class="separator:a99175dd632b9406722bab986f152d73f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1efe38564b740d4fe6f8d609c4118a2a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fileType.html#ga1efe38564b740d4fe6f8d609c4118a2a">TYPE_FLDR</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:ga1efe38564b740d4fe6f8d609c4118a2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">type file directory  <a href="group__fileType.html#ga1efe38564b740d4fe6f8d609c4118a2a">More...</a><br /></td></tr>
+<tr class="separator:ga1efe38564b740d4fe6f8d609c4118a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1c4b9a03f9d2107bf4c139bb00c7ec4c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fileType.html#ga1c4b9a03f9d2107bf4c139bb00c7ec4c">TYPE_FILE</a>&#160;&#160;&#160;1</td></tr>
+<tr class="memdesc:ga1c4b9a03f9d2107bf4c139bb00c7ec4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">type file  <a href="group__fileType.html#ga1c4b9a03f9d2107bf4c139bb00c7ec4c">More...</a><br /></td></tr>
+<tr class="separator:ga1c4b9a03f9d2107bf4c139bb00c7ec4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga99175dd632b9406722bab986f152d73f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fileType.html#ga99175dd632b9406722bab986f152d73f">TYPE_DOC</a>&#160;&#160;&#160;2</td></tr>
+<tr class="memdesc:ga99175dd632b9406722bab986f152d73f"><td class="mdescLeft">&#160;</td><td class="mdescRight">type (reserved) document for file system  <a href="group__fileType.html#ga99175dd632b9406722bab986f152d73f">More...</a><br /></td></tr>
+<tr class="separator:ga99175dd632b9406722bab986f152d73f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a4f191cdff3ae630b9357abbbdf44d8f7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a4f191cdff3ae630b9357abbbdf44d8f7">__get_root_dir</a> ()</td></tr>
+<tr class="separator:a4f191cdff3ae630b9357abbbdf44d8f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae603c546b0980b143fccdd84f5cfc223"><td class="memItemLeft" align="right" valign="top">static int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#ae603c546b0980b143fccdd84f5cfc223">__has_next_item</a> (const <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *p)</td></tr>
+<tr class="separator:ae603c546b0980b143fccdd84f5cfc223"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84d845668d6ba78d2cbc876abe9b2d97"><td class="memItemLeft" align="right" valign="top">static int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a84d845668d6ba78d2cbc876abe9b2d97">__has_prev_item</a> (const <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *p)</td></tr>
+<tr class="separator:a84d845668d6ba78d2cbc876abe9b2d97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82ec056db7e5286d965ce512847deef4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a82ec056db7e5286d965ce512847deef4">__next_item</a> (<a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *p)</td></tr>
+<tr class="separator:a82ec056db7e5286d965ce512847deef4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b7a75d582a8c7d996922c49f29dc1f2"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a6b7a75d582a8c7d996922c49f29dc1f2">__prev_item</a> (<a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *p)</td></tr>
+<tr class="separator:a6b7a75d582a8c7d996922c49f29dc1f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf6a26e63993b67ae60a6458a68c4278"><td class="memItemLeft" align="right" valign="top">static int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#acf6a26e63993b67ae60a6458a68c4278">__FAT_item_type</a> (const <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *p)</td></tr>
+<tr class="separator:acf6a26e63993b67ae60a6458a68c4278"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a333d375df0d783a19063edfa1d3e1af6"><td class="memItemLeft" align="right" valign="top">static int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a333d375df0d783a19063edfa1d3e1af6">__FAT_showable_item</a> (const <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *p)</td></tr>
+<tr class="separator:a333d375df0d783a19063edfa1d3e1af6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa89162136c8ad708f2ea97a6d4cfe8c8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#aa89162136c8ad708f2ea97a6d4cfe8c8">__jmp_into_dir</a> (const <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *p)</td></tr>
+<tr class="separator:aa89162136c8ad708f2ea97a6d4cfe8c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cbf80c5406dd13f0c1ff25ec383c36e"><td class="memItemLeft" align="right" valign="top">static int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a0cbf80c5406dd13f0c1ff25ec383c36e">__rm_this_file</a> (<a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *p)</td></tr>
+<tr class="separator:a0cbf80c5406dd13f0c1ff25ec383c36e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9df1f9042a84238b964f63d640fefa4b"><td class="memItemLeft" align="right" valign="top">static int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a9df1f9042a84238b964f63d640fefa4b">__run_this_file</a> (<a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *p)</td></tr>
+<tr class="separator:a9df1f9042a84238b964f63d640fefa4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b5a1fe0b77afeeb348e00b33c32bfeb"><td class="memItemLeft" align="right" valign="top">static int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a5b5a1fe0b77afeeb348e00b33c32bfeb">__load_program</a> (const char *targetFilename)</td></tr>
+<tr class="separator:a5b5a1fe0b77afeeb348e00b33c32bfeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21f8f1bbe755c4b460ff5f592bda63b4"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsapi_8h.html#a21f8f1bbe755c4b460ff5f592bda63b4">__print_file_cluster_list</a> (const <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *pfat)</td></tr>
+<tr class="separator:a21f8f1bbe755c4b460ff5f592bda63b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p class="">below define the api for filesystem. they are low level api. </p>
+
+<p class="definition">Definition in file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a47744541258a26adfce215564d8d05f4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a47744541258a26adfce215564d8d05f4">&#9670;&nbsp;</a></span>ERR_NOT_FOUND</h2>
 
@@ -106,55 +145,388 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fsErrorCode_8h_source.html#l00009">9</a> of file <a class="el" href="fsErrorCode_8h_source.html">fsErrorCode.h</a>.</p>
+<p>file not found </p>
+
+<p class="definition">Definition at line <a class="el" href="fsErrorCode_8h_source.html#l00013">13</a> of file <a class="el" href="fsErrorCode_8h_source.html">fsErrorCode.h</a>.</p>
 
 </div>
 </div>
-<a id="a99175dd632b9406722bab986f152d73f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99175dd632b9406722bab986f152d73f">&#9670;&nbsp;</a></span>TYPE_DOC</h2>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="acf6a26e63993b67ae60a6458a68c4278"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf6a26e63993b67ae60a6458a68c4278">&#9670;&nbsp;</a></span>__FAT_item_type()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">#define TYPE_DOC&#160;&#160;&#160;2</td>
+          <td class="memname">static int16_t __FAT_item_type </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+<p class="">return the type of a fat item </p><dl class="section return"><dt>Returns</dt><dd>macro indicating the type </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__fileType.html" title="file types for return value ">FileType</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00017">17</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00083">83</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
 
 </div>
 </div>
-<a id="a1c4b9a03f9d2107bf4c139bb00c7ec4c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c4b9a03f9d2107bf4c139bb00c7ec4c">&#9670;&nbsp;</a></span>TYPE_FILE</h2>
+<a id="a333d375df0d783a19063edfa1d3e1af6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a333d375df0d783a19063edfa1d3e1af6">&#9670;&nbsp;</a></span>__FAT_showable_item()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">#define TYPE_FILE&#160;&#160;&#160;1</td>
+          <td class="memname">static int16_t __FAT_showable_item </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+<p class="">whether the item is showable </p><dl class="section return"><dt>Returns</dt><dd>true only if it is not <a class="el" href="group__fileType.html#ga99175dd632b9406722bab986f152d73f">TYPE_DOC</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__fileType.html" title="file types for return value ">FileType</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00016">16</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00095">95</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
 
 </div>
 </div>
-<a id="a1efe38564b740d4fe6f8d609c4118a2a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1efe38564b740d4fe6f8d609c4118a2a">&#9670;&nbsp;</a></span>TYPE_FLDR</h2>
+<a id="a4f191cdff3ae630b9357abbbdf44d8f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f191cdff3ae630b9357abbbdf44d8f7">&#9670;&nbsp;</a></span>__get_root_dir()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">#define TYPE_FLDR&#160;&#160;&#160;0</td>
+          <td class="memname">static <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a>* __get_root_dir </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
+<p class="">return a pointer pointed to root directory </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">None</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>pointer to fat item. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00015">15</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00035">35</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+
+</div>
+</div>
+<a id="ae603c546b0980b143fccdd84f5cfc223"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae603c546b0980b143fccdd84f5cfc223">&#9670;&nbsp;</a></span>__has_next_item()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int16_t __has_next_item </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p class="">whether a fat item has an available next item. available means not deleted </p>
+
+<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00042">42</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+
+</div>
+</div>
+<a id="a84d845668d6ba78d2cbc876abe9b2d97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84d845668d6ba78d2cbc876abe9b2d97">&#9670;&nbsp;</a></span>__has_prev_item()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int16_t __has_prev_item </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="fsapi_8h.html#ae603c546b0980b143fccdd84f5cfc223">__has_next_item</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00051">51</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+
+</div>
+</div>
+<a id="aa89162136c8ad708f2ea97a6d4cfe8c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa89162136c8ad708f2ea97a6d4cfe8c8">&#9670;&nbsp;</a></span>__jmp_into_dir()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a>* __jmp_into_dir </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p class="">jump into the directory that the pointer points </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>the directory that is currently pointing </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a new pointer that point at the new directory entered </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00102">102</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+
+</div>
+</div>
+<a id="a5b5a1fe0b77afeeb348e00b33c32bfeb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b5a1fe0b77afeeb348e00b33c32bfeb">&#9670;&nbsp;</a></span>__load_program()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int16_t __load_program </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>targetFilename</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p class="">try and load the program. search from the root directory, trying to match filename. if file is found, try runing it by calling <a class="el" href="fsapi_8h.html#a9df1f9042a84238b964f63d640fefa4b">__run_this_file</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">targetFilename</td><td>the file to load. without '.ext'. no longer than 5 bytes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>errorcode. </dd>
+<dd>
+<a class="el" href="fsErrorCode_8h.html#a0ac74b7a179f050bce712dac77d0c6b4">NO_ERR</a> if no error </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="fsErrorCode_8h.html">fsErrorCode.h</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00171">171</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+
+</div>
+</div>
+<a id="a82ec056db7e5286d965ce512847deef4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82ec056db7e5286d965ce512847deef4">&#9670;&nbsp;</a></span>__next_item()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a>* __next_item </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p class="">get the next item of a fat item </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>fat item pointer </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00062">62</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+
+</div>
+</div>
+<a id="a6b7a75d582a8c7d996922c49f29dc1f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b7a75d582a8c7d996922c49f29dc1f2">&#9670;&nbsp;</a></span>__prev_item()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a>* __prev_item </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="fsapi_8h.html#a82ec056db7e5286d965ce512847deef4">__next_item</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00071">71</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+
+</div>
+</div>
+<a id="a21f8f1bbe755c4b460ff5f592bda63b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21f8f1bbe755c4b460ff5f592bda63b4">&#9670;&nbsp;</a></span>__print_file_cluster_list()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void __print_file_cluster_list </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td>
+          <td class="paramname"><em>pfat</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p class="">no directly run it </p>
+
+<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00187">187</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+
+</div>
+</div>
+<a id="a0cbf80c5406dd13f0c1ff25ec383c36e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cbf80c5406dd13f0c1ff25ec383c36e">&#9670;&nbsp;</a></span>__rm_this_file()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int16_t __rm_this_file </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p class="">try and delete a fat item (file or directory) </p><dl class="section return"><dt>Returns</dt><dd>error code. defined in <a class="el" href="fsErrorCode_8h.html">fsErrorCode.h</a> </dd>
+<dd>
+return <a class="el" href="fsErrorCode_8h.html#a0ac74b7a179f050bce712dac77d0c6b4">NO_ERR</a> if no error </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00115">115</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
+
+</div>
+</div>
+<a id="a9df1f9042a84238b964f63d640fefa4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9df1f9042a84238b964f63d640fefa4b">&#9670;&nbsp;</a></span>__run_this_file()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int16_t __run_this_file </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p class="">helper function. no need to directly call it. check whether it is run-able. load EVERY-SECTOR into memory. </p><dl class="section return"><dt>Returns</dt><dd>forever return 0 currently. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="fsErrorCode_8h.html" title="define error code that is used in fsapi.h ">fsErrorCode.h</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="fsapi_8h_source.html#l00142">142</a> of file <a class="el" href="fsapi_8h_source.html">fsapi.h</a>.</p>
 
 </div>
 </div>

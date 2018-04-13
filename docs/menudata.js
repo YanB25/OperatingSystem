@@ -23,6 +23,7 @@ for the JavaScript code in this file
 */
 var menudata={children:[
 {text:"Main Page",url:"index.html"},
+{text:"Modules",url:"modules.html"},
 {text:"Classes",url:"annotated.html",children:[
 {text:"Class List",url:"annotated.html"},
 {text:"Class Index",url:"classes.html"},
@@ -42,6 +43,7 @@ var menudata={children:[
 {text:"f",url:"globals.html#index_f"},
 {text:"g",url:"globals.html#index_g"},
 {text:"h",url:"globals.html#index_h"},
+{text:"i",url:"globals.html#index_i"},
 {text:"j",url:"globals.html#index_j"},
 {text:"k",url:"globals.html#index_k"},
 {text:"l",url:"globals.html#index_l"},
@@ -61,6 +63,7 @@ var menudata={children:[
 {text:"d",url:"globals_func.html#index_d"},
 {text:"g",url:"globals_func.html#index_g"},
 {text:"h",url:"globals_func.html#index_h"},
+{text:"i",url:"globals_func.html#index_i"},
 {text:"j",url:"globals_func.html#index_j"},
 {text:"k",url:"globals_func.html#index_k"},
 {text:"l",url:"globals_func.html#index_l"},

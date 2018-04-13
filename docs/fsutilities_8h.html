@@ -79,10 +79,13 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:ac4b5d82ee350769eafe817b579427007"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsutilities_8h.html#ac4b5d82ee350769eafe817b579427007">lgsector2sector</a>(X)&#160;&#160;&#160;(((X-1)%18)+1)</td></tr>
+<tr class="memdesc:ac4b5d82ee350769eafe817b579427007"><td class="mdescLeft">&#160;</td><td class="mdescRight">logic sector to sector  <a href="#ac4b5d82ee350769eafe817b579427007">More...</a><br /></td></tr>
 <tr class="separator:ac4b5d82ee350769eafe817b579427007"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a351ceaca1f9e9bcab6e69a440a3b77aa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsutilities_8h.html#a351ceaca1f9e9bcab6e69a440a3b77aa">lgsector2head</a>(X)&#160;&#160;&#160;(((X-1)/18)%2)</td></tr>
+<tr class="memdesc:a351ceaca1f9e9bcab6e69a440a3b77aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">logic sector to head  <a href="#a351ceaca1f9e9bcab6e69a440a3b77aa">More...</a><br /></td></tr>
 <tr class="separator:a351ceaca1f9e9bcab6e69a440a3b77aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad77303c50bb1269e264331a9708fd2ff"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsutilities_8h.html#ad77303c50bb1269e264331a9708fd2ff">lgsector2track</a>(X)&#160;&#160;&#160;((X-1)/36)</td></tr>
+<tr class="memdesc:ad77303c50bb1269e264331a9708fd2ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">logic sector 2 track  <a href="#ad77303c50bb1269e264331a9708fd2ff">More...</a><br /></td></tr>
 <tr class="separator:ad77303c50bb1269e264331a9708fd2ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afada56f7987eca2d244486767e70aaae"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsutilities_8h.html#afada56f7987eca2d244486767e70aaae">filesize2sectors</a>(X)&#160;&#160;&#160;((X+511)/512)</td></tr>
 <tr class="separator:afada56f7987eca2d244486767e70aaae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -91,6 +94,10 @@ Macros</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a35c1a257e21e91115e97730a5cabeb2b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsutilities_8h.html#a35c1a257e21e91115e97730a5cabeb2b">loadSector</a> (uint16_t track, uint16_t head, uint16_t sector, uint16_t addr, uint16_t num)</td></tr>
 <tr class="separator:a35c1a257e21e91115e97730a5cabeb2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a829cfbd6904cdede14f94784bf7d7909"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsutilities_8h.html#a829cfbd6904cdede14f94784bf7d7909">loadLogicSector</a> (uint16_t lgsector, uint16_t addr, uint16_t num)</td></tr>
+<tr class="separator:a829cfbd6904cdede14f94784bf7d7909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1510ad0e0c5b00fedbb741d1d544a073"><td class="memItemLeft" align="right" valign="top">static int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fsutilities_8h.html#a1510ad0e0c5b00fedbb741d1d544a073">__fs_strcmp</a> (const char *s1, const char *s2)</td></tr>
+<tr class="separator:a1510ad0e0c5b00fedbb741d1d544a073"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="afada56f7987eca2d244486767e70aaae"></a>
@@ -129,6 +136,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>logic sector to head </p>
+
 <p class="definition">Definition at line <a class="el" href="fsutilities_8h_source.html#l00005">5</a> of file <a class="el" href="fsutilities_8h_source.html">fsutilities.h</a>.</p>
 
 </div>
@@ -148,6 +157,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>logic sector to sector </p>
 
 <p class="definition">Definition at line <a class="el" href="fsutilities_8h_source.html#l00004">4</a> of file <a class="el" href="fsutilities_8h_source.html">fsutilities.h</a>.</p>
 
@@ -169,11 +180,96 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>logic sector 2 track </p>
+
 <p class="definition">Definition at line <a class="el" href="fsutilities_8h_source.html#l00006">6</a> of file <a class="el" href="fsutilities_8h_source.html">fsutilities.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a1510ad0e0c5b00fedbb741d1d544a073"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1510ad0e0c5b00fedbb741d1d544a073">&#9670;&nbsp;</a></span>__fs_strcmp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int16_t __fs_strcmp </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>s1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>s2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p class="">strcmp only for file system </p>
+
+<p class="definition">Definition at line <a class="el" href="fsutilities_8h_source.html#l00020">20</a> of file <a class="el" href="fsutilities_8h_source.html">fsutilities.h</a>.</p>
+
+</div>
+</div>
+<a id="a829cfbd6904cdede14f94784bf7d7909"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a829cfbd6904cdede14f94784bf7d7909">&#9670;&nbsp;</a></span>loadLogicSector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void loadLogicSector </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>lgsector</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>addr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>num</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="fsutilities_8h_source.html#l00008">8</a> of file <a class="el" href="fsutilities_8h_source.html">fsutilities.h</a>.</p>
+
+</div>
+</div>
 <a id="a35c1a257e21e91115e97730a5cabeb2b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a35c1a257e21e91115e97730a5cabeb2b">&#9670;&nbsp;</a></span>loadSector()</h2>
 

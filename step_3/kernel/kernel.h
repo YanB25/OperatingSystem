@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @brief used by @ref kernel.c
+ * a header for kernel file.
+ * why not read the source directly?
+ */
 #ifndef __KERNEL_H_
 #define __KERNEL_H_
 // __asm__(".code16gcc\n");

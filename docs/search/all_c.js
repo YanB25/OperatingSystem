@@ -1,12 +1,9 @@
 var searchData=
 [
-  ['main',['main',['../kernel_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'kernel.c']]],
-  ['media_5ftype',['media_type',['../datablock_8c.html#a97c8e0392164cb1101ed6dded9742181',1,'datablock.c']]],
-  ['memcpy',['memcpy',['../mystring_8c.html#aeedb41f7f8d6e2f902409d7b78deb472',1,'mystring.c']]],
-  ['mod',['mod',['../structFAT__ITEM.html#a9e45d6c4a9a76b778986930c31fb7dc0',1,'FAT_ITEM::mod()'],['../FATMacro_8h.html#a7e6d6c4ffa3ecb61cde728e16c91deee',1,'mod():&#160;FATMacro.h']]],
-  ['modify_5fhms',['modify_hms',['../structFAT__ITEM.html#a56a6b36d2eec2a382d8caf043395cd41',1,'FAT_ITEM::modify_hms()'],['../FATMacro_8h.html#a7c98939955a71d8798f82c6a6f50e0ac',1,'modify_hms():&#160;FATMacro.h']]],
-  ['modify_5fymd',['modify_ymd',['../structFAT__ITEM.html#a71f17662b58e2bc02d7d97c7e23bd23d',1,'FAT_ITEM::modify_ymd()'],['../FATMacro_8h.html#a74bc7e8dc7419dc1583d60b180fe3d44',1,'modify_ymd():&#160;FATMacro.h']]],
-  ['msg',['msg',['../datablock_8c.html#abe7a9e754e1b30af24d61bb908ab1ca8',1,'datablock.c']]],
-  ['mystring_2ec',['mystring.c',['../mystring_8c.html',1,'']]],
-  ['mystring_2eh',['mystring.h',['../mystring_8h.html',1,'']]]
+  ['lgsector2head',['lgsector2head',['../fsutilities_8h.html#a351ceaca1f9e9bcab6e69a440a3b77aa',1,'fsutilities.h']]],
+  ['lgsector2sector',['lgsector2sector',['../fsutilities_8h.html#ac4b5d82ee350769eafe817b579427007',1,'fsutilities.h']]],
+  ['lgsector2track',['lgsector2track',['../fsutilities_8h.html#ad77303c50bb1269e264331a9708fd2ff',1,'fsutilities.h']]],
+  ['loadlogicsector',['loadLogicSector',['../fsutilities_8h.html#a829cfbd6904cdede14f94784bf7d7909',1,'fsutilities.h']]],
+  ['loadsector',['loadSector',['../fsutilities_8h.html#a35c1a257e21e91115e97730a5cabeb2b',1,'fsutilities.h']]],
+  ['low_5f8_5fmask',['LOW_8_MASK',['../terminal_8c.html#a0c49f1f971dfbc855a96f943a40cb4e8',1,'terminal.c']]]
 ];

@@ -1,3 +1,6 @@
+/** @file
+ * @brief datablock table for fat filesystem
+ */
 #include <stdint.h>
 #include "FATMacro.h"
 
@@ -11,6 +14,9 @@ FAT_ITEM error_flags = {
     FAT_doc
     ,0,0,0,0,0,0,0,0,0,0
 };
+/**
+ * kernel file.
+ */
 FAT_ITEM kernel_bin= {
     "kernel",
     "bin",

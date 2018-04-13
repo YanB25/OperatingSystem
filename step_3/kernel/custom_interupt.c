@@ -1,4 +1,7 @@
 #include "../include/stdio.h"
+/**
+ * my CRAZY 3-D stu id!
+ */
 void draw_my_info() {
     char* a =
 "  _____  ________ ________  ________   ________   _______  ________ ________     ";

@@ -71,6 +71,9 @@ $(function() {
 <div class="title">utilities.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>most importantly low level function used in kernel  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="ctype_8h_source.html">ctype.h</a>&quot;</code><br />
 </div>
@@ -81,6 +84,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a4953d1edcbbfc7e420c423ded1d5621a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utilities_8h.html#a4953d1edcbbfc7e420c423ded1d5621a">clear_screen</a> ()</td></tr>
 <tr class="separator:a4953d1edcbbfc7e420c423ded1d5621a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba7e39f892c5263f63ec221bf78b3f09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utilities_8h.html#aba7e39f892c5263f63ec221bf78b3f09">hello_hybrid_programming</a> ()</td></tr>
+<tr class="memdesc:aba7e39f892c5263f63ec221bf78b3f09"><td class="mdescLeft">&#160;</td><td class="mdescRight">testcase  <a href="#aba7e39f892c5263f63ec221bf78b3f09">More...</a><br /></td></tr>
 <tr class="separator:aba7e39f892c5263f63ec221bf78b3f09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9e80f72ea764075aace5d65cebc1ced"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utilities_8h.html#ae9e80f72ea764075aace5d65cebc1ced">add</a> (int, int)</td></tr>
 <tr class="separator:ae9e80f72ea764075aace5d65cebc1ced"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -88,8 +92,79 @@ Functions</h2></td></tr>
 <tr class="separator:ad5451da499ab9d3907da8dd7060ab677"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1f62902b54c95a1ade4f1efb5238671"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utilities_8h.html#ae1f62902b54c95a1ade4f1efb5238671">readkb</a> ()</td></tr>
 <tr class="separator:ae1f62902b54c95a1ade4f1efb5238671"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93609c4269b97a09d9666c9f3432f4af"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utilities_8h.html#a93609c4269b97a09d9666c9f3432f4af">set_cursor</a> (uint8_t <a class="el" href="kbhit_8c.html#acc38b28927bf55a0a8a775fb8425476e">row</a>, uint8_t col)</td></tr>
+<tr class="separator:a93609c4269b97a09d9666c9f3432f4af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa97cd4e969256b6ec80bcec9e6b90432"><td class="memItemLeft" align="right" valign="top">static uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utilities_8h.html#aa97cd4e969256b6ec80bcec9e6b90432">get_cursor</a> ()</td></tr>
+<tr class="separator:aa97cd4e969256b6ec80bcec9e6b90432"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16a7e5cffe9effa5e2503f69a1dc58ac"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utilities_8h.html#a16a7e5cffe9effa5e2503f69a1dc58ac">__screen_scroll</a> (uint16_t row_col_lu, uint16_t row_col_rd, uint8_t lines, uint16_t <a class="el" href="timeout_8c.html#a886d551d5381dc3e53f17825ffc51641">direction</a>)</td></tr>
+<tr class="separator:a16a7e5cffe9effa5e2503f69a1dc58ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81096a58339734f344bdb34e6082a599"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="utilities_8h.html#a81096a58339734f344bdb34e6082a599">scroll_up_one_line</a> ()</td></tr>
+<tr class="separator:a81096a58339734f344bdb34e6082a599"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p class="">most importantly low level function used in kernel </p>
+
+<p class="definition">Definition in file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a16a7e5cffe9effa5e2503f69a1dc58ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16a7e5cffe9effa5e2503f69a1dc58ac">&#9670;&nbsp;</a></span>__screen_scroll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void __screen_scroll </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>row_col_lu</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>row_col_rd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>lines</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>direction</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p class="">no need to use. screen the scrool. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">row_col_lu</td><td>16bits. high: row, low: col. left upper point. </td></tr>
+    <tr><td class="paramname">row_col_rd</td><td>high 16bits row, low: col. right down point. </td></tr>
+    <tr><td class="paramname">lines</td><td>how many lines to scrool </td></tr>
+    <tr><td class="paramname">direction</td><td>0 if scroll up. any int otherwise. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00068">68</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+
+</div>
+</div>
 <a id="ae9e80f72ea764075aace5d65cebc1ced"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae9e80f72ea764075aace5d65cebc1ced">&#9670;&nbsp;</a></span>add()</h2>
 
@@ -115,6 +190,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p class="">testcase </p>
 
 </div>
 </div>
@@ -135,6 +211,34 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aa97cd4e969256b6ec80bcec9e6b90432"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa97cd4e969256b6ec80bcec9e6b90432">&#9670;&nbsp;</a></span>get_cursor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static uint16_t get_cursor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p class="">get the current cursor </p><dl class="section return"><dt>Returns</dt><dd>a 16 bits int. the high 8 bits store the row. the low 8 bits store the column. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00045">45</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+
+</div>
+</div>
 <a id="aba7e39f892c5263f63ec221bf78b3f09"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aba7e39f892c5263f63ec221bf78b3f09">&#9670;&nbsp;</a></span>hello_hybrid_programming()</h2>
 
@@ -149,6 +253,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>testcase </p>
 
 </div>
 </div>
@@ -166,6 +272,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p class="">unbocked function to test whether kb is hit. WARNING: this function will not remove kbhit in buffer. you need to call readkb to do so. </p><dl class="section return"><dt>Returns</dt><dd>return zero if no kb is hit. return ascii otherwise. </dd></dl>
 
 </div>
 </div>
@@ -183,6 +290,78 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a81096a58339734f344bdb34e6082a599"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81096a58339734f344bdb34e6082a599">&#9670;&nbsp;</a></span>scroll_up_one_line()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void scroll_up_one_line </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00091">91</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+
+</div>
+</div>
+<a id="a93609c4269b97a09d9666c9f3432f4af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93609c4269b97a09d9666c9f3432f4af">&#9670;&nbsp;</a></span>set_cursor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void set_cursor </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>col</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p class="">directly set cursor </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">row</td><td>range 0~24 </td></tr>
+    <tr><td class="paramname">col</td><td>range 0~79 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00026">26</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>

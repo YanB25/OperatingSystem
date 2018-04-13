@@ -1,3 +1,7 @@
+/**
+ * @file
+ * @brief light-weight ctype.h 
+ */
 #ifndef __C_TYPE_H_
 #define __C_TYPE_H_
 #include <stdint.h>

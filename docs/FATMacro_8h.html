@@ -75,6 +75,9 @@ $(function() {
 <div class="title">FATMacro.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>all the macro needed by FAT inner implementation  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
 </div>
 <p><a href="FATMacro_8h_source.html">Go to the source code of this file.</a></p>
@@ -86,28 +89,37 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a67384dcd55a6d0a1130920063b1017c0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#a67384dcd55a6d0a1130920063b1017c0">S_UNUSED</a>&#160;&#160;&#160;((uint8_t)0x00)</td></tr>
-<tr class="separator:a67384dcd55a6d0a1130920063b1017c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45e450f1c27e96a8b5ae8b5d67e7845f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#a45e450f1c27e96a8b5ae8b5d67e7845f">S_DOTS</a>&#160;&#160;&#160;((uint8_t)0x2E)</td></tr>
-<tr class="separator:a45e450f1c27e96a8b5ae8b5d67e7845f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff930c7ed3eb0bfde73aa51aba53d2cf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#aff930c7ed3eb0bfde73aa51aba53d2cf">S_DEL</a>&#160;&#160;&#160;((uint8_t)0xE5)</td></tr>
-<tr class="separator:aff930c7ed3eb0bfde73aa51aba53d2cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6058cd264e03f73a266d16282e29b66c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#a6058cd264e03f73a266d16282e29b66c">FAT_rw</a>&#160;&#160;&#160;(0)</td></tr>
-<tr class="separator:a6058cd264e03f73a266d16282e29b66c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab078b984a53278d3e3d77020d8e61a49"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#ab078b984a53278d3e3d77020d8e61a49">FAT_ro</a>&#160;&#160;&#160;(1)</td></tr>
-<tr class="separator:ab078b984a53278d3e3d77020d8e61a49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91427f0e346af8cea0a3f47c53bd501e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#a91427f0e346af8cea0a3f47c53bd501e">FAT_hid</a>&#160;&#160;&#160;(1 &lt;&lt; 1)</td></tr>
-<tr class="separator:a91427f0e346af8cea0a3f47c53bd501e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed99e264a253e2e5782262e596342383"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#aed99e264a253e2e5782262e596342383">FAT_sys</a>&#160;&#160;&#160;(1 &lt;&lt; 2)</td></tr>
-<tr class="separator:aed99e264a253e2e5782262e596342383"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7ac72d4bbe5491a7139d707afe625c0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#ae7ac72d4bbe5491a7139d707afe625c0">FAT_fldr</a>&#160;&#160;&#160;(1 &lt;&lt; 4)</td></tr>
-<tr class="separator:ae7ac72d4bbe5491a7139d707afe625c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ea6857663be542756796a917628c449"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#a7ea6857663be542756796a917628c449">FAT_doc</a>&#160;&#160;&#160;(1 &lt;&lt; 5)</td></tr>
-<tr class="separator:a7ea6857663be542756796a917628c449"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a976a505d8714449b514a7fed04d9e798"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#a976a505d8714449b514a7fed04d9e798">FAT_ITEM_EMPTY</a>&#160;&#160;&#160;{0,0,0,0,0,0,0,0,0,0,0,0,0}</td></tr>
-<tr class="separator:a976a505d8714449b514a7fed04d9e798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e744eb0741ca83e9ec7e2712198199d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#a5e744eb0741ca83e9ec7e2712198199d">FAT_ITEM_SIZE</a>&#160;&#160;&#160;(32)</td></tr>
-<tr class="separator:a5e744eb0741ca83e9ec7e2712198199d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga67384dcd55a6d0a1130920063b1017c0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FATItemState.html#ga67384dcd55a6d0a1130920063b1017c0">S_UNUSED</a>&#160;&#160;&#160;((uint8_t)0x00)</td></tr>
+<tr class="memdesc:ga67384dcd55a6d0a1130920063b1017c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">item unused  <a href="group__FATItemState.html#ga67384dcd55a6d0a1130920063b1017c0">More...</a><br /></td></tr>
+<tr class="separator:ga67384dcd55a6d0a1130920063b1017c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga45e450f1c27e96a8b5ae8b5d67e7845f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FATItemState.html#ga45e450f1c27e96a8b5ae8b5d67e7845f">S_DOTS</a>&#160;&#160;&#160;((uint8_t)0x2E)</td></tr>
+<tr class="memdesc:ga45e450f1c27e96a8b5ae8b5d67e7845f"><td class="mdescLeft">&#160;</td><td class="mdescRight">it is '.' or '..'  <a href="group__FATItemState.html#ga45e450f1c27e96a8b5ae8b5d67e7845f">More...</a><br /></td></tr>
+<tr class="separator:ga45e450f1c27e96a8b5ae8b5d67e7845f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaff930c7ed3eb0bfde73aa51aba53d2cf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__FATItemState.html#gaff930c7ed3eb0bfde73aa51aba53d2cf">S_DEL</a>&#160;&#160;&#160;((uint8_t)0xE5)</td></tr>
+<tr class="memdesc:gaff930c7ed3eb0bfde73aa51aba53d2cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">has been deleted, can be reused  <a href="group__FATItemState.html#gaff930c7ed3eb0bfde73aa51aba53d2cf">More...</a><br /></td></tr>
+<tr class="separator:gaff930c7ed3eb0bfde73aa51aba53d2cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6058cd264e03f73a266d16282e29b66c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fileMod.html#ga6058cd264e03f73a266d16282e29b66c">FAT_rw</a>&#160;&#160;&#160;(0)</td></tr>
+<tr class="memdesc:ga6058cd264e03f73a266d16282e29b66c"><td class="mdescLeft">&#160;</td><td class="mdescRight">readable and writable  <a href="group__fileMod.html#ga6058cd264e03f73a266d16282e29b66c">More...</a><br /></td></tr>
+<tr class="separator:ga6058cd264e03f73a266d16282e29b66c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab078b984a53278d3e3d77020d8e61a49"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fileMod.html#gab078b984a53278d3e3d77020d8e61a49">FAT_ro</a>&#160;&#160;&#160;(1)</td></tr>
+<tr class="memdesc:gab078b984a53278d3e3d77020d8e61a49"><td class="mdescLeft">&#160;</td><td class="mdescRight">read only  <a href="group__fileMod.html#gab078b984a53278d3e3d77020d8e61a49">More...</a><br /></td></tr>
+<tr class="separator:gab078b984a53278d3e3d77020d8e61a49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga91427f0e346af8cea0a3f47c53bd501e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fileMod.html#ga91427f0e346af8cea0a3f47c53bd501e">FAT_hid</a>&#160;&#160;&#160;(1 &lt;&lt; 1)</td></tr>
+<tr class="memdesc:ga91427f0e346af8cea0a3f47c53bd501e"><td class="mdescLeft">&#160;</td><td class="mdescRight">hidden file  <a href="group__fileMod.html#ga91427f0e346af8cea0a3f47c53bd501e">More...</a><br /></td></tr>
+<tr class="separator:ga91427f0e346af8cea0a3f47c53bd501e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaed99e264a253e2e5782262e596342383"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fileMod.html#gaed99e264a253e2e5782262e596342383">FAT_sys</a>&#160;&#160;&#160;(1 &lt;&lt; 2)</td></tr>
+<tr class="memdesc:gaed99e264a253e2e5782262e596342383"><td class="mdescLeft">&#160;</td><td class="mdescRight">system file  <a href="group__fileMod.html#gaed99e264a253e2e5782262e596342383">More...</a><br /></td></tr>
+<tr class="separator:gaed99e264a253e2e5782262e596342383"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae7ac72d4bbe5491a7139d707afe625c0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fileMod.html#gae7ac72d4bbe5491a7139d707afe625c0">FAT_fldr</a>&#160;&#160;&#160;(1 &lt;&lt; 4)</td></tr>
+<tr class="memdesc:gae7ac72d4bbe5491a7139d707afe625c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">folder  <a href="group__fileMod.html#gae7ac72d4bbe5491a7139d707afe625c0">More...</a><br /></td></tr>
+<tr class="separator:gae7ac72d4bbe5491a7139d707afe625c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7ea6857663be542756796a917628c449"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fileMod.html#ga7ea6857663be542756796a917628c449">FAT_doc</a>&#160;&#160;&#160;(1 &lt;&lt; 5)</td></tr>
+<tr class="memdesc:ga7ea6857663be542756796a917628c449"><td class="mdescLeft">&#160;</td><td class="mdescRight">partition reserved doc  <a href="group__fileMod.html#ga7ea6857663be542756796a917628c449">More...</a><br /></td></tr>
+<tr class="separator:ga7ea6857663be542756796a917628c449"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga976a505d8714449b514a7fed04d9e798"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fileMod.html#ga976a505d8714449b514a7fed04d9e798">FAT_ITEM_EMPTY</a>&#160;&#160;&#160;{0,0,0,0,0,0,0,0,0,0,0,0,0}</td></tr>
+<tr class="separator:ga976a505d8714449b514a7fed04d9e798"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5e744eb0741ca83e9ec7e2712198199d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__fileMod.html#ga5e744eb0741ca83e9ec7e2712198199d">FAT_ITEM_SIZE</a>&#160;&#160;&#160;(32)</td></tr>
+<tr class="separator:ga5e744eb0741ca83e9ec7e2712198199d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -130,12 +142,16 @@ Variables</h2></td></tr>
 <tr class="memitem:a7e6d6c4ffa3ecb61cde728e16c91deee"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#a7e6d6c4ffa3ecb61cde728e16c91deee">mod</a></td></tr>
 <tr class="separator:a7e6d6c4ffa3ecb61cde728e16c91deee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29850f3918435f089b2e206b9da59936"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#a29850f3918435f089b2e206b9da59936">res</a></td></tr>
+<tr class="memdesc:a29850f3918435f089b2e206b9da59936"><td class="mdescLeft">&#160;</td><td class="mdescRight">reserved  <a href="#a29850f3918435f089b2e206b9da59936">More...</a><br /></td></tr>
 <tr class="separator:a29850f3918435f089b2e206b9da59936"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7c006bb83e1d2cf39a654e1bda73bcf"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#ad7c006bb83e1d2cf39a654e1bda73bcf">created_time</a></td></tr>
+<tr class="memdesc:ad7c006bb83e1d2cf39a654e1bda73bcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">ms  <a href="#ad7c006bb83e1d2cf39a654e1bda73bcf">More...</a><br /></td></tr>
 <tr class="separator:ad7c006bb83e1d2cf39a654e1bda73bcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a384f285853fa2d8b52f3eb72cf9fc9ab"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#a384f285853fa2d8b52f3eb72cf9fc9ab">hms</a></td></tr>
+<tr class="memdesc:a384f285853fa2d8b52f3eb72cf9fc9ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">hour minute second  <a href="#a384f285853fa2d8b52f3eb72cf9fc9ab">More...</a><br /></td></tr>
 <tr class="separator:a384f285853fa2d8b52f3eb72cf9fc9ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2610f141296d1a780edda8c43eed706"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#af2610f141296d1a780edda8c43eed706">ymd</a></td></tr>
+<tr class="memdesc:af2610f141296d1a780edda8c43eed706"><td class="mdescLeft">&#160;</td><td class="mdescRight">year month day  <a href="#af2610f141296d1a780edda8c43eed706">More...</a><br /></td></tr>
 <tr class="separator:af2610f141296d1a780edda8c43eed706"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7712d222620362331436a3fdedd6750"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#ac7712d222620362331436a3fdedd6750">recent_access_ymd</a></td></tr>
 <tr class="separator:ac7712d222620362331436a3fdedd6750"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,186 +164,14 @@ Variables</h2></td></tr>
 <tr class="memitem:a9504341f73c8b44395351cab4e83f35d"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#a9504341f73c8b44395351cab4e83f35d">blow_cluster</a></td></tr>
 <tr class="separator:a9504341f73c8b44395351cab4e83f35d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0532db3d21cdd9e862560340b97d8e05"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FATMacro_8h.html#a0532db3d21cdd9e862560340b97d8e05">filesize</a></td></tr>
+<tr class="memdesc:a0532db3d21cdd9e862560340b97d8e05"><td class="mdescLeft">&#160;</td><td class="mdescRight">in bytes  <a href="#a0532db3d21cdd9e862560340b97d8e05">More...</a><br /></td></tr>
 <tr class="separator:a0532db3d21cdd9e862560340b97d8e05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a7ea6857663be542756796a917628c449"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ea6857663be542756796a917628c449">&#9670;&nbsp;</a></span>FAT_doc</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p class="">all the macro needed by FAT inner implementation </p>
 
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define FAT_doc&#160;&#160;&#160;(1 &lt;&lt; 5)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00035">35</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
-
-</div>
-</div>
-<a id="ae7ac72d4bbe5491a7139d707afe625c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae7ac72d4bbe5491a7139d707afe625c0">&#9670;&nbsp;</a></span>FAT_fldr</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define FAT_fldr&#160;&#160;&#160;(1 &lt;&lt; 4)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00034">34</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
-
-</div>
-</div>
-<a id="a91427f0e346af8cea0a3f47c53bd501e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91427f0e346af8cea0a3f47c53bd501e">&#9670;&nbsp;</a></span>FAT_hid</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define FAT_hid&#160;&#160;&#160;(1 &lt;&lt; 1)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00032">32</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
-
-</div>
-</div>
-<a id="a976a505d8714449b514a7fed04d9e798"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a976a505d8714449b514a7fed04d9e798">&#9670;&nbsp;</a></span>FAT_ITEM_EMPTY</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define FAT_ITEM_EMPTY&#160;&#160;&#160;{0,0,0,0,0,0,0,0,0,0,0,0,0}</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00036">36</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
-
-</div>
-</div>
-<a id="a5e744eb0741ca83e9ec7e2712198199d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e744eb0741ca83e9ec7e2712198199d">&#9670;&nbsp;</a></span>FAT_ITEM_SIZE</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define FAT_ITEM_SIZE&#160;&#160;&#160;(32)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00038">38</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
-
-</div>
-</div>
-<a id="ab078b984a53278d3e3d77020d8e61a49"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab078b984a53278d3e3d77020d8e61a49">&#9670;&nbsp;</a></span>FAT_ro</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define FAT_ro&#160;&#160;&#160;(1)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00031">31</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
-
-</div>
-</div>
-<a id="a6058cd264e03f73a266d16282e29b66c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6058cd264e03f73a266d16282e29b66c">&#9670;&nbsp;</a></span>FAT_rw</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define FAT_rw&#160;&#160;&#160;(0)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00030">30</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
-
-</div>
-</div>
-<a id="aed99e264a253e2e5782262e596342383"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed99e264a253e2e5782262e596342383">&#9670;&nbsp;</a></span>FAT_sys</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define FAT_sys&#160;&#160;&#160;(1 &lt;&lt; 2)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00033">33</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
-
-</div>
-</div>
-<a id="aff930c7ed3eb0bfde73aa51aba53d2cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff930c7ed3eb0bfde73aa51aba53d2cf">&#9670;&nbsp;</a></span>S_DEL</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define S_DEL&#160;&#160;&#160;((uint8_t)0xE5)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00009">9</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
-
-</div>
-</div>
-<a id="a45e450f1c27e96a8b5ae8b5d67e7845f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45e450f1c27e96a8b5ae8b5d67e7845f">&#9670;&nbsp;</a></span>S_DOTS</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define S_DOTS&#160;&#160;&#160;((uint8_t)0x2E)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00008">8</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
-
-</div>
-</div>
-<a id="a67384dcd55a6d0a1130920063b1017c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67384dcd55a6d0a1130920063b1017c0">&#9670;&nbsp;</a></span>S_UNUSED</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define S_UNUSED&#160;&#160;&#160;((uint8_t)0x00)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00007">7</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Typedef Documentation</h2>
+<p class="definition">Definition in file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+</div><h2 class="groupheader">Typedef Documentation</h2>
 <a id="a30ca17a2d1e095eca8836b26c7ca0025"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a30ca17a2d1e095eca8836b26c7ca0025">&#9670;&nbsp;</a></span>FAT_ITEM</h2>
 
@@ -340,7 +184,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00028">28</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00039">39</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -356,7 +200,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00005">5</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00009">9</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -392,7 +236,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00015">15</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00019">19</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -408,7 +252,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00019">19</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00023">23</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -424,7 +268,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00011">11</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p>ms </p>
+
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00015">15</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -440,7 +286,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00007">7</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00011">11</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -456,7 +302,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00006">6</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00010">10</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -472,7 +318,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00020">20</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p>in bytes </p>
+
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00024">24</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -488,7 +336,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00012">12</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p>hour minute second </p>
+
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00016">16</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -504,7 +354,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00008">8</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00012">12</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -520,7 +370,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00017">17</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00021">21</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -536,7 +386,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00018">18</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00022">22</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -552,7 +402,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00014">14</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00018">18</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -568,7 +418,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00010">10</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p>reserved </p>
+
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00014">14</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
@@ -584,7 +436,9 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00013">13</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
+<p>year month day </p>
+
+<p class="definition">Definition at line <a class="el" href="FATMacro_8h_source.html#l00017">17</a> of file <a class="el" href="FATMacro_8h_source.html">FATMacro.h</a>.</p>
 
 </div>
 </div>
