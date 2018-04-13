@@ -558,18 +558,22 @@ custom_int_table:
 \begin{figure}
     \begin{center}
     \includegraphics[scale=0.5]{assets/16337269.png}
-    \caption{caption\label{fig:3_D_id}} 
+    \caption{特色中断：个人学号的3D显示\label{fig:3_D_id}} 
     \end{center} 
 \end{figure} 
 
 \section{实验总结}
     \subsection{亮点介绍}
-    \subsubsection{极其详尽的文档和代码开源}
+    \subsubsection{极其详尽的文档}
     本次项目为所有文件添加了足够的注释，并自动生成了说明文档。
-    说明文档可以见网页
-    https://yanb25.github.io/OperatingSystem/files.html。
+    说明文档可以见网页\\ 
+
+    \url{https://yanb25.github.io/OperatingSystem/files.html}。(可点击) \\
+
     其上极其详细地为几乎所有函数增加说明，列举了函数间的依赖关系以及
-    调用方法等。
+    调用方法等。\\
+    
+    同时，本项目中附属的项目文档pdf文件也由代码和注释自动生成。
     \subsubsection{ASM拓展语法}
     本实验在上个实验的基础上，更深入地使用了GCC的ASM语言拓展。为
     C和汇编的交互带来了更大的便利。见\ref{subsec:asm}节。
@@ -583,7 +587,7 @@ custom_int_table:
 
     \subsection{更新细节}
     \subsubsection{printf进一步完善}
-    实现了定宽输出的功能。即支持$ printf(\"\%4d\", 1) $功能，
+    实现了定宽输出的功能。即支持$ printf("\%4d", 1) $ 功能，
     在输出的1前输出3个空格。//TODO:
     \\
     同时，所有的IO函数重构成返回int16\_t类型，代表他们输出到屏幕的
@@ -595,6 +599,9 @@ custom_int_table:
     \subsection{心得体会}
  
     \subsection{BUG汇总}
+    \subsubsection{扇区加载错误}
+    首先是发生了扇区加载不足的状况。操作系统内核共10个展区长度，但在最开始的实现中
+    只//TODO:
 \begin{appendices}
 \section{参考文献} \label{sec:reference}
 sasadf
