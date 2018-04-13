@@ -338,55 +338,260 @@
         \end{itemize}
  
 \section{实验过程}
-    \subsubsection{GCC语言拓展的运用}
-    为了简化代码的书写，
+    \subsubsection{GCC语言拓展的运用}\label{subsec:asm}
+    为了简化代码的书写,本项目进一步地使用了GCC的语言拓展，\_\_asm\_\_语法。代码\ref{lst:asm_ext}举出了两个
+    比较有说明性的道理，列举其用法。内嵌汇编的初衷是，若C语言不得不调用汇编，而汇编语句又很短（10行以内），为了汇编
+    而新建一个文件并编译链接显得很麻烦。内嵌汇编可以做到``细粒度''的C与汇编交互功能。\\
+    
+    volatile语句的作用是``禁止GCC优化（删除）掉汇编语句''。由于GCC在编译时无法解析汇编的内容，汇编的内容是在C
+    语言代码完全编译后，再由内置汇编器解释的。故GCC无法在编译期确定内嵌的汇编代码是否有副作用。若GCC（错误地）认为
+    这些汇编代码没有副作用，会把代码完全优化（删除）掉。volatile可以禁止这种优化。\\
+    
+    整个拓展语法为\_\_asm\_\_ volatile ( assembly : output : input : clobber );\\
+    
+    其中assembly为字符串表示的汇编代码。以回车结尾以分隔汇编代码。output显式地指明了汇编代码会``输出''到C变量，即
+    汇编代码会修改某个C变量的值。input显示地指明了汇编代码会从C语言``输入''值，即把C的某个变量赋给寄存器。clobber
+    显式地指明了汇编语句会修改到哪些内容（如标志寄存器，内存等）。如果不指明，C语言会（为了速度）而不刷新缓存，导致
+    汇编语句的修改没有更新到C语言环境中。\\
+    
+    代码\ref{lst:asm_ext}中，``c'', ``D''分别代表寄存器CX和DX，``CC''表示标志寄存器，其他标志可从字面意思弄懂。
+    这些标志与架构密切相关，可以从GCC官网的ASM语言拓展查到详细的使用手册。\\
+    
+    代码\ref{lst:asm_ext}的两个函数中，第一个函数通过中断的方式在屏幕的某个特定的位置显示字符。C语言对它做了便利
+    的封装。第二个函数用于得到光标位置，并自动导出到cursor\_pos中。
+    \begin{figure}[!htb]
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language=C, label=lst:asm_ext, caption=GCC内嵌汇编拓展语法详解]
+static inline int16_t _draw_char(char ch, int offset, uint8_t style) {
+    uint16_t written_data = ch | (style << 8);
+    __asm__ volatile (
+        "movb $1, %%ah\n"
+        "int $0x2B\n"
+        : /* no output */
+        : "c"(written_data), "D"(offset)
+        : "cc", "ax", "memory"
+    );
+    return 1;
+}
+static inline uint16_t get_cursor(){
+    uint16_t cursor_pos;
+    __asm__ volatile(
+        "pushw %%ax\n"
+        "pushw %%bx\n"
+        "movb $0x03, %%ah\n"
+        "movb $0, %%bh\n"
+        "int $0x10\n"
+        "popw %%bx\n"
+        "popw %%ax\n"
+        : "=d"(cursor_pos)
+        : /* no input */
+        : "cc", "cx"
+    );
+    return cursor_pos;
+}
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
     \subsection{修改时钟中断}
-    \subsection{修改键盘中断}
-    \subsection{安装用户自定义中断}
-    \begin{table}[!htb]
-        \caption{GCC编译指令}\label{tab:gcc}
-    \begin{tabular}{@{} *5l @{}} 
-        \toprule
-    \emph{编译选项} & \emph{作用} &&&  \\
-        \midrule
-        -o    & D  \\ 
-        \\ 
-        -march=i386  & X产生原始Itel i376 CPU架构的代码\\ 
-        \\
-        -m16& 等价于汇编伪指令.code16gcc。
-            \\& 在所有必要的指令前加,前缀66, 67，
-            \\& 使得处理器能以32位的方式读取GCC产生的代码\\
-        \\
-        -mpreferred-stack-boundary=2 & 以$2^i$bytes作为对齐量，对齐栈的界限。
-            \\& 该选项默认为4(即默认$2^4$字节对齐栈界限).
-            \\& 为了节省空间，这里设置成2 \\
-        \\
-        -ffreestanding &  产生``自立''的程序文件.
-            \\& 即告知GCC不使用（几乎）所有的库头文件。
-            \\& 保证产生的代码不依赖于GCC的自带库 \\
-        \\
-        -c & 不产生可执行文件，只执行``编译''操作产生目标文件 \\ 
-        \\
-        -Og & 产生最小限度的优化.
-            \\& 即这个优化能化简汇编代码，但又
-            不影响汇编程序的可读性。\\
-        \\
-        -O0 & 不产生任何优化。
-            \\& 本项目文件系统FAT表的构建使用C语言的struct
-            完成。
-            \\& 为了保证产生的二进制表项和C代码中的struct严格一致
-            \\& 必须
-            采用本优化等级。\\
+    本步骤的重点在于，保证时钟中断结束后不修改\textbf{任何}寄存器的值，且进入时钟中断的时立即将段寄存器初始化到正确的
+    状态.\\
+    
+    由于时钟中断可以发生在代码执行的任何一个时刻，用户程序在执行到任何一个状态时，都有可能被突然间中断。如果时钟中断没有
+    保存（哪怕一个）寄存器的值，当中断返回时，用户程序会直接崩溃。更可怕的是，有可能用户程序不立即崩溃，带着错误的状态继续
+    执行下去，错误像滚雪球般地越积越多。当程序错误地退出时，很难定位到BUG的具体发生位置。\\
+    
+    更需要注意的是，在时钟中断进入后，要尽快地将ds的值设置为cs的值。虽然本项目使用平坦模型（flatten model），
+    段寄存器的值都是0,但是由于时钟中断可以发生在任何时候（哪怕当前正在运行另外一个中断）。而另外的中断（例如int 16H)
+    的代码中很可能临时地修改段寄存器。在时钟中断突然来临后，ds的值将是错误的值。这同样会导致程序的异常出现。\\
+    
+    代码\ref{lst:clock_int}展示了自定义时钟中断的实现。假设代码已经成功地将中断向量表地址修改为timeOut汇编函数的
+    首地址。timeOut后，程序会先保存一些寄存器的值，将ds同步为cs，随后使用call指令调用C的真正的处理函数。当从C函数中
+    返回后，恢复相关寄存器，随后跳转到原时钟中断（0F000H:0FEA5H）的地址。由于不清楚原时钟中断做了什么，所以最好在程序
+    最后跳转回原中断，让它完成它想完成的事情。
+    \begin{figure}[!bht]
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:clock_int, caption=自定义时钟中断的部分代码]
+timeOut:
 
-        \bottomrule
-    \hline
-    \end{tabular}
-    \end{table}
+    pusha
+    push gs
+    push ds
+    push es
+
+    mov ax, cs 
+    mov ds, ax 
+    mov es, ax 
+
+    push cs 
+    call timeout ; timeout is a C function
+
+    pop es
+    pop ds
+    pop gs
+    popa
+
+    jmp 0F000H:0FEA5H ; 为了展示目的，这里采用硬编码的方式
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
+    \subsection{修改键盘中断}
+    键盘中断的实现和时钟中断十分类似。首先修改中断向量表，保证中断发生时控制权能到达用户自定义程序。只要保证能恢复
+    到中断前的状态，程序一般就能正确运行。\\
+    
+    本个实现的小技巧是，采用pushf 和 call far的方式先调用旧键盘中断处理程序。由于旧中断处理程序的最后一条指令必为iret,
+    刚好可以把pushf 和call far中压栈的内容正确地恢复到原有的寄存器中。随后自定义中断服务程序再通过一个iret把栈完全复原。
+    \subsection{安装用户自定义中断}
+    为了让用户自定义中断的行为和系统自带的中断保持类似，自定义中断也采用ah作为功能号标志。具体实现如代码\ref{lst:custom_int}所示。\\
+
+    global\_custom\_int\_install函数安装用户自定义中断，把2BH号中断链接到custom\_int\_hanlder函数中。该函数是个
+    中断处理函数，它负责解析功能号（ah）的值，在一个向量表中查询服务程序的地址，并将控制权移交给服务程序。值得注意的是，
+    所有的服务程序都通过retf的方式先返回到custom\_int\_handler，由其统一地使用iret结束中断。也就是custom\_int\_handler
+    是一个统一的入口和出口，做了封装和``分发处理''。\\
+    
+    custom\_int\_table地址表。功能号ah代表着地址在表中的位置。本项目定义了三个简单的中断程序。第一个叫testcase，它做了
+    若干入栈和出栈操作。它用来检测``从中断安装到中断执行''的过程中，栈是否正确地返回了。\_int\_draw\_char是重写的底层输出
+    函数。所有的IO函数几乎都依赖于这一中断调用。见//TODO:\_draw\_char
+    的介绍。
+    \_int\_draw\_my\_info中断会在程序的特定位置显示3-D的学号。视觉效果较好。
+    
+    \begin{figure}[!h]
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:custom_int, caption=用户自定义中断的实现]
+global_custom_int_install:
+    push ds
+    mov ax, 0
+    mov ds, ax
+
+    mov word [ds:2BH * 4], custom_int_handler
+    mov word [ds:2BH * 4 + 2], cs
+
+    pop ds
+    retl
+custom_int_handler:
+    ; ah=01H: _draw_char
+    push bx
+    push ax
+    push dx 
+
+    mov dl, 4
+    mov al, ah
+    xor ah, ah
+    mul dl
+    add ax, custom_int_table
+    mov bx, ax
+
+    pop dx
+    pop ax
+
+    call far [bx]
+
+    pop bx
+    iret
+
+testcase:
+    ...
+
+    retf
+_int_draw_char:
+    ...
+
+    retf
+
+_int_draw_my_info:
+    ...
+
+    retf
+custom_int_table:
+    dw testcase
+    dw 0x0000
+    dw _int_draw_char
+    dw 0x0000
+    dw _int_draw_my_info
+    dw 0x0000  
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
+\section{实验结果}
+\subsection{终端界面}
+图\ref{fig:terminal}展示了终端界面的外观。//TODO:由于四周围的边框
+需要有闪动的字符，所以终端的所有提示信息都应自动地为边框腾出空间。为了完成
+这个效果，本项目结合了滚屏中断和光标设置中断，实现了一个特殊的字符输出中断，
+原本写好的IO程序可以不加修改，只修改他们底层最终依赖的中断，即可自动地为
+边框腾出空间。\\
+
+图\ref{fig:terminal}还同时展示了改进版的ls指令。该指令会用对齐的
+方式输出根目录的所有文件，文件的大小以及文件所在的首扇区。对齐的输出
+使用了新增的printf定宽输出功能。见//TODO:\\
+
+文件系统其实还实现了输出文件所有簇编号这一功能。只是由于内核程序太大，所
+占的簇数太多，导致输出的画面显得混乱。所以在这个版本中我把这个功能砍掉了。
+但我保留了一张截图，如\ref{fig:fs_long_ls.png}所示。
+\begin{figure}
+    \begin{center}
+    \includegraphics[scale=0.5]{assets/terminal.png}
+    \caption{带运动边框的终端界面\label{fig:terminal}} 
+    \end{center} 
+\end{figure} 
+
+\begin{figure}
+    \begin{center}
+    \includegraphics[scale=0.5]{assets/fs_long_ls.png}
+    \caption{带有文件所有扇区列表的ls指令\label{fig:ls}} 
+    \end{center} 
+\end{figure} 
+\subsection{用户程序}
+图\ref{fig:user}实现了带按键反馈的用户程序。在进入用户程序时，安装
+自定义中断，键盘对每次按下都会输出 ``OUCH!''，而在离开用户程序后，中断
+复原，不再对键盘按下响应``OUCH!''。\\
+
+\begin{figure}
+    \begin{center}
+    \includegraphics[scale=0.5]{assets/user.png}
+    \caption{带按键反馈的用户程序\label{fig:user}} 
+    \end{center} 
+\end{figure} 
+
+\subsection{特色中断}
+本实现实现了特色中断，可以以3D的形式输出本人的学号。如图\ref{fig:3_D_id}
+所示。
+
+\begin{figure}
+    \begin{center}
+    \includegraphics[scale=0.5]{assets/16337269.png}
+    \caption{caption\label{fig:3_D_id}} 
+    \end{center} 
+\end{figure} 
 
 \section{实验总结}
     \subsection{亮点介绍}
-   
+    \subsubsection{极其详尽的文档和代码开源}
+    本次项目为所有文件添加了足够的注释，并自动生成了说明文档。
+    说明文档可以见网页
+    https://yanb25.github.io/OperatingSystem/files.html。
+    其上极其详细地为几乎所有函数增加说明，列举了函数间的依赖关系以及
+    调用方法等。
+    \subsubsection{ASM拓展语法}
+    本实验在上个实验的基础上，更深入地使用了GCC的ASM语言拓展。为
+    C和汇编的交互带来了更大的便利。见\ref{subsec:asm}节。
+    \subsubsection{格式化ls输出}
+    本实验实现了格式化的ls输出，在输出文件名的同时，格式化地输出
+    文件大小和文件首簇位置。本实验还实现了函数，可以将文件的所有簇
+    按序输出。见图\ref{fig:fs_long_ls.png}和图\ref{fig:terminal}。其他寄存器
+    \subsubsection{光标滚屏自主控制}
+    为了完成终端中闪烁的边框，本项目将IO函数的一个底层中断重写了一遍。并
+    结合了光标控制和自动滚屏。见//TODO:所示。
 
+    \subsection{更新细节}
+    \subsubsection{printf进一步完善}
+    实现了定宽输出的功能。即支持$ printf(\"\%4d\", 1) $功能，
+    在输出的1前输出3个空格。//TODO:
+    \\
+    同时，所有的IO函数重构成返回int16\_t类型，代表他们输出到屏幕的
+    字符数。这为格式化输出提供了巨大的帮助。
+    \subsubsection{目录树结构变更}
+    将C程序库进一步细分，分成了utilities.h, stdio.h, ctype.h, mystring.h 
+    等基本库。utilities.h负责内核所需的最基本的操作，例如扇区读写和
+    光标控制等。其他头文件作用类似与ANSI C的实现。
     \subsection{心得体会}
  
     \subsection{BUG汇总}
