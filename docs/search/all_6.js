@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['false',['false',['../kernel_8c.html#a65e9886d74aaee76545e83dd09011727',1,'kernel.c']]],
+  ['fat_2ec',['FAT.c',['../FAT_8c.html',1,'']]],
+  ['fat_5fdoc',['FAT_doc',['../FATMacro_8h.html#a7ea6857663be542756796a917628c449',1,'FATMacro.h']]],
+  ['fat_5ffldr',['FAT_fldr',['../FATMacro_8h.html#ae7ac72d4bbe5491a7139d707afe625c0',1,'FATMacro.h']]],
+  ['fat_5fhid',['FAT_hid',['../FATMacro_8h.html#a91427f0e346af8cea0a3f47c53bd501e',1,'FATMacro.h']]],
+  ['fat_5fitem',['FAT_ITEM',['../structFAT__ITEM.html',1,'FAT_ITEM'],['../FATMacro_8h.html#a30ca17a2d1e095eca8836b26c7ca0025',1,'FAT_ITEM():&#160;FATMacro.h']]],
+  ['fat_5fitem_5fempty',['FAT_ITEM_EMPTY',['../FATMacro_8h.html#a976a505d8714449b514a7fed04d9e798',1,'FATMacro.h']]],
+  ['fat_5fitem_5fsize',['FAT_ITEM_SIZE',['../FATMacro_8h.html#a5e744eb0741ca83e9ec7e2712198199d',1,'FATMacro.h']]],
+  ['fat_5fitem_5ft',['FAT_ITEM_T',['../FATMacro_8h.html#aabf0f6df73d0a21cea512d484c0d6ae2',1,'FATMacro.h']]],
+  ['fat_5fitems',['fat_items',['../FAT_8c.html#a683230552c587c4ff1de8d0f2034978e',1,'FAT.c']]],
+  ['fat_5fro',['FAT_ro',['../FATMacro_8h.html#ab078b984a53278d3e3d77020d8e61a49',1,'FATMacro.h']]],
+  ['fat_5frw',['FAT_rw',['../FATMacro_8h.html#a6058cd264e03f73a266d16282e29b66c',1,'FATMacro.h']]],
+  ['fat_5fsys',['FAT_sys',['../FATMacro_8h.html#aed99e264a253e2e5782262e596342383',1,'FATMacro.h']]],
+  ['fat_5ftable_5faddress',['FAT_TABLE_ADDRESS',['../filesystem_8h.html#a8968104a702bebb4db8ddda1eb81980a',1,'filesystem.h']]],
+  ['fatmacro_2eh',['FATMacro.h',['../FATMacro_8h.html',1,'']]],
+  ['filename',['filename',['../structFAT__ITEM.html#a536b8676d6d56c9c691fb0f2cfe56a10',1,'FAT_ITEM::filename()'],['../FATMacro_8h.html#a36126364ff9f56a16488e5c2b8d1206e',1,'filename():&#160;FATMacro.h']]],
+  ['filesize',['filesize',['../structFAT__ITEM.html#a134efce543c3dae5e98a7c859fb19b7c',1,'FAT_ITEM::filesize()'],['../FATMacro_8h.html#a0532db3d21cdd9e862560340b97d8e05',1,'filesize():&#160;FATMacro.h']]],
+  ['filesize2sectors',['filesize2sectors',['../fsutilities_8h.html#afada56f7987eca2d244486767e70aaae',1,'fsutilities.h']]],
+  ['filesystem_2eh',['filesystem.h',['../filesystem_8h.html',1,'']]],
+  ['fsapi_2eh',['fsapi.h',['../fsapi_8h.html',1,'']]],
+  ['fserrorcode_2eh',['fsErrorCode.h',['../fsErrorCode_8h.html',1,'']]],
+  ['fsutilities_2eh',['fsutilities.h',['../fsutilities_8h.html',1,'']]]
+];
