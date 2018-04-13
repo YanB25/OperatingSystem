@@ -3,7 +3,8 @@
 /**/*.log
 /**/*.img
 /**/*.com
-
+latex/*
+html/*
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
