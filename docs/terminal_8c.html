@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Project: step_3/user/terminal.c File Reference</title>
+<title>Operating System: step_3/user/terminal.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">My Project
+   <div id="projectname">Operating System
    </div>
   </td>
  </tr>
@@ -87,8 +87,10 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a7247a7911f0b8149deac401b46dac394"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="terminal_8c.html#a7247a7911f0b8149deac401b46dac394">BACK_SPACE</a>&#160;&#160;&#160;8</td></tr>
+<tr class="memdesc:a7247a7911f0b8149deac401b46dac394"><td class="mdescLeft">&#160;</td><td class="mdescRight">'<b></b>' ascii  <a href="#a7247a7911f0b8149deac401b46dac394">More...</a><br /></td></tr>
 <tr class="separator:a7247a7911f0b8149deac401b46dac394"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b20d41d6252e9871430c242cb1a56e7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="terminal_8c.html#a6b20d41d6252e9871430c242cb1a56e7">BUFFER_SIZE</a>&#160;&#160;&#160;64</td></tr>
+<tr class="memdesc:a6b20d41d6252e9871430c242cb1a56e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">buffer size for parcing command  <a href="#a6b20d41d6252e9871430c242cb1a56e7">More...</a><br /></td></tr>
 <tr class="separator:a6b20d41d6252e9871430c242cb1a56e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac1b9baca390a3e52fec87d235941c91"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="terminal_8c.html#aac1b9baca390a3e52fec87d235941c91">PROMT</a>&#160;&#160;&#160;&quot;yb@yb-thinkpad-e450:~$ &quot;</td></tr>
 <tr class="separator:aac1b9baca390a3e52fec87d235941c91"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,6 +123,7 @@ Variables</h2></td></tr>
 <tr class="memitem:adedde379808a21b727c4d25b410680de"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="terminal_8c.html#adedde379808a21b727c4d25b410680de">CMD_BUFFER</a> [<a class="el" href="terminal_8c.html#a6b20d41d6252e9871430c242cb1a56e7">BUFFER_SIZE</a>+10] = {}</td></tr>
 <tr class="separator:adedde379808a21b727c4d25b410680de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0eb453072d746176ccfe15c483db768d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structFAT__ITEM.html">FAT_ITEM</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="terminal_8c.html#a0eb453072d746176ccfe15c483db768d">CUR_DIR</a> = 0</td></tr>
+<tr class="memdesc:a0eb453072d746176ccfe15c483db768d"><td class="mdescLeft">&#160;</td><td class="mdescRight">current directory pointer  <a href="#a0eb453072d746176ccfe15c483db768d">More...</a><br /></td></tr>
 <tr class="separator:a0eb453072d746176ccfe15c483db768d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -141,6 +144,8 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>'<b></b>' ascii </p>
+
 <p class="definition">Definition at line <a class="el" href="terminal_8c_source.html#l00015">15</a> of file <a class="el" href="terminal_8c_source.html">terminal.c</a>.</p>
 
 </div>
@@ -156,6 +161,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>buffer size for parcing command </p>
 
 <p class="definition">Definition at line <a class="el" href="terminal_8c_source.html#l00016">16</a> of file <a class="el" href="terminal_8c_source.html">terminal.c</a>.</p>
 
@@ -394,6 +401,8 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>current directory pointer </p>
 
 <p class="definition">Definition at line <a class="el" href="terminal_8c_source.html#l00033">33</a> of file <a class="el" href="terminal_8c_source.html">terminal.c</a>.</p>
 
