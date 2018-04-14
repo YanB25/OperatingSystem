@@ -450,8 +450,8 @@ timeOut:
     
     custom\_int\_table地址表。功能号ah代表着地址在表中的位置。本项目定义了三个简单的中断程序。第一个叫testcase，它做了
     若干入栈和出栈操作。它用来检测``从中断安装到中断执行''的过程中，栈是否正确地返回了。\_int\_draw\_char是重写的底层输出
-    函数。所有的IO函数几乎都依赖于这一中断调用。见//TODO:\_draw\_char
-    的介绍。
+    函数。所有的IO函数几乎都依赖于这一中断调用。见\ref{sec:low_level}
+    节对输出的工作有其他的介绍。
     \_int\_draw\_my\_info中断会在程序的特定位置显示3-D的学号。视觉效果较好。
     
     \begin{figure}[!h]
@@ -511,32 +511,88 @@ custom_int_table:
     \end{lstlisting}
     \end{itemize}
     \end{figure}
+
+
+    \subsection{自定义的底层输出函数} \label{sec:low_level}
+    为了给屏幕四周的边框预留位置，本实验实现了自定义的底层输出函数，只需要实现该底层输出函数，高层的IO函数可以几乎不经
+    任何修改，就能自动地腾出边框的位置。\\
+    
+    如代码\ref{lst:io}所示，要满足上述要求，首先需要具有手动设置光标的能力。当检测到光标的位置在倒数第二列时（因为要把
+    最后一列空出来给边框），在输出后需要手动设置光标到下一行的第一列。当检测到光标在倒数第二行时，（同理，让出最后一行给边框），
+    需要手动将屏幕向上滚动一行。\\
+    
+    还有一些细节需要考虑，例如输出回车，输出换行，输出退格等的光标操作。若输出回车，则将光标设置到行首，行号不变。
+    如果输出换行，则需要将光标向下移动一行，但光标的列号不变。注意，换行和回车是不一样的。
+    若输出退格，则需要将光标的列号-1.
+    这需要在输出函数中加入若干if语句做手动判断。\\
+    
+    函数中调用的\_draw\_char函数是C函数，它的函数体完全由内嵌汇编组成。该内嵌汇编只做了一件事情，调用中断。该中断
+    真正完成了输出字符到屏幕的操作。\\
+    
+    如何实现滚屏和光标设置不再赘述。可直接阅读源码。在stdio.h和utilities.h，两个文件中。也可在文档网页中
+    搜索函数名看具体实现。
+    \begin{figure}[!h]
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:io, caption=自定义的底层输出函数的实现]
+static inline int16_t putch_style(char ch, uint8_t style) {
+    uint16_t cursor = get_cursor();
+    uint8_t crow = cursor >> 8;
+    uint8_t ccol = cursor & 0b11111111;
+    if (ch == '\r') {
+        set_cursor(crow, 1);
+    } else if (ch == '\n') {
+        if (crow >= 23) {
+            scroll_up_one_line();
+        } else {
+            set_cursor(crow + 1, ccol);
+        }
+    } else if (ch == '\b') {
+        set_cursor(crow, ccol-1);
+    }
+    else if (ch == '\t') {
+        set_cursor(crow, ccol + 4);
+    }
+    else {
+        _draw_char(ch, (crow * 80 + ccol)*2, style);
+        ccol++;
+        if (ccol == 79) {
+            crow++;
+            ccol = 1;
+        }
+        set_cursor(crow, ccol);
+    }
+    return 1;
+}
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
 \section{实验结果}
 \subsection{终端界面}
-图\ref{fig:terminal}展示了终端界面的外观。//TODO:由于四周围的边框
-需要有闪动的字符，所以终端的所有提示信息都应自动地为边框腾出空间。为了完成
+图\ref{fig:terminal}展示了终端界面的外观。由于四周围的边框
+需要有闪动的字符，所以终端的所有提示信息都应自动地为边框腾出空间。\ref{sec:low_level}
+节详细介绍了如何为边框腾出空间。为了完成
 这个效果，本项目结合了滚屏中断和光标设置中断，实现了一个特殊的字符输出中断，
 原本写好的IO程序可以不加修改，只修改他们底层最终依赖的中断，即可自动地为
 边框腾出空间。\\
 
 图\ref{fig:terminal}还同时展示了改进版的ls指令。该指令会用对齐的
 方式输出根目录的所有文件，文件的大小以及文件所在的首扇区。对齐的输出
-使用了新增的printf定宽输出功能。见//TODO:\\
+使用了新增的printf定宽输出功能。它的相关实现可以见文档。\\ 
 
 文件系统其实还实现了输出文件所有簇编号这一功能。只是由于内核程序太大，所
 占的簇数太多，导致输出的画面显得混乱。所以在这个版本中我把这个功能砍掉了。
-但我保留了一张截图，如\ref{fig:fs_long_ls.png}所示。
-\begin{figure}
+但我保留了一张截图，如\ref{fig:ls}所示。
+\begin{figure}[H]
     \begin{center}
     \includegraphics[scale=0.5]{assets/terminal.png}
     \caption{带运动边框的终端界面\label{fig:terminal}} 
     \end{center} 
 \end{figure} 
 
-\begin{figure}
+\begin{figure}[H]
     \begin{center}
     \includegraphics[scale=0.5]{assets/fs_long_ls.png}
-    \caption{带有文件所有扇区列表的ls指令\label{fig:ls}} 
+    \caption{带有文件所有簇号列表的ls指令\label{fig:ls}} 
     \end{center} 
 \end{figure} 
 \subsection{用户程序}
@@ -544,7 +600,7 @@ custom_int_table:
 自定义中断，键盘对每次按下都会输出 ``OUCH!''，而在离开用户程序后，中断
 复原，不再对键盘按下响应``OUCH!''。\\
 
-\begin{figure}
+\begin{figure}[H]
     \begin{center}
     \includegraphics[scale=0.5]{assets/user.png}
     \caption{带按键反馈的用户程序\label{fig:user}} 
@@ -555,7 +611,7 @@ custom_int_table:
 本实现实现了特色中断，可以以3D的形式输出本人的学号。如图\ref{fig:3_D_id}
 所示。
 
-\begin{figure}
+\begin{figure}[H]
     \begin{center}
     \includegraphics[scale=0.5]{assets/16337269.png}
     \caption{特色中断：个人学号的3D显示\label{fig:3_D_id}} 
@@ -575,20 +631,22 @@ custom_int_table:
     
     同时，本项目中附属的项目文档pdf文件也由代码和注释自动生成。
     \subsubsection{ASM拓展语法}
-    本实验在上个实验的基础上，更深入地使用了GCC的ASM语言拓展。为
+    本实验在上个实验的基础上，更深入地使用了GCC的ASM语言拓展。ASM语言拓展分为
+    basic asm 和 extend asm。以往的项目只使用basic asm，从本项目起加入extend asm
+    语法的内容，为
     C和汇编的交互带来了更大的便利。见\ref{subsec:asm}节。
     \subsubsection{格式化ls输出}
     本实验实现了格式化的ls输出，在输出文件名的同时，格式化地输出
     文件大小和文件首簇位置。本实验还实现了函数，可以将文件的所有簇
-    按序输出。见图\ref{fig:fs_long_ls.png}和图\ref{fig:terminal}。其他寄存器
+    按序输出。见图\ref{fig:ls}和图\ref{fig:terminal}。其他寄存器
     \subsubsection{光标滚屏自主控制}
     为了完成终端中闪烁的边框，本项目将IO函数的一个底层中断重写了一遍。并
-    结合了光标控制和自动滚屏。见//TODO:所示。
+    结合了光标控制和自动滚屏。见\ref{sec:low_level}节的具体细节。
 
     \subsection{更新细节}
     \subsubsection{printf进一步完善}
     实现了定宽输出的功能。即支持$ printf("\%4d", 1) $ 功能，
-    在输出的1前输出3个空格。//TODO:
+    在输出的1前输出3个空格。
     \\
     同时，所有的IO函数重构成返回int16\_t类型，代表他们输出到屏幕的
     字符数。这为格式化输出提供了巨大的帮助。
@@ -597,24 +655,85 @@ custom_int_table:
     等基本库。utilities.h负责内核所需的最基本的操作，例如扇区读写和
     光标控制等。其他头文件作用类似与ANSI C的实现。
     \subsection{心得体会}
- 
-    \subsection{BUG汇总}
+    本次实验稍微晚交了一天，因为这次实验中我又再次整理微调了目录树，并给所有的函数增加了详尽的文档。
+    以后的实验中，代码量会逐渐加大，翔实的文档应该能带来很大的帮助（也能给后来的人一些参考）。\\
+    
+    这个实验遇到的BUG比上次文件系统的实验中还多。这主要是因为中断的DEBUG并不好进行。例如，我无法预知
+    下一次时钟中断发生的时间，不能在中断发生前（有预谋地）提前设置断点。两次时钟中断的时间间隔虽短，
+    但中间可能间隔着无数行代码了。这些因素都让我的这次DEBUG感到举步维艰。对BUG的具体讨论见
+    \ref{sec:bug}节。\\
+
+    这次实验的一部分工作量还在于完善底层的函数。例如IO函数和字符串处理函数等。这些改动在本项目
+    中还难以体现（唯一能体现的就是对齐的ls输出了），但在以后的实验中，相信能成为我最重要的工具。
+    
+
+    \subsection{BUG汇总}\label{sec:bug}
     \subsubsection{扇区加载错误}
-    首先是发生了扇区加载不足的状况。操作系统内核共10个展区长度，但在最开始的实现中
-    只//TODO:
+    首先是发生了扇区加载不足的状况。操作系统内核共10个扇区长度，但在最开始的实现中
+    只向内存加载了8个扇区。其实这个BUG并没有带来多大的影响。这可能是因为最后两个扇区
+    中的代码都是些辅助函数，而这些函数恰好没有被调用到。但我依然在发现了这个问题后第一时间把
+    它改了过来。这也是为什么，内核的簇在文件系统中是不连续的：内核的后半部分是我后来才加入文件
+    系统的。图\ref{fig:ls}中也能看出，ls指令正确地显示了内核中每个簇的编号。也能看到
+    他们的确是不连续的。\\
+    
+    第二个问题是磁面号计算错误。我之前错误地将磁面的计算写成了$$logic-sector \div 18$$类似的写法。
+    这个写法对36号前的逻辑扇区换算都是正确的。但是当扇区号高于36时，会算出磁面号为2！这个隐秘的BUG很容易
+    捕捉：当我发现我最后一个用户程序一运行就卡死时，我就很快发现了它根本没有被加载入内存。但是找到我的磁面数
+    计算错误却花了我很多的时间。因为一开始我没有相通，为什么前面的扇区能载入，后面的扇区就无法载入了！
+
+    \subsubsection{时钟中断未正确保存上下文}
+    这个BUG花了我很多的时间，因为当时我几乎是把``程序化简到最简''再运行，程序却始终出错。有时是卡死，有时是
+    程序屏幕变花，有时甚至出现了如图\ref{fig:bug}所示的错误。这个错误极其让我困惑：中断16H越界？我根本
+    没有动过16H啊。我几乎只是把时钟中断安装了，自定义的时钟中断没有做任何事，立即就返回了。\\
+
+    后来我才想到，我在中断中没有把DS设置为CS。我的所有程序暂时还使用平坦内存模型（flatten model），
+    所有段寄存器都设置为0,我以为不可能出现DS被修改的状况。然而因为时钟中断可以发生在程序运行的任何
+    时刻，包括其他中断正在运行时。其他的中断有可能临时地修改了段寄存器，所以当进入时钟中断时，
+    段寄存器的值是错的。\\
+    
+    这个错误很难被找到。我确信我自己写的代码绝对不会修改到段寄存器，所以我潜意识地默认了，段寄存器
+    一定不会被修改，所以我很自然地就没有初始化DS寄存器。为了找到这个BUG，我用bochs跟着程序
+    控制流一路走，走过了6/7层嵌套的函数调用，最终在某刻突然发现段寄存器的值被改变了。最后发现是
+    中断16H在程序中会有修改DS的操作。虽然16H保证在返回前把DS复原，但时钟中断可能在DS复原前发生。\\ 
+
+    DS错误是一个很难捕捉的BUG。它不会让程序立即崩溃。相反，它让程序进入一个错误的状态，它任由
+    错误日积月累，让错误像滚雪球一样地越积越多，直到最后程序崩溃。程序崩溃的位置和错误发生的位置
+    相隔十万八千里了。\\
+    
+    这也让我理解到了软件开发的一些定律，例如：尽力让错误在编译期捕获;当程序无法处理该异常时
+    不要捕获该异常（let it crash 定律）。这些定律的目标都是一致的：让程序尽早地展现出它的
+    错误，而不是把错误隐藏，带着错误的状态继续运行程序。\\
+    
+    我会考虑在下一个版本的实验中增加assert函数。这个函数的参数是一个条件表达式，当表达式运算
+    为False时直接停止程序的继续运行，并报出文件名和行号（如果可以的话）。
+    \subsubsection{双次安装中断的错误}
+    这个错误完全是个人不小心。我在用户程序进入前，把键盘中断安装成自定义中断，但没有在退出时
+    把旧中断复原（我还没有实现复原中断的逻辑，我习惯写完一部分代码就先做测试，测试完了再继续开发）
+    。\\
+    
+    当我两次进入用户程序时，自定义中断就会被安装两次！第一次安装时，旧中断被缓存到old\_int\_address
+    变量中。第二次进入中断时，用户自定义中断就被写入到old\_int\_address中了！旧中断的地址就被
+    用户程序的地址改写了！\\
+    
+    这是个很蠢的BUG，但当时的注意力没有放在这里，一直怀疑自己是其他地方出了错，所以没有即时地
+    找到这个BUG。
+    
+    \begin{figure}[H]
+        \begin{center}
+        \includegraphics[scale=0.3]{assets/bug_full_screen.png}
+        \caption{中断未正确保存上下文时遇到的诡异的BUG\label{fig:bug}} 
+        \end{center} 
+    \end{figure} 
+    
+
+
 \begin{appendices}
 \section{参考文献} \label{sec:reference}
-sasadf
 \begin{enumerate}
     \item https://blog.csdn.net/longintchar/article/details/50602851 \\
     16位和32位汇编指令的不同（尤其是push指令）
     \item https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html\#s1 \\
     GCC 内嵌汇编的书写。
-    \item http://blog.51cto.com/dengqi/1349327
-    FAT32文件系统讲解
-    \item https://blog.csdn.net/yeruby/article/details/41978199
-    FAT16文件系统讲解
   \end{enumerate}
-\section{其他代码} \label{sec:otherCode}
 \end{appendices}
 \end{document}
