@@ -6,6 +6,7 @@
  */
 #include "../include/utilities.h"
 #include "../include/stdio.h"
+#include "PCBManager.h"
 char ch = 'A';
 #define DELAY 2
 int delX[] = {1, 0, -1, 0};
@@ -14,13 +15,14 @@ int direction = 0;
 int x = 0;
 int y = 0;
 uint8_t style = 0;
-void callback();
+void draw_terminal_board();
 char nextAlphabet(char);
 void timeout() {
     // _draw_char(ch++, 0, 0x0F);
-    callback();
+    draw_terminal_board();
+    try_context_switch();
 }
-void callback() {
+void draw_terminal_board() {
     style = (style+1) & 0b00001111;
     ch = nextAlphabet(ch);
     draw_char_style(ch, y, x, style);
