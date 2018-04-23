@@ -27,6 +27,5 @@ void init_PCBManager() {
 }
 void try_context_switch() {
     if (PCB_manager.psize <= 1) return;
-    save_context();
 }
 #endif

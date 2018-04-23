@@ -137,9 +137,10 @@ static inline int16_t __rm_this_file(FAT_ITEM* p) {
  * helper function. no need to directly call it.
  * check whether it is run-able. load EVERY-SECTOR into memory.
  * @return forever return 0 currently.
+ * @param addr addr where to load the program, see @ref __load_program
  * @see fsErrorCode.h
  */
-static inline int16_t __run_this_file(FAT_ITEM* p) {
+static inline int16_t __run_this_file(FAT_ITEM* p, uint32_t addr) {
     uint16_t mod = p->mod;
     if (mod & FAT_sys) {
         return ERR_SYS_PROTC;
@@ -155,7 +156,9 @@ static inline int16_t __run_this_file(FAT_ITEM* p) {
         NUMBER_OF_FAT * SECTOR_PER_FAT + 
         cluster * SECTOR_PER_CLUSTER + 1;
     uint16_t numOfSector = filesize2sectors(p->filesize);
-    loadLogicSector(sectorNth, USER_PROGRAM_ADDRESS, numOfSector);
+    uint16_t cs = addr >> 16;
+    uint16_t offset = addr & 0xffff;
+    loadLogicSector(sectorNth, (cs << 4) + offset, numOfSector);
     return 0;
 
 }
@@ -164,19 +167,22 @@ static inline int16_t __run_this_file(FAT_ITEM* p) {
  * if file is found, try runing it by calling @ref __run_this_file.
  * @param targetFilename the file to load. without '.ext'. no longer
  * than 5 bytes.
+ * @param addr where to load the program into memory, 
+ * the high 16 bits for cs and low 16 bits for offset. physical
+ * address in calculated in (cs * 16 + offset)
  * @return errorcode.
  * @return @ref NO_ERR if no error
  * @see @ref fsErrorCode.h
  */ 
-static inline int16_t __load_program(const char* targetFilename) {
+static inline int16_t __load_program(const char* targetFilename, uint32_t addr) {
     FAT_ITEM* pfat = __get_root_dir();
     if (strcmp(pfat->filename, targetFilename) == 0) {
-        return __run_this_file(pfat);
+        return __run_this_file(pfat, addr);
     }
     while (__has_next_item(pfat)) {
         pfat = __next_item(pfat);
         if (strcmp(pfat->filename, targetFilename) == 0) {
-            return __run_this_file(pfat);
+            return __run_this_file(pfat, addr);
         }
     }
     return ERR_NOT_FOUND;

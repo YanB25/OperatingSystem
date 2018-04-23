@@ -89,7 +89,8 @@ void parseCMD(int CMDindex) {
     if (strstr(CMD_BUFFER, "run") == 0 && strchr(CMD_BUFFER, ' ') == 3) {
         int16_t pos = strchr(CMD_BUFFER, ' ');
         const char* fn = CMD_BUFFER + pos + 1;
-        int16_t code = __load_program(fn);
+        //TODO: need to change here, not to hard code.
+        int16_t code = __load_program(fn, (0x06C0) << 16);
         int (*userProgram)() = (int (*)())(0x6c00);
         switch(code) {
             case ERR_SYS_PROTC:
@@ -106,6 +107,9 @@ void parseCMD(int CMDindex) {
                 break;
             case NO_ERR:
                 kb_interupt_install();
+                // __asm__ volatile (
+                //     "calll $0x06C0, $0"
+                // );
                 userProgram();
                 kb_interupt_uninstall();
                 resetTerminal();
