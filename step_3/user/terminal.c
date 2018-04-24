@@ -89,9 +89,18 @@ void parseCMD(int CMDindex) {
     if (strstr(CMD_BUFFER, "run") == 0 && strchr(CMD_BUFFER, ' ') == 3) {
         int16_t pos = strchr(CMD_BUFFER, ' ');
         const char* fn = CMD_BUFFER + pos + 1;
-        //TODO: need to change here, not to hard code.
-        int16_t code = __load_program(fn, (0x06C0) << 16);
-        int (*userProgram)() = (int (*)())(0x6c00);
+        //TODO: need to be changed here
+        // it is badly designed, file location is determined by filename
+        // after finish auto load and memory allocation
+        // here should change
+        //TODO: remember to change makefile ld accordingly
+        uint32_t addr = 0;
+        if (fn[5] == 'Q') addr = 0x4200;
+        else if (fn[5] == 'W') addr = 0x4A00;
+        else if (fn[5] == 'A') addr = 0x5200;
+        else addr = 0x5A00;
+        int16_t code = __load_program(fn, addr);
+        int (*userProgram)() = (int (*)())(addr);
         switch(code) {
             case ERR_SYS_PROTC:
                 putln("ERROR: system protect file");

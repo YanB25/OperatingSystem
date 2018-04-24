@@ -1,3 +1,12 @@
+__asm__(
+    "movw %cs, %ax\n"
+    "popw %cx\n"
+    "popw %dx\n"
+    "add $0x1024, %ax\n"
+    "movw %ax, %sp\n"
+    "pushw %dx\n"
+    "pushw %cx\n"
+);
 __asm__("jmpl $0, $stone\n");
 
 #include "../../include/utilities.h"

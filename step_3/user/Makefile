@@ -16,24 +16,25 @@ terminal.o: terminal.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
 
 $(STONE)/stoneQ.bin: $(STONE)/stoneQ.o $(UTILITIES)/utilities.o
-	$(LD) $(LDFLAGS) -Ttext 0x6C00 --oformat binary -o $@ $^
+	$(LD) $(LDFLAGS) -Ttext 0x4200 --oformat binary -o $@ $^
 $(STONE)/stoneQ.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $< -D UL -o $@
 
 $(STONE)/stoneW.bin: $(STONE)/stoneW.o $(UTILITIES)/utilities.o
-	$(LD) $(LDFLAGS) -Ttext 0x6C00 --oformat binary -o $@ $^
+	$(LD) $(LDFLAGS) -Ttext 0x4A00 --oformat binary -o $@ $^
 $(STONE)/stoneW.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $< -D UR -o $@
 
+$(STONE)/stoneA.bin: $(STONE)/stoneA.o $(UTILITIES)/utilities.o
+	$(LD) $(LDFLAGS) -Ttext 0x5200 --oformat binary -o $@ $^
+$(STONE)/stoneA.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
+	$(CC) $(CCFLAGS) -c $< -D DL -o $@
+
 $(STONE)/stoneS.bin: $(STONE)/stoneS.o $(UTILITIES)/utilities.o
-	$(LD) $(LDFLAGS) -Ttext 0x6C00 --oformat binary -o $@ $^
+	$(LD) $(LDFLAGS) -Ttext 0x5A00 --oformat binary -o $@ $^
 $(STONE)/stoneS.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $< -D DR -o $@
 
-$(STONE)/stoneA.bin: $(STONE)/stoneA.o $(UTILITIES)/utilities.o
-	$(LD) $(LDFLAGS) -Ttext 0x6C00 --oformat binary -o $@ $^
-$(STONE)/stoneA.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
-	$(CC) $(CCFLAGS) -c $< -D DL -o $@
 
 kb_interupt_installer.o: kb_interupt_installer.asm
 	$(AS) $(ASFLAGS) -f elf32 -o $@ $^

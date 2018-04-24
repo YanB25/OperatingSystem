@@ -25,9 +25,17 @@ msg 25 [3000~3200]
 37~54 0 -1/18-> 2
 55~72 1 -1/18-> 3
 ## 内存结构
+//TODO: WARNING:
+// 用户程序是通过LD硬编码进去的。
+// 在本项目中，还没有内存分配，所以就让四个程序硬编码吧
+// 动态内存分配后记得改过来
 1:0x7C00: MBR(loader)
 2:0x7E00: DBR
 4:0x8200: FAT table
 4:0x8A00: root area
 8:0x9200: data block
-n:0xA200 kernel
+32:0xA200 kernel
+4: 0x4200 user program Q
+4: 0x4A00 user program W
+4: 0x5200 user program A
+4: 0x5A00 user program S
