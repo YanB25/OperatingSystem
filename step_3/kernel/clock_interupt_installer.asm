@@ -5,6 +5,7 @@ extern timeout
 extern kb_custom_interupt
 
 extern get_current_PCB_address
+extern get_next_PCB_address
 %include "../include/bridge.inc"
 clock_install_interupt:
     push es
@@ -34,6 +35,9 @@ clock_install_interupt:
 
 timeOut:
     jmp saveRegisterImage
+.back_1:
+    jmp restoreProcess
+.back_2:
 
     pusha
     push gs
@@ -51,6 +55,7 @@ timeOut:
     pop ds
     pop gs
     popa
+
 
     jmp 0F000H:0fea5H ;TODO: should not hard code
 
@@ -87,8 +92,9 @@ saveRegisterImage:
 
     ; set ds and es to 0
     ; which is the segment for kernel
-    mov ax, 0
+    mov ax, cs
     mov ds, ax
+    mov ax, 0
     mov es, ax
 
     calll get_current_PCB_address
@@ -104,3 +110,24 @@ saveRegisterImage:
     mov cx, 17 * 2
     cld
     rep movsb
+
+    jmp timeOut.back_1
+
+restoreProcess:
+    mov ax, 0
+    mov es, ax
+    mov ds, ax
+
+    calll get_next_PCB_address
+    mov bx, ax
+    mov sp, [bx]
+    pop ss 
+    pop gs
+    pop fs 
+    pop es 
+    pop ds
+
+    popa
+
+    ; iret
+    jmp timeOut.back_2

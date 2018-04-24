@@ -22,6 +22,11 @@ void init();
 int main() {
     init_testcase();
     clock_install_interupt();
+    __asm__ volatile(
+        ".intel_syntax noprefix\n"
+        "int 0x08\n"
+        ".att_syntax\n"
+    );
     init();
     // __screen_scroll(0, (20 << 8) + 20, 5, 0);
     // __asm__ volatile (
