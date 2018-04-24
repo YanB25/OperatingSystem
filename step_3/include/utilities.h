@@ -91,4 +91,14 @@ static inline void __screen_scroll(
 static inline void scroll_up_one_line() {
     __screen_scroll((2 << 8) + 1, (23 << 8) + 78, 1, 0);
 }
+static inline void* memcpy(void* dst, const void* src, int16_t size) {
+    __asm__ volatile(
+        ".intel_syntax noprefix\n"
+        "rep movsb\n"
+        ".att_syntax\n"
+        : /* no output */
+        : "S"(src), "D"(dst), "c"(size)
+        : "memory"
+    );
+}
 #endif
