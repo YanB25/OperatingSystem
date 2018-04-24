@@ -51,13 +51,17 @@ void init_INIT_process() {
     struct RegisterImage* ri = &(PCB_manager.PCBList[PCB_manager.cur_active].register_image);
 
     ri->ss = 0;
-    ri->sp = 0x4000;
+    ri->sp = 0x3200;
     ri->cs = 0;
     ri->ds = 0;
     ri->es = 0;
+    ri->ax = 0x4200;
+    ri->cx = 0x607;
+    ri->bx = 1;
+    ri->dx = 0x201;
 
     ri->bp = ri->sp;
-    ri->ip = 0xA200;
+    ri->ip = 0x4200;
 }
 struct RegisterImage* get_current_PCB_address() {
     int16_t index = PCB_manager.cur_active;

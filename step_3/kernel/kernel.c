@@ -18,29 +18,24 @@ extern void clock_install_interupt(); ///< used to install clock
 extern void global_custom_int_install(); ///< used to install cumstom interupt
 void init_testcase(); ///< TODO:delete me after debug finish
 void init();
+void init_INIT_process();
+void restoreProcess();
 /// kernel entry
 int main() {
-    init_testcase();
+    __load_program("stoneQ", 0x4200);
+    // __load_program("stoneW", 0x4A00);
+    init_INIT_process();
     clock_install_interupt();
-    __asm__ volatile(
-        ".intel_syntax noprefix\n"
-        "int 0x08\n"
-        ".att_syntax\n"
-    );
-    init();
-    // __screen_scroll(0, (20 << 8) + 20, 5, 0);
-    // __asm__ volatile (
-    //     "pushw %ax\n"
-    //     "mov $0, %ax\n"
-    //     "INT $0x2B\n"
-    //     "popw %ax\n"
+    // __asm__ volatile(
+    //     ".intel_syntax noprefix\n"
+    //     "int 0x08\n"
+    //     ".att_syntax\n"
     // );
-    // _draw_char('A', 0, DEFAULT_STYLE);
-    // __asm__("int $0x8\n");
-    // __load_program("stoneS");
-    //draw_char_style('A', 0, 10, G_DEFAULT);
-    // draw_char_style('A', 0, 11, G_DEFAULT_DARK);
-    terminal();
+    init();
+    restoreProcess();
+    // void (*p)() = (void (*)()) (0x4200);
+    // p();
+    //terminal();
     return 0;
 }
 

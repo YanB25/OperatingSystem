@@ -1,6 +1,7 @@
 ;TODO: in this file ,cs must be 0.
 [BITS 16]
 global clock_install_interupt
+global restoreProcess
 extern timeout
 extern kb_custom_interupt
 
@@ -116,14 +117,30 @@ restoreProcess:
     mov ds, ax
 
     calll get_next_PCB_address
+    ; si and di
+    ; move the register image into stack
+    mov si, ax
     mov bx, ax
-    mov sp, [bx]
+    mov cx, [bx]
+    mov di, cx ; sp
+    sub di, 2; important, bug?
+    add bx, 2
+    mov cx, [bx]
+    mov ds, cx ; ss
+    mov cx, 17 * 2
+    cld
+    rep movsb
 
-    sub bx, 2
-    mov ax, [bx]
-    mov ss, ax
+    mov bx, ax
+    mov cx, [bx] ;sp
+    mov sp, cx
 
-    pop ss 
+    add bx, 2
+    mov cx, [bx] ;ss
+    mov ss, cx
+
+    pop ax; pop ignore ss
+
     pop gs
     pop fs 
     pop es 
@@ -132,9 +149,13 @@ restoreProcess:
     popa
 
     push ax 
+    ; hardware port to enable next int
     mov al, 20H
     out 20H, al
     out 0A0H, al 
-    pop ax 
+    pop ax
 
     iret
+
+temp_ss dw 0
+temp_sp dw 0
