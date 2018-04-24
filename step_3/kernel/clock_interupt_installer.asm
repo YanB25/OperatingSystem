@@ -89,13 +89,10 @@ saveRegisterImage:
     push gs ; sp + 2
     push ss ; sp 
     ; 低地址
-
-    ; set ds and es to 0
-    ; which is the segment for kernel
-    mov ax, cs
-    mov ds, ax
-    mov ax, 0
+    
+    mov ax, 0 ; cs is 0
     mov es, ax
+    mov ds, ax
 
     calll get_current_PCB_address
 
@@ -114,13 +111,18 @@ saveRegisterImage:
     jmp timeOut.back_1
 
 restoreProcess:
-    mov ax, 0
+    mov ax, 0 ; cs is 0
     mov es, ax
     mov ds, ax
 
     calll get_next_PCB_address
     mov bx, ax
     mov sp, [bx]
+
+    sub bx, 2
+    mov ax, [bx]
+    mov ss, ax
+
     pop ss 
     pop gs
     pop fs 
@@ -129,5 +131,10 @@ restoreProcess:
 
     popa
 
-    ; iret
-    jmp timeOut.back_2
+    push ax 
+    mov al, 20H
+    out 20H, al
+    out 0A0H, al 
+    pop ax 
+
+    iret

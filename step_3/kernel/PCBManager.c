@@ -45,6 +45,20 @@ void init_testcase() {
     ri->ax = 0x1234;
     ri->flags = 0x5678;
 }
+void init_INIT_process() {
+    PCB_manager.psize = 1;
+    PCB_manager.cur_active = 0;
+    struct RegisterImage* ri = &(PCB_manager.PCBList[PCB_manager.cur_active].register_image);
+
+    ri->ss = 0;
+    ri->sp = 0x4000;
+    ri->cs = 0;
+    ri->ds = 0;
+    ri->es = 0;
+
+    ri->bp = ri->sp;
+    ri->ip = 0xA200;
+}
 struct RegisterImage* get_current_PCB_address() {
     int16_t index = PCB_manager.cur_active;
     int16_t psize = PCB_manager.psize;
