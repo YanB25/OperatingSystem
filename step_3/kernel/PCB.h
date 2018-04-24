@@ -36,7 +36,7 @@ struct RegisterImage {
     uint16_t dx;
     uint16_t cx;
     uint16_t ax;
-    // pushed by int
+    // pushed by interupt
     uint16_t ip;
     uint16_t cs;
     uint16_t flags;

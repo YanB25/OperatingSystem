@@ -20,7 +20,6 @@ char nextAlphabet(char);
 void timeout() {
     // _draw_char(ch++, 0, 0x0F);
     draw_terminal_board();
-    try_context_switch();
 }
 void draw_terminal_board() {
     style = (style+1) & 0b00001111;

@@ -25,7 +25,8 @@ void init_PCBManager() {
     PCB_manager.psize = 0;
     PCB_manager.cur_active = -1;
 }
-void try_context_switch() {
-    if (PCB_manager.psize <= 1) return;
+void* get_current_PCB_address() {
+    int16_t index = PCB_manager.cur_active;
+    return (void*) &(PCB_manager.PCBList[index]);
 }
 #endif

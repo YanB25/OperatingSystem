@@ -2,6 +2,8 @@
 global clock_install_interupt
 extern timeout
 extern kb_custom_interupt
+
+extern get_current_PCB_address
 %include "../include/bridge.inc"
 clock_install_interupt:
     push es
@@ -27,6 +29,7 @@ clock_install_interupt:
     jmp cx
 
 timeOut:
+    ;jmp saveRegisterImage
 
     pusha
     push gs
@@ -49,3 +52,24 @@ timeOut:
 
 data:
     char db 'A'
+
+saveRegisterImage:
+    ;ax
+    ;cx
+    ;dx
+    ;bx
+    ;old_ps
+    ;bp
+    ;si
+    ;di
+    pusha
+
+    push ds
+    push es
+    push fs
+    push gs
+    push ss
+    mov bx, sp ;TODO: maybe bug
+    mov word [bx-2], sp
+
+    calll get_current_PCB_address
