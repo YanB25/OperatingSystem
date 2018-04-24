@@ -1,4 +1,10 @@
-__asm__("jmpl $0, $stone\n");
+__asm__(
+    ".intel_syntax noprefix\n"
+    "movw %ax, %cs\n"
+    "movw %ds, %ax\n"
+    "jmp stone\n"
+    ".att_syntax\n"
+);
 
 #include "../../include/utilities.h"
 #include "stone.h"

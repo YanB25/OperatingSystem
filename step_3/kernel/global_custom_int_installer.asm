@@ -19,9 +19,16 @@ global_custom_int_install:
 custom_int_handler:
     ;TODO:warning, not to use bx, maybe bug
     ; ah=01H: _draw_char
+    push ds
     push bx
     push ax
     push dx 
+
+    ; sync ds, important
+    push ax
+    mov ax, 0
+    mov ds, ax
+    pop ax
 
     mov dl, 4
     mov al, ah
@@ -36,6 +43,7 @@ custom_int_handler:
     call far [bx]
 
     pop bx
+    pop ds
 
     iret
 
