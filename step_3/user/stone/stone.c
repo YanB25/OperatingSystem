@@ -2,6 +2,7 @@ __asm__(
     ".intel_syntax noprefix\n"
     "movw %ax, %cs\n"
     "movw %ds, %ax\n"
+    "movw %es, %ax\n"
     "jmp stone\n"
     ".att_syntax\n"
 );

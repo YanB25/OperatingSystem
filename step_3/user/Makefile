@@ -16,12 +16,12 @@ terminal.o: terminal.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
 
 $(STONE)/stoneQ.bin: $(STONE)/stoneQ.o $(UTILITIES)/utilities.o
-	$(LD) $(LDFLAGS) -Ttext 0x4200 --oformat binary -o $@ $^
+	$(LD) $(LDFLAGS) -Ttext 0x0 --oformat binary -o $@ $^
 $(STONE)/stoneQ.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $< -D UL -o $@
 
 $(STONE)/stoneW.bin: $(STONE)/stoneW.o $(UTILITIES)/utilities.o
-	$(LD) $(LDFLAGS) -Ttext 0x4A00 --oformat binary -o $@ $^
+	$(LD) $(LDFLAGS) -Ttext 0x0 --oformat binary -o $@ $^
 $(STONE)/stoneW.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $< -D UR -o $@
 
