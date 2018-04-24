@@ -94,6 +94,7 @@ static inline void scroll_up_one_line() {
 static inline void* memcpy(void* dst, const void* src, int16_t size) {
     __asm__ volatile(
         ".intel_syntax noprefix\n"
+        "cld\n"
         "rep movsb\n"
         ".att_syntax\n"
         : /* no output */
