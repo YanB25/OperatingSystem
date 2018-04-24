@@ -23,7 +23,7 @@ void restoreProcess();
 /// kernel entry
 int main() {
     __load_program("stoneQ", 0x4200);
-    // __load_program("stoneW", 0x4A00);
+    __load_program("stoneW", 0x4A00);
     init_INIT_process();
     clock_install_interupt();
     // __asm__ volatile(
