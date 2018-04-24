@@ -16,9 +16,12 @@
 #define false 0
 extern void clock_install_interupt(); ///< used to install clock 
 extern void global_custom_int_install(); ///< used to install cumstom interupt
+void init_testcase(); ///< TODO:delete me after debug finish
 void init();
 /// kernel entry
 int main() {
+    init_testcase();
+    clock_install_interupt();
     init();
     // __screen_scroll(0, (20 << 8) + 20, 5, 0);
     // __asm__ volatile (
@@ -38,7 +41,7 @@ int main() {
 
 void init() {
     global_custom_int_install();
-    clock_install_interupt();
+    // clock_install_interupt();
     clear_screen();
     draw_str("enter help to get help", 1, 30);
     newline();
