@@ -40,3 +40,4 @@ msg 25 [3000~3200]
 4:0x8A00: root area
 8:0x9200: data block
 32:0xA200 kernel
+16:0xE200 terminal

@@ -6,14 +6,17 @@ AS=nasm
 ASFLAGS=
 
 UTILITIES=../include
+FS=../filesystem
 STONE=stone
 STONE_BIN = $(STONE)/stoneQ.bin $(STONE)/stoneW.bin $(STONE)/stoneA.bin $(STONE)/stoneS.bin
-all: terminal.o $(STONE_BIN) kb_interupt_installer.o kbhit.o
+all: terminal.bin $(STONE_BIN) kb_interupt_installer.o kbhit.o
 
 user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
 terminal.o: terminal.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
+terminal.bin: terminal.o $(UTILITIES)/utilities.o $(UTILITIES)/mystring.o $(FS)/fsutilities.o
+	$(LD) $(LDFLAGS) -Ttext 0x0 --oformat binary -o $@ $^
 
 $(STONE)/stoneQ.bin: $(STONE)/stoneQ.o $(UTILITIES)/utilities.o
 	$(LD) $(LDFLAGS) -Ttext 0x0 --oformat binary -o $@ $^
@@ -44,6 +47,14 @@ kbhit.o: kbhit.c
 $(UTILITIES)/utilities.o:
 	cd $(UTILITIES)/ && make
 	cd ../user/
+$(UTILITIES)/mystring.o:
+	cd $(UTILITIES)/ && make 
+	cd ../user/
+$(FS)/fsutilities.o:
+	cd $(FS)/ && make 
+	cd ../user/
+
+
 clean:
 	rm *.bin -f 
 	rm *.o -f  

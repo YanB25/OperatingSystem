@@ -26,8 +26,9 @@
 #include "../include/stdio.h"
 #include "../include/graphic.h"
 #define TERMINAL_STYLE (TO_FN(G_PINKISH))
-extern void kb_interupt_install();
-extern void kb_interupt_uninstall();
+//TODO: disable install and uninstall interupt
+// extern void kb_interupt_install();
+// extern void kb_interupt_uninstall();
 char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
 static FAT_ITEM* CUR_DIR = 0; ///< current directory pointer
@@ -115,12 +116,13 @@ void parseCMD(int CMDindex) {
                 putln("ERROR: file not found");
                 break;
             case NO_ERR:
-                kb_interupt_install();
+                //TODO: disable install and uninstall interupt
+                //kb_interupt_install();
                 // __asm__ volatile (
                 //     "calll $0x06C0, $0"
                 // );
                 userProgram();
-                kb_interupt_uninstall();
+                // kb_interupt_uninstall();
                 resetTerminal();
                 break;
         }

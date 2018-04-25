@@ -12,7 +12,7 @@ FILESYSTEM=../filesystem
 STONE=stone
 
 USER_HEADER=$(USER)/terminal.h 
-USER_OBJ=$(USER)/terminal.o $(USER)/kb_interupt_installer.o $(USER)/kbhit.o
+USER_OBJ= $(USER)/kb_interupt_installer.o $(USER)/kbhit.o
 INT_OBJ=clock_interupt_installer.o global_custom_int_installer.o timeout.o custom_interupt.o
 PCB_OBJ=PCBManager.o
 all: kernel.bin

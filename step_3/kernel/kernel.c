@@ -9,7 +9,6 @@
 #include "kernel.h"
 #include "../include/utilities.h"
 #include "../user/user.h"
-#include "../user/terminal.h"
 #include "../include/mystring.h"
 #include "../filesystem/API/fsapi.h"
 #define true 1
