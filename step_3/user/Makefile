@@ -26,12 +26,12 @@ $(STONE)/stoneW.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $< -D UR -o $@
 
 $(STONE)/stoneA.bin: $(STONE)/stoneA.o $(UTILITIES)/utilities.o
-	$(LD) $(LDFLAGS) -Ttext 0x5200 --oformat binary -o $@ $^
+	$(LD) $(LDFLAGS) -Ttext 0x0 --oformat binary -o $@ $^
 $(STONE)/stoneA.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $< -D DL -o $@
 
 $(STONE)/stoneS.bin: $(STONE)/stoneS.o $(UTILITIES)/utilities.o
-	$(LD) $(LDFLAGS) -Ttext 0x5A00 --oformat binary -o $@ $^
+	$(LD) $(LDFLAGS) -Ttext 0x0 --oformat binary -o $@ $^
 $(STONE)/stoneS.o: $(STONE)/stone.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $< -D DR -o $@
 

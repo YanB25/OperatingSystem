@@ -16,15 +16,18 @@
 #define false 0
 extern void clock_install_interupt(); ///< used to install clock 
 extern void global_custom_int_install(); ///< used to install cumstom interupt
-void init_testcase(); ///< TODO:delete me after debug finish
 void init();
 void init_INIT_process();
 void restoreProcess();
+void timeout_init();
 /// kernel entry
 int main() {
     __load_program("stoneQ", 0x4200);
     __load_program("stoneW", 0x4A00);
+    __load_program("stoneA", 0x5200);
+    __load_program("stoneS", 0x5A00);
     init_INIT_process();
+    timeout_init();
     clock_install_interupt();
     // __asm__ volatile(
     //     ".intel_syntax noprefix\n"

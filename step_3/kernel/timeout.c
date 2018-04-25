@@ -16,6 +16,15 @@ int y = 0;
 uint8_t style = 0;
 void draw_terminal_board();
 char nextAlphabet(char);
+void timeout_init() {
+    ch = 'A';
+    x = 0;
+    y = 0;
+    style = 0;
+    direction = 0;
+    delX[0] = 1; delX[1] = 0; delX[2] = -1; delX[3] = 0;
+    delY[0] = 0; delY[1] = 1; delY[2] = 0; delY[3] = -1;
+}
 void timeout() {
     // _draw_char(ch++, 0, 0x0F);
     draw_terminal_board();

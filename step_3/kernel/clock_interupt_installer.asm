@@ -20,9 +20,8 @@ clock_install_interupt:
 
     ; install int 08: clock interupt
     mov word [es: 20H], timeOut
-    mov ax, cs
     ;mov word [es: 22H], ax
-    mov word[es: 22H], 0 ;TODO: maybe bug.
+    mov word[es: 22H], 0 ; notice, here must be ZERO
     ; I changed the code above, to ensure that when comes into interupt
     ; the segment is always 0
 
@@ -45,12 +44,11 @@ timeOut:
     push ds
     push es
 
-    mov ax, cs 
+    mov ax, 0 
     mov ds, ax 
     mov es, ax 
 
-    push cs 
-    call timeout
+    calll timeout
 
     pop es
     pop ds
@@ -58,7 +56,15 @@ timeOut:
     popa
 
 
-    jmp 0F000H:0fea5H ;TODO: should not hard code
+    push ax 
+    ; hardware port to enable next int
+    mov al, 20H
+    out 20H, al
+    out 0A0H, al 
+    pop ax
+
+    iret
+    ; WARNING: will no jmp to origin clock interupt anymore
 
 data:
     char db 'A'
@@ -148,14 +154,15 @@ restoreProcess:
 
     popa
 
-    push ax 
-    ; hardware port to enable next int
-    mov al, 20H
-    out 20H, al
-    out 0A0H, al 
-    pop ax
+    ;   push ax 
+    ;   ; hardware port to enable next int
+    ;   mov al, 20H
+    ;   out 20H, al
+    ;   out 0A0H, al 
+    ;   pop ax
 
-    iret
+    ;   iret
+    jmp timeOut.back_2
 
 temp_ss dw 0
 temp_sp dw 0

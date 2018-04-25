@@ -10,7 +10,7 @@ __asm__(
 #include "../../include/utilities.h"
 #include "stone.h"
 #include "../../include/stdio.h"
-#define DELAY (5 * 1e5)
+#define DELAY (1e5)
 int getKbHit();
 void checkBound();
 

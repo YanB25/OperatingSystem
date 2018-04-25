@@ -127,12 +127,7 @@ void parseCMD(int CMDindex) {
     } else if (strcmp(CMD_BUFFER, "help") == 0) {
         putln(HELP_MSG);
     } else if (strcmp(CMD_BUFFER, "test") == 0) {
-        // TODO: it is only for debug. please delete me when finish.
-        __load_program("stoneQ", 0x4200);
-        __asm__(
-            "calll $0x420, $0\n"
-        );
-
+        putln("empty test script.");
     } else if (strcmp(CMD_BUFFER, "ls") == 0) {
         printf("%10s|%20s|%10s\n", "filename", "filesize(bytes)", "begin cluster");
         FAT_ITEM* pfat = CUR_DIR;
