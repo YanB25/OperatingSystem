@@ -26,6 +26,13 @@ void init_PCBManager() {
     //TODO: important!!!!!!fixme!!!!!
     //FIXME: important!!
 }
+void init_terminal_process() {
+    // PCB_manager.psize++;
+    // int16_t index = PCB_manager.psize-1;
+    // struct RegisterImage* ri = &(PCB_manager.PCBList[index].register_image);
+    // ri->ss = 0;
+    // ri->sp = 
+}
 void init_INIT_process() {
     //TODO: just for test. please change me
     PCB_manager.psize = 4;

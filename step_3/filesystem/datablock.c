@@ -110,3 +110,13 @@ FAT_ITEM user_programS = {
     26,
     512*4 // 4 sectors
 };
+FAT_ITEM terminal = {
+    "termina",
+    "bin",
+    FAT_rw,
+    0, 0, 0, 0, 0, 0,
+    0,
+    0,
+    46,
+    512 * 16
+};

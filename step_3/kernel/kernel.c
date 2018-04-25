@@ -21,6 +21,9 @@ void restoreProcess();
 void timeout_init();
 /// kernel entry
 int main() {
+    // TODO:debug, delete me plz.
+    init();
+
     __load_program("stoneQ", 0x4200);
     __load_program("stoneW", 0x4A00);
     __load_program("stoneA", 0x5200);
@@ -33,7 +36,6 @@ int main() {
     //     "int 0x08\n"
     //     ".att_syntax\n"
     // );
-    init();
     restoreProcess();
     // void (*p)() = (void (*)()) (0x4200);
     // p();

@@ -18,22 +18,22 @@ FAT_ITEM_T fat_items[] = {
     0x001E, // 11 //TODO: kernel jmp to 1E
     0xFFFF, // 12
     0xFFFF, // 13
-    0x000F, // 14
-    0x0010, // 15
+    0x000F, // 14 // program Q start
+    0x0010, // 15 
     0x0011, // 16
-    0xFFFF, // 17
-    0x0013, // 18
+    0xFFFF, // 17 // program Q end
+    0x0013, // 18 // program W start
     0x0014, // 19
     0x0015, // 20
-    0xFFFF, // 21
-    0x0017, // 22
+    0xFFFF, // 21 // program W end
+    0x0017, // 22 // program A start
     0x0018, // 23
     0x0019, // 24
-    0xFFFF, // 25
-    0x001B, // 26
+    0xFFFF, // 25 // program A end
+    0x001B, // 26 // program S start
     0x001C, // 27
     0x001D, // 28
-    0xFFFF, // 29
+    0xFFFF, // 29 // program S end
     0x001F, // 30 //TODO: kernel part 2
     0x0020, // 31
     0x0021, // 32
@@ -50,22 +50,22 @@ FAT_ITEM_T fat_items[] = {
     0x002C, // 43
     0x002D, // 44
     0xFFFF, // 45 // kernel end
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
-    0xFFFF, // 41
+    0x002F, // 46 // terminal start
+    0x0030, // 47
+    0x0031, // 48
+    0x0032, // 49
+    0x0033, // 50
+    0x0034, // 51
+    0x0035, // 52
+    0x0036, // 53
+    0x0037, // 54
+    0x0038, // 55
+    0x0039, // 56
+    0x003A, // 57
+    0x003B, // 58
+    0x003C, // 59
+    0x003D, // 60
+    0xFFFF, // 61 //terminal end
     0xFFFF, // 41
     0xFFFF, // 41
 };

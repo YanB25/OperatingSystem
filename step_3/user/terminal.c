@@ -8,6 +8,14 @@
  * run files.
  * do whatever and never really returned
  */
+__asm__(
+    ".intel_syntax noprefix\n"
+    "mov ax, cs\n"
+    "mov ds, ax\n"
+    "mov es, ax\n"
+    "jmp terminal\n"
+    ".att_syntax\n"
+);
 #include "../include/utilities.h"
 #include "../include/mystring.h"
 #include "../filesystem/API/fsapi.h"
@@ -34,9 +42,8 @@ void parseCMD(int );
 static FAT_ITEM* CUR_DIR = 0; ///< current directory pointer
 void resetTerminal(); 
 int terminal() {
-    if (CUR_DIR == 0) {
-        CUR_DIR = __get_root_dir();
-    }
+    CUR_DIR = __get_root_dir();
+
     puts_style(PROMT, TERMINAL_STYLE);
     int offsetx = 0;
     int offsety = 0;
