@@ -35,11 +35,11 @@ int main() {
     );
     init();
     //__load_program("termina", 0x4200);
-    __load_program("stoneQ", 0x1000 << 16);
+    //__load_program("stoneQ", 0x1000 << 16);
     init_PCBManager();
     //init_INIT_process();
     //init_terminal_process();
-    add_new_process(0x10000);
+    //add_new_process(0x10000);
     timeout_init();
     clock_install_interupt();
 
@@ -57,7 +57,7 @@ int main() {
     //restoreProcess();
     terminal();
     while(1) {/* never pass me */}
-    
+
     return 0;
 }
 
