@@ -2,11 +2,13 @@
 #define __PCB_H_
 
 #include <stdint.h>
+#include "../include/utilities.h"
 #define P_RUNNING (0)
 #define P_SLEEPING (1)
 #define P_DEAD (2)
 
 #define PCB_MANAGER_PROCESS_SIZE 20
+#define PCB_COMMENT_LENGTH 30
 /**
  * @brief a copy of registers for PCB
  * 
@@ -58,6 +60,7 @@ struct PCB {
     int16_t pid;
     pPCB* pFatherPCB;
     uint8_t state;
+    // char comment[PCB_COMMENT_LENGTH];
 }__attribute__((packed));
 typedef struct PCB PCB;
 struct PCBManager {
@@ -101,6 +104,7 @@ static inline int32_t add_new_process(uint32_t segment) {
     int32_t pid = PCB_manager.init_id++;
     PCB_manager.PCBList[index].pid = pid;
     PCB_manager.PCBList[index].state = P_RUNNING;
+    //strcpy(PCB_manager.PCBList[index].comment, "None"); //TODO: should be altered
     return pid;
 }
 static inline int32_t kill_process(uint32_t pid) {
@@ -116,4 +120,12 @@ void init_INIT_process();
 struct RegisterImage* get_current_PCB_address();
 struct RegisterImage* get_next_PCB_address();
 int32_t get_process_num();
+static inline void __print_process_info() {
+    printf("%10s %3s\n", "comment", "pid");
+    for (int32_t i = 0; i < PCB_manager.psize; ++i) {
+        if (PCB_manager.PCBList[i].state != P_DEAD) {
+            printf("%10s %3d \n", "none", PCB_manager.PCBList[i].pid);
+        }
+    }
+}
 #endif

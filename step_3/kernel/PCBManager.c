@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stddef.h>
+#include "../include/stdio.h"
 #include "PCB.h"
 /**
  * @brief global infomation and high lever manager

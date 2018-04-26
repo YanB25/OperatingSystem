@@ -156,6 +156,7 @@ void parseCMD(int CMDindex) {
         printf("new process created. pid is %d\n", pid);
     } else if (strcmp(CMD_BUFFER, "pc") == 0) {
         printf("there are currently %d process running\n", get_process_num());
+        __print_process_info();
     } else if (strcmp(CMD_BUFFER, "ls") == 0) {
         printf("%10s|%20s|%10s\n", "filename", "filesize(bytes)", "begin cluster");
         FAT_ITEM* pfat = CUR_DIR;
