@@ -20,26 +20,22 @@ void init_INIT_process();
 void restoreProcess();
 void timeout_init();
 /// kernel entry
+void init_terminal_process();
 int main() {
     // TODO:debug, delete me plz.
     init();
 
-    __load_program("stoneQ", 0x4200);
-    __load_program("stoneW", 0x4A00);
-    __load_program("stoneA", 0x5200);
-    __load_program("stoneS", 0x5A00);
+    __load_program("stoneQ", 0x1000 << 16);
+    __load_program("stoneW", 0x1100<<16);
+    __load_program("stoneA", 0x1200<<16);
+    __load_program("stoneS", 0x1300<<16);
+    //__load_program("termina", 0x4200);
+    
     init_INIT_process();
+    //init_terminal_process();
     timeout_init();
     clock_install_interupt();
-    // __asm__ volatile(
-    //     ".intel_syntax noprefix\n"
-    //     "int 0x08\n"
-    //     ".att_syntax\n"
-    // );
     restoreProcess();
-    // void (*p)() = (void (*)()) (0x4200);
-    // p();
-    //terminal();
     return 0;
 }
 

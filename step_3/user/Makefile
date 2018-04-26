@@ -7,6 +7,7 @@ ASFLAGS=
 
 UTILITIES=../include
 FS=../filesystem
+KERNEL=../kernel
 STONE=stone
 STONE_BIN = $(STONE)/stoneQ.bin $(STONE)/stoneW.bin $(STONE)/stoneA.bin $(STONE)/stoneS.bin
 all: terminal.bin $(STONE_BIN) kb_interupt_installer.o kbhit.o
@@ -15,7 +16,7 @@ user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
 terminal.o: terminal.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
-terminal.bin: terminal.o $(UTILITIES)/utilities.o $(UTILITIES)/mystring.o $(FS)/fsutilities.o
+terminal.bin: terminal.o $(UTILITIES)/utilities.o $(UTILITIES)/mystring.o $(FS)/fsutilities.o $(KERNEL)/PCBManager.o
 	$(LD) $(LDFLAGS) -Ttext 0x0 --oformat binary -o $@ $^
 
 $(STONE)/stoneQ.bin: $(STONE)/stoneQ.o $(UTILITIES)/utilities.o
@@ -43,7 +44,6 @@ kb_interupt_installer.o: kb_interupt_installer.asm
 	$(AS) $(ASFLAGS) -f elf32 -o $@ $^
 kbhit.o: kbhit.c 
 	$(CC) $(CCFLAGS) -c $^
-
 $(UTILITIES)/utilities.o:
 	cd $(UTILITIES)/ && make
 	cd ../user/
@@ -53,7 +53,9 @@ $(UTILITIES)/mystring.o:
 $(FS)/fsutilities.o:
 	cd $(FS)/ && make 
 	cd ../user/
-
+$(KERNEL)/PCBManager.o:
+	cd ../kernel && make PCBManager.o
+	cd ../user/
 
 clean:
 	rm *.bin -f 
