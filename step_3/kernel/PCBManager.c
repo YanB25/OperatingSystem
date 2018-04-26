@@ -17,7 +17,8 @@ void init_terminal_process();
 void init_PCBManager() {
     PCB_manager.psize = 1;
     PCB_manager.cur_active = 0; //TODO: this asume at least one p is exist
-    PCB_manager.init_id = 0;
+    PCB_manager.init_id = 1;
+    PCB_manager.PCBList[0].pid = 0;
 }
 
 // void add_new_process(uint32_t segment) {

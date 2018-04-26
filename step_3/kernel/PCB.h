@@ -70,14 +70,14 @@ struct PCBManager {
 }__attribute__((packed));
 extern struct PCBManager PCB_manager;
 void init_PCBManager();
-static inline void add_new_process(uint32_t segment) {
+static inline int32_t add_new_process(uint32_t segment) {
     segment /= 16;
     PCB_manager.psize++;
     if (PCB_manager.cur_active == -1) PCB_manager.cur_active = PCB_manager.psize-1;
     int16_t index = PCB_manager.psize - 1;
     struct RegisterImage* ri = &(PCB_manager.PCBList[index].register_image);
     ri->ss = 0;
-    ri->sp = 16*segment + 2048;
+    ri->sp = 16*segment + 2048; //TODO: think twice: how sp should be
     ri->cs = segment;
     ri->ds = segment;
     ri->es = segment;
@@ -86,7 +86,9 @@ static inline void add_new_process(uint32_t segment) {
     ri->ip = 0;
 
 
-    PCB_manager.PCBList[index].pid = PCB_manager.init_id++;
+    int32_t pid = PCB_manager.init_id++;
+    PCB_manager.PCBList[index].pid = pid;
+    return pid;
 }
 void init_INIT_process();
 struct RegisterImage* get_current_PCB_address();

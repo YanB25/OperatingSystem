@@ -100,18 +100,18 @@ void parseCMD(int CMDindex) {
     if (strstr(CMD_BUFFER, "run") == 0 && strchr(CMD_BUFFER, ' ') == 3) {
         int16_t pos = strchr(CMD_BUFFER, ' ');
         const char* fn = CMD_BUFFER + pos + 1;
+        int32_t pid = -1;
         //TODO: need to be changed here
         // it is badly designed, file location is determined by filename
         // after finish auto load and memory allocation
         // here should change
         //TODO: remember to change makefile ld accordingly
-        uint32_t addr = 0;
-        if (fn[5] == 'Q') addr = 0x4200;
-        else if (fn[5] == 'W') addr = 0x4A00;
-        else if (fn[5] == 'A') addr = 0x5200;
-        else addr = 0x5A00;
-        int16_t code = __load_program(fn, addr);
-        int (*userProgram)() = (int (*)())(addr);
+        uint32_t segment = 0;
+        if (fn[5] == 'Q') segment = 0x1000 ;
+        else if (fn[5] == 'W') segment = 0x1100;
+        else if (fn[5] == 'A') segment = 0x1200;
+        else segment = 0x1300;
+        int16_t code = __load_program(fn, segment << 16);
         switch(code) {
             case ERR_SYS_PROTC:
                 putln("ERROR: system protect file");
@@ -131,9 +131,12 @@ void parseCMD(int CMDindex) {
                 // __asm__ volatile (
                 //     "calll $0x06C0, $0"
                 // );
-                userProgram();
+                //    userProgram();
                 // kb_interupt_uninstall();
-                resetTerminal();
+                //    resetTerminal();
+
+                pid = add_new_process(segment << 4);
+                printf("new process created. pid is %d\n", pid);
                 break;
         }
     } else if (strcmp(CMD_BUFFER, "help") == 0) {
@@ -141,9 +144,10 @@ void parseCMD(int CMDindex) {
     } else if (strcmp(CMD_BUFFER, "test") == 0) {
         putln("test command catch");
         __load_program("stoneQ", 0x1000 << 16);
-        add_new_process(0x10000);
+        int32_t pid = add_new_process(0x10000);
+        printf("new process created. pid is %d\n", pid);
     } else if (strcmp(CMD_BUFFER, "pc") == 0) {
-        putiln(get_process_num());
+        printf("there are currently %d process running\n", get_process_num());
     } else if (strcmp(CMD_BUFFER, "ls") == 0) {
         printf("%10s|%20s|%10s\n", "filename", "filesize(bytes)", "begin cluster");
         FAT_ITEM* pfat = CUR_DIR;
