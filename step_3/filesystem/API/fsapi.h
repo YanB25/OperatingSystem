@@ -156,9 +156,9 @@ static inline int16_t __run_this_file(FAT_ITEM* p, uint32_t addr) {
         NUMBER_OF_FAT * SECTOR_PER_FAT + 
         cluster * SECTOR_PER_CLUSTER + 1;
     uint16_t numOfSector = filesize2sectors(p->filesize);
-    uint16_t cs = addr >> 16;
-    uint16_t offset = addr & 0xffff;
-    loadLogicSector(sectorNth, (cs << 4) + offset, numOfSector);
+    // uint16_t cs = addr >> 16;
+    // uint16_t offset = addr & 0xffff;
+    loadLogicSector(sectorNth, addr, numOfSector);
     return 0;
 
 }

@@ -9,6 +9,7 @@ loadSector:
     ; num bp + 22
     enter 0, 0
     push bx
+    push es
 
     ; sector number in low 6 bits in CL
     mov ax, [bp + 14]
@@ -31,6 +32,11 @@ loadSector:
     mov es, ax
 
     mov bx, [bp + 18]
+    ; address ad es:bx, so read argument to es
+    mov ax, [bp + 20]
+    mov es, ax
+    xor ax, ax ; clear ax
+
     ; number of sectors to load
     mov al, [bp + 22]
 
@@ -40,6 +46,7 @@ loadSector:
     xor ah, ah 
     and al, 0FH ; 00001111
 
+    pop es
     pop bx
     leave
 
