@@ -19,6 +19,11 @@ global_custom_int_install:
 custom_int_handler:
     ;TODO:warning, not to use bx, maybe bug
     ; ah=01H: _draw_char
+
+    ;TODO: delete me
+    context_switch_save
+    ;TODO: end
+
     push ds
     push bx
     push ax
@@ -44,6 +49,11 @@ custom_int_handler:
 
     pop bx
     pop ds
+
+    ;TODO: deletee me
+    context_switch_restore
+    ;TODO: end me
+
 
     iret
 

@@ -28,13 +28,16 @@ int main() {
     // TODO:debug, delete me plz.
     init();
     __load_program("termina", 0x4200);
+    __load_program("stoneQ", 0x1000 << 16);
     
     init_PCBManager();
     init_INIT_process();
     //init_terminal_process();
+    //add_new_process(0x10000);
     timeout_init();
     clock_install_interupt();
     restoreProcess();
+    while(1){};
     return 0;
 }
 

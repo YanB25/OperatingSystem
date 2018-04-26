@@ -42,12 +42,8 @@ char CMD_BUFFER[BUFFER_SIZE + 10] = {};
 void parseCMD(int );
 static FAT_ITEM* CUR_DIR = 0; ///< current directory pointer
 void resetTerminal(); 
-void add_new_process(uint32_t segment);
 int terminal() {
     //TODO: delete me
-    //int16_t code = __load_program("stoneQ", 0x5200);
-    //putiln(code);
-    //add_new_process(0x6200);
 
     CUR_DIR = __get_root_dir();
 
@@ -143,6 +139,10 @@ void parseCMD(int CMDindex) {
     } else if (strcmp(CMD_BUFFER, "help") == 0) {
         putln(HELP_MSG);
     } else if (strcmp(CMD_BUFFER, "test") == 0) {
+        putln("test command catch");
+        //__load_program("stoneQ", 0x1000 << 16);
+        //add_new_process(0x10000);
+
     } else if (strcmp(CMD_BUFFER, "ls") == 0) {
         printf("%10s|%20s|%10s\n", "filename", "filesize(bytes)", "begin cluster");
         FAT_ITEM* pfat = CUR_DIR;

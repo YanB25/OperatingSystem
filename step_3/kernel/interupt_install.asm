@@ -1,4 +1,5 @@
 [BITS 16]
+%include "context_switch"
 global install_interupt
 extern timeout
 install_interupt:

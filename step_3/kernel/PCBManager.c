@@ -44,7 +44,16 @@ void add_new_process(uint32_t segment) {
     PCB_manager.PCBList[index].pid = PCB_manager.init_id++;
 }
 void init_INIT_process() {
-    add_new_process(0x4200); ///< for terminal
+    PCB_manager.psize = 1;
+    PCB_manager.cur_active = 0;
+    struct RegisterImage* ri = &(PCB_manager.PCBList[0].register_image);
+    ri->ip = 0x4200;
+    ri->ss = 0;
+    ri->sp = 3000;
+    ri->cs = 0;
+    ri->es = 0;
+    ri->es = 0;
+    //add_new_process(0x10000); ///< for stoneQ
     //TODO: just for test. please change me
 
     //    PCB_manager.psize = 4;
@@ -105,4 +114,8 @@ struct RegisterImage* get_next_PCB_address() {
     } while (PCB_manager.PCBList[index].state == P_DEAD);
     PCB_manager.cur_active = index;
     return &(PCB_manager.PCBList[index].register_image);
+}
+
+int32_t get_process_num() {
+    return PCB_manager.psize;
 }

@@ -16,8 +16,8 @@ user.o: user.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
 terminal.o: terminal.c $(UTILITIES)/utilities.h
 	$(CC) $(CCFLAGS) -c $^
-terminal.bin: terminal.o $(UTILITIES)/utilities.o $(UTILITIES)/mystring.o $(FS)/fsutilities.o $(KERNEL)/PCBManager.o
-	$(LD) $(LDFLAGS) -Ttext 0x0 --oformat binary -o $@ $^
+terminal.bin: terminal.o $(UTILITIES)/utilities.o $(UTILITIES)/mystring.o $(FS)/fsutilities.o
+	$(LD) $(LDFLAGS) -Ttext 0x4200 --oformat binary -o $@ $^
 
 $(STONE)/stoneQ.bin: $(STONE)/stoneQ.o $(UTILITIES)/utilities.o
 	$(LD) $(LDFLAGS) -Ttext 0x0 --oformat binary -o $@ $^

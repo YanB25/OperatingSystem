@@ -60,4 +60,11 @@ struct PCB {
 }__attribute__((packed));
 
 typedef struct PCB PCB;
+
+void init_PCBManager();
+void add_new_process(uint32_t segment);
+void init_INIT_process();
+struct RegisterImage* get_current_PCB_address();
+struct RegisterImage* get_next_PCB_address();
+int32_t get_process_num();
 #endif
