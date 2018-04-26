@@ -74,28 +74,6 @@ static inline int16_t padding(int16_t num) {
     }
     return num;
 }
-
-/**
- * no need to used this.
- * inner function that used to parce int from string
- */
-static inline int16_t __uts_read_int(const char* s, int16_t* readNum) {
-    int16_t fac = 1;
-    int16_t cnt = 0;
-    if (*s == '-') {
-        fac = -1;
-        s++;
-        cnt++;
-    }
-    int16_t ret = 0;
-    while (*s && *s >= '0' && *s <= '9') {
-        ret = ret * 10 + (*s - '0');
-        s++;
-        cnt++;
-    }
-    *readNum = ret;
-    return cnt;
-}
 /**
  * @param str string to output
  * @param row the starting row in terminal (0 based, count from left)
@@ -152,6 +130,29 @@ static inline int16_t putln(char const* str) {
     cnt += puts("\n\r");
     return cnt;
 }
+
+/**
+ * no need to used this.
+ * inner function that used to parce int from string
+ */
+static inline int16_t __uts_read_int(const char* s, int32_t* readNum) {
+    int16_t fac = 1;
+    int16_t cnt = 0;
+    if (*s == '-') {
+        fac = -1;
+        s++;
+        cnt++;
+    }
+    int32_t ret = 0;
+    while (*s && *s >= '0' && *s <= '9') {
+        ret = ret * 10 + (*s - '0');
+        s++;
+        cnt++;
+    }
+    *readNum = (int32_t)ret * fac;
+    return cnt;
+}
+
 /**
  * put integer.
  * @param num the int to be print
@@ -201,7 +202,7 @@ static inline int printf(const char* format, ...) {
 
     index = 0;
     while (format[index]) {
-        int16_t putSize = 0;
+        int32_t putSize = 0;
         int16_t delta = 0;
         int16_t digitLength = 0;
         if (format[index] == '%') {
@@ -250,5 +251,74 @@ static inline int16_t putn(const char* s, uint16_t size) {
         putch(s[i]);
     }
     return size;
+}
+static inline int32_t sscanf(const char* s, const char* format, ...) {
+    //FIXME: there's something wrong.
+    //  when %d is interpreted as int32_t, it is wrong when pass in int16_t type and parce a negative number
+    // when is interpreted as int16_t, it is wrong .. 32 bits.
+    va_list valist;
+    int16_t pcnt = 0;
+    int16_t index = 0;
+    int16_t nargs = 0;
+    while (format[index]) {
+        if (format[index] == '%') nargs++;
+        index++;
+    }
+
+    va_start(valist, nargs);
+
+    index = 0;
+    int16_t s_index = 0;
+    int16_t s_offset;
+    while (format[index]) {
+        if (format[index] == '%') {
+            if (format[index + 1] == 'c') {
+                char* pc = va_arg(valist, char*);
+                *pc = s[s_index];
+                s_offset = 1;
+            }
+            else if (format[index+1] == 'd') {
+                if (!isdigit(s[s_index]) && s[s_index] != '-') {
+                    // printf("not digit, get %c\n", s[s_index]);
+                    return pcnt;
+                }
+                int32_t* pd = va_arg(valist, int32_t*);
+                s_offset = __uts_read_int(s+s_index, pd);
+                printf("inner %d\n", *pd);
+            }
+            else if (format[index+1] == 's') {
+                char* pstr = va_arg(valist, char*);
+                while (s[s_index] && !isblank(s[s_index])) {
+                    *pstr = s[s_index];
+                    pstr++;
+                    s_index++;
+                }
+                s_offset = 0;
+                *pstr = '\0';
+            }
+            index += 2;
+            s_index += s_offset;
+            pcnt++;
+        } 
+        else {
+            // below is normal match
+            if (format[index] == ' ') {
+                while (isblank(s[s_index])) {
+                    s_index++;
+                }
+                index++;
+            }
+            else if (format[index] == s[s_index]) {
+                index++;
+                s_index++;
+            } else {
+                // printf("not same, %c and %c\n", format[index], s[s_index]);
+                return pcnt;
+            }
+        }
+    }
+
+    va_end(valist);
+    return pcnt;
 }
 #endif

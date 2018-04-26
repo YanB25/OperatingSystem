@@ -14,4 +14,10 @@ static inline uint8_t isalpha(char ch) {
 static inline uint8_t isalnum(char ch) {
     return isdigit(ch) || isalpha(ch);
 }
+static inline uint8_t isblank(char ch) {
+    return ch == ' ' ||
+        ch == '\n' ||
+        ch == '\r' ||
+        ch == '\t';
+}
 #endif

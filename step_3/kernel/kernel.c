@@ -34,12 +34,7 @@ int main() {
         ".att_syntax\n"
     );
     init();
-    //__load_program("termina", 0x4200);
-    //__load_program("stoneQ", 0x1000 << 16);
     init_PCBManager();
-    //init_INIT_process();
-    //init_terminal_process();
-    //add_new_process(0x10000);
     timeout_init();
     clock_install_interupt();
 
@@ -48,13 +43,6 @@ int main() {
         "sti\n"
         ".att_syntax\n"
     );
-
-    // __asm__ volatile(
-    //     ".intel_syntax noprefix\n"
-    //     "int 0x08\n"
-    //     ".att_syntax\n"
-    // );
-    //restoreProcess();
     terminal();
     while(1) {/* never pass me */}
 

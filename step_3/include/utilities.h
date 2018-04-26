@@ -102,4 +102,12 @@ static inline void* memcpy(void* dst, const void* src, int16_t size) {
         : "memory"
     );
 }
+static char* strcpy(char* dst, const char* src) {
+    int16_t index = 0;
+    while (src[index]) {
+        dst[index] = src[index];
+        index++;
+    }
+    return dst;
+}
 #endif
