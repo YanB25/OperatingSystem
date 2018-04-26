@@ -97,7 +97,9 @@ int terminal() {
 
 void parseCMD(int CMDindex) {
     if (CMDindex == 0) return;
-    if (strstr(CMD_BUFFER, "run") == 0 && strchr(CMD_BUFFER, ' ') == 3) {
+    char fn[10];
+    int32_t kpid;
+    if (sscanf(CMD_BUFFER, "run %s", fn) == 1) {
         int16_t pos = strchr(CMD_BUFFER, ' ');
         const char* fn = CMD_BUFFER + pos + 1;
         int32_t pid = -1;
@@ -141,6 +143,10 @@ void parseCMD(int CMDindex) {
         }
     } else if (strcmp(CMD_BUFFER, "help") == 0) {
         putln(HELP_MSG);
+    } 
+    else if (sscanf(CMD_BUFFER, "kill %d", &kpid) == 1) {
+        printf("kill pid %d (not imple)\n");
+
     } else if (strcmp(CMD_BUFFER, "test") == 0) {
         putln("test command catch");
         __load_program("stoneQ", 0x1000 << 16);

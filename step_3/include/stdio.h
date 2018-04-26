@@ -284,7 +284,7 @@ static inline int32_t sscanf(const char* s, const char* format, ...) {
                 }
                 int32_t* pd = va_arg(valist, int32_t*);
                 s_offset = __uts_read_int(s+s_index, pd);
-                printf("inner %d\n", *pd);
+                //printf("inner %d\n", *pd);
             }
             else if (format[index+1] == 's') {
                 char* pstr = va_arg(valist, char*);
