@@ -19,6 +19,7 @@ int y;
 int deltax;
 int deltay;
 int stone() {
+    putln("hello world");
     // return 0;
     x = _X;
     y = _Y;

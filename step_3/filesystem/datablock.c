@@ -111,7 +111,7 @@ FAT_ITEM user_programS = {
     512*4 // 4 sectors
 };
 FAT_ITEM terminal = {
-    "termina",
+    "\xE5termina",
     "bin",
     FAT_rw,
     0, 0, 0, 0, 0, 0,

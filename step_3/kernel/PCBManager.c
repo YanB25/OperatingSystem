@@ -23,9 +23,23 @@ void init_terminal_process();
  *     PCBList not initialized
  */
 void init_PCBManager() {
-    PCB_manager.psize = 0;
-    PCB_manager.cur_active = -1; //TODO: this asume at least one p is exist
+    PCB_manager.psize = 1;
+    PCB_manager.cur_active = 0; //TODO: this asume at least one p is exist
     PCB_manager.init_id = 0;
+}
+void add_new_process_ip(uint32_t ip) {
+    PCB_manager.psize++;
+    if (PCB_manager.cur_active == -1) PCB_manager.cur_active = PCB_manager.psize-1;
+    int16_t index = PCB_manager.psize - 1;
+    struct RegisterImage* ri = &(PCB_manager.PCBList[index].register_image);
+    ri->ss = 0;
+    ri->sp = 0x4100;
+    ri->cs = 0;
+    ri->ds = 0;
+    ri->es = 0;
+    ri->gs = 0;
+    ri->fs = 0;
+    ri->ip = ip;
 }
 void add_new_process(uint32_t segment) {
     segment /= 16;
@@ -34,25 +48,28 @@ void add_new_process(uint32_t segment) {
     int16_t index = PCB_manager.psize - 1;
     struct RegisterImage* ri = &(PCB_manager.PCBList[index].register_image);
     ri->ss = 0;
-    ri->sp = 16*segment - 512;
+    ri->sp = 16*segment + 2048;
     ri->cs = segment;
     ri->ds = segment;
     ri->es = segment;
+    ri->gs = segment;
+    ri->fs = segment;
     ri->ip = 0;
 
 
     PCB_manager.PCBList[index].pid = PCB_manager.init_id++;
 }
 void init_INIT_process() {
-    PCB_manager.psize = 1;
-    PCB_manager.cur_active = 0;
-    struct RegisterImage* ri = &(PCB_manager.PCBList[0].register_image);
-    ri->ip = 0x4200;
-    ri->ss = 0;
-    ri->sp = 3000;
-    ri->cs = 0;
-    ri->es = 0;
-    ri->es = 0;
+    //PCB_manager.psize = 1;
+    //PCB_manager.cur_active = 0;
+    //struct RegisterImage* ri = &(PCB_manager.PCBList[0].register_image);
+    //ri->ip = 0x4200;
+    //ri->ss = 0;
+    //ri->sp = 3000;
+    //ri->cs = 0;
+    //ri->es = 0;
+    //ri->es = 0;
+
     //add_new_process(0x10000); ///< for stoneQ
     //TODO: just for test. please change me
 

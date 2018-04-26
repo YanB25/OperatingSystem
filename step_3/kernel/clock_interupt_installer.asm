@@ -36,8 +36,6 @@ clock_install_interupt:
 timeOut:
     jmp saveRegisterImage
 .back_1:
-    jmp restoreProcess
-.back_2:
 
     pusha
     push gs
@@ -56,12 +54,16 @@ timeOut:
     popa
 
 
+    jmp restoreProcess
+.back_2:
+
     push ax 
     ; hardware port to enable next int
     mov al, 20H
     out 20H, al
     out 0A0H, al 
     pop ax
+
 
     iret
     ; WARNING: will no jmp to origin clock interupt anymore
@@ -154,14 +156,14 @@ restoreProcess:
 
     popa
 
-    ;   push ax 
-    ;   ; hardware port to enable next int
-    ;   mov al, 20H
-    ;   out 20H, al
-    ;   out 0A0H, al 
-    ;   pop ax
+    ;    push ax 
+    ;    ; hardware port to enable next int
+    ;    mov al, 20H
+    ;    out 20H, al
+    ;    out 0A0H, al 
+    ;    pop ax
 
-    ;   iret
+    ;    iret
     jmp timeOut.back_2
 
 temp_ss dw 0
