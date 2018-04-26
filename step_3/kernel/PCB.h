@@ -72,9 +72,21 @@ extern struct PCBManager PCB_manager;
 void init_PCBManager();
 static inline int32_t add_new_process(uint32_t segment) {
     segment /= 16;
-    PCB_manager.psize++;
+
+    int32_t index = -1;
+    for (int32_t i = 0; i < PCB_manager.psize; ++i) {
+        if (PCB_manager.PCBList[i].state == P_DEAD) {
+            index = i;
+            break;
+        }
+    }
+    if (index == -1) {
+        PCB_manager.psize++;
+        index = PCB_manager.psize - 1;
+    }
+
     if (PCB_manager.cur_active == -1) PCB_manager.cur_active = PCB_manager.psize-1;
-    int16_t index = PCB_manager.psize - 1;
+
     struct RegisterImage* ri = &(PCB_manager.PCBList[index].register_image);
     ri->ss = 0;
     ri->sp = 16*segment + 2048; //TODO: think twice: how sp should be
@@ -88,7 +100,17 @@ static inline int32_t add_new_process(uint32_t segment) {
 
     int32_t pid = PCB_manager.init_id++;
     PCB_manager.PCBList[index].pid = pid;
+    PCB_manager.PCBList[index].state = P_RUNNING;
     return pid;
+}
+static inline int32_t kill_process(uint32_t pid) {
+    for (int32_t i = 0; i < PCB_manager.psize; ++i) {
+        if (PCB_manager.PCBList[i].pid == pid && PCB_manager.PCBList[i].state == P_RUNNING) {
+            PCB_manager.PCBList[i].state = P_DEAD;
+            return 0; //TODO: should return errno
+        }
+    }
+    return 1;
 }
 void init_INIT_process();
 struct RegisterImage* get_current_PCB_address();

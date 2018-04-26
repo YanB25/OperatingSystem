@@ -145,8 +145,10 @@ void parseCMD(int CMDindex) {
         putln(HELP_MSG);
     } 
     else if (sscanf(CMD_BUFFER, "kill %d", &kpid) == 1) {
-        printf("kill pid %d (not imple)\n");
-
+        int8_t errno = kill_process(kpid);
+        if (errno == 1) {
+            printf("ERROR: no this pid %d\n", kpid);
+        }
     } else if (strcmp(CMD_BUFFER, "test") == 0) {
         putln("test command catch");
         __load_program("stoneQ", 0x1000 << 16);

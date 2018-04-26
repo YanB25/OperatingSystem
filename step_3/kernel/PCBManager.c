@@ -19,6 +19,7 @@ void init_PCBManager() {
     PCB_manager.cur_active = 0; //TODO: this asume at least one p is exist
     PCB_manager.init_id = 1;
     PCB_manager.PCBList[0].pid = 0;
+    PCB_manager.PCBList[0].state = P_RUNNING;
 }
 
 // void add_new_process(uint32_t segment) {
@@ -114,5 +115,11 @@ struct RegisterImage* get_next_PCB_address() {
 }
 
 int32_t get_process_num() {
-    return PCB_manager.psize;
+    int32_t cnt = 0;
+    for (int32_t i = 0; i < PCB_manager.psize; ++i) {
+        if (PCB_manager.PCBList[i].state == P_RUNNING) {
+            cnt++;
+        }
+    }
+    return cnt;
 }
