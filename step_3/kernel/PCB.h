@@ -6,6 +6,7 @@
 #define P_SLEEPING (1)
 #define P_DEAD (2)
 
+#define PCB_MANAGER_PROCESS_SIZE 20
 /**
  * @brief a copy of registers for PCB
  * 
@@ -58,11 +59,35 @@ struct PCB {
     pPCB* pFatherPCB;
     uint8_t state;
 }__attribute__((packed));
-
 typedef struct PCB PCB;
+struct PCBManager {
+    PCB PCBList[PCB_MANAGER_PROCESS_SIZE];
+    int16_t psize;
+    int16_t cur_active;
+    int32_t init_id;
 
+    /* functions */
+}__attribute__((packed));
+extern struct PCBManager PCB_manager;
 void init_PCBManager();
-void add_new_process(uint32_t segment);
+static inline void add_new_process(uint32_t segment) {
+    segment /= 16;
+    PCB_manager.psize++;
+    if (PCB_manager.cur_active == -1) PCB_manager.cur_active = PCB_manager.psize-1;
+    int16_t index = PCB_manager.psize - 1;
+    struct RegisterImage* ri = &(PCB_manager.PCBList[index].register_image);
+    ri->ss = 0;
+    ri->sp = 16*segment + 2048;
+    ri->cs = segment;
+    ri->ds = segment;
+    ri->es = segment;
+    ri->gs = segment;
+    ri->fs = segment;
+    ri->ip = 0;
+
+
+    PCB_manager.PCBList[index].pid = PCB_manager.init_id++;
+}
 void init_INIT_process();
 struct RegisterImage* get_current_PCB_address();
 struct RegisterImage* get_next_PCB_address();

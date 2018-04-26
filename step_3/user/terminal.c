@@ -141,7 +141,9 @@ void parseCMD(int CMDindex) {
     } else if (strcmp(CMD_BUFFER, "test") == 0) {
         putln("test command catch");
         __load_program("stoneQ", 0x1000 << 16);
-        //add_new_process(0x10000);
+        add_new_process(0x10000);
+    } else if (strcmp(CMD_BUFFER, "pc") == 0) {
+        putiln(get_process_num());
     } else if (strcmp(CMD_BUFFER, "ls") == 0) {
         printf("%10s|%20s|%10s\n", "filename", "filesize(bytes)", "begin cluster");
         FAT_ITEM* pfat = CUR_DIR;

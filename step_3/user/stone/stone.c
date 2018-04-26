@@ -19,7 +19,6 @@ int y;
 int deltax;
 int deltay;
 int stone() {
-    putln("hello world");
     // return 0;
     x = _X;
     y = _Y;
@@ -27,7 +26,7 @@ int stone() {
     deltay = 1;
     uint8_t style = 0;
 
-    clear_screen();
+    // clear_screen();
     while(1) {
         int key = getKbHit();
         if (key == 'q') return key;
