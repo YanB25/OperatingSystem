@@ -48,8 +48,10 @@ int stone() {
 int getKbHit() {
     int try = kbhit();
     if (try) {
-        int key = readkb();
-        return key;
+        //int key = readkb(); //TODO: stone not allowed to read kb
+        // return key;
+
+        return try;
     }
     return 0;
 }
