@@ -4,6 +4,7 @@
 #include <stdint.h>
 #define P_RUNNING (0)
 #define P_SLEEPING (1)
+#define P_DEAD (2)
 
 /**
  * @brief a copy of registers for PCB
@@ -54,7 +55,7 @@ struct PBookKeeping {
 struct PCB {
     struct RegisterImage register_image;
     int16_t pid;
-    pPCB pFatherPCB;
+    pPCB* pFatherPCB;
     uint8_t state;
 }__attribute__((packed));
 

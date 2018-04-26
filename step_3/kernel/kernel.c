@@ -21,16 +21,15 @@ void restoreProcess();
 void timeout_init();
 /// kernel entry
 void init_terminal_process();
+void add_new_process(uint32_t address);
+void init_terminal_process();
+void init_PCBManager();
 int main() {
     // TODO:debug, delete me plz.
     init();
-
-    __load_program("stoneQ", 0x1000 << 16);
-    __load_program("stoneW", 0x1100<<16);
-    __load_program("stoneA", 0x1200<<16);
-    __load_program("stoneS", 0x1300<<16);
-    //__load_program("termina", 0x4200);
+    __load_program("termina", 0x4200);
     
+    init_PCBManager();
     init_INIT_process();
     //init_terminal_process();
     timeout_init();
