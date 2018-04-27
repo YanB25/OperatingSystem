@@ -21,6 +21,7 @@ __asm__(
 #include "../include/mystring.h"
 #include "../filesystem/API/fsapi.h"
 #include "../kernel/PCB.h"
+#include "../include/kmm.h"
 
 #define BACK_SPACE 8 ///< '\b' ascii
 #define BUFFER_SIZE 64 ///< buffer size for parcing command
@@ -109,24 +110,30 @@ void parseCMD(int CMDindex) {
         // after finish auto load and memory allocation
         // here should change
         //TODO: remember to change makefile ld accordingly
-        uint32_t segment = 0;
-        if (fn[5] == 'Q') segment = 0x1000 ;
-        else if (fn[5] == 'W') segment = 0x1100;
-        else if (fn[5] == 'A') segment = 0x1200;
-        else segment = 0x1300;
-        int16_t code = __load_program(fn, segment << 16);
+        //      uint32_t segment = 0;
+        //      if (fn[5] == 'Q') segment = 0x1000 ;
+        //      else if (fn[5] == 'W') segment = 0x1100;
+        //      else if (fn[5] == 'A') segment = 0x1200;
+        //      else segment = 0x1300;
+        uint32_t address = mm_malloc(0x800);
+
+        int16_t code = __load_program(fn, (address >> 4) << 16);
         switch(code) {
             case ERR_SYS_PROTC:
                 putln("ERROR: system protect file");
+                mm_free(address, 0x800);
                 break;
             case ERR_TYPE_FLDR:
                 putln("ERROR: folder not executable");
+                mm_free(address, 0x800);
                 break;
             case ERR_TYPE_DOC:
                 putln("ERROR: partition info protect");
+                mm_free(address, 0x800);
                 break;
             case ERR_NOT_FOUND:
                 putln("ERROR: file not found");
+                mm_free(address, 0x800);
                 break;
             case NO_ERR:
                 //TODO: disable install and uninstall interupt
@@ -138,8 +145,10 @@ void parseCMD(int CMDindex) {
                 // kb_interupt_uninstall();
                 //    resetTerminal();
 
-                pid = add_new_process(segment << 4);
+
+                pid = add_new_process(address);
                 printf("new process created. pid is %d\n", pid);
+                printf("new program at memory %d\n", address);
                 break;
         }
     } else if (strcmp(CMD_BUFFER, "help") == 0) {

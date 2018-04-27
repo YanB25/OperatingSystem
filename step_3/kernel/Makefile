@@ -15,9 +15,11 @@ USER_HEADER=$(USER)/terminal.h
 USER_OBJ= $(USER)/kb_interupt_installer.o $(USER)/kbhit.o
 INT_OBJ=clock_interupt_installer.o global_custom_int_installer.o timeout.o custom_interupt.o
 PCB_OBJ=PCBManager.o
+MM_OBJ=$(INCLUDE)/kmm.o
 all: kernel.bin
 
-kernel.bin: kernel.o $(INCLUDE)/utilities.o $(USER_OBJ) $(INCLUDE)/mystring.o $(FILESYSTEM)/fsutilities.o $(INT_OBJ) $(PCB_OBJ) $(USER)/terminal.o
+
+kernel.bin: kernel.o $(INCLUDE)/utilities.o $(USER_OBJ) $(INCLUDE)/mystring.o $(FILESYSTEM)/fsutilities.o $(INT_OBJ) $(PCB_OBJ) $(USER)/terminal.o $(MM_OBJ)
 	$(LD) $(LDFLAGS) -Ttext 0xA200 --oformat binary -o $@ $^
 kernel.o: kernel.c kernel.h $(INCLUDE)/utilities.h $(USER_HEADER) $(FILESYSTEM)/API/fsapi.h
 	$(CC) $(CCFLAGS) -c $^ 
@@ -55,6 +57,9 @@ $(USER)/kbkit.o:
 	cd ../kernel
 $(USER)/terminal.o:
 	cd $(USER)/ && make terminal.o
+	cd ../kernel
+$(MM_OBJ):
+	cd $(INCLUDE) && make $(MM_OBJ)
 	cd ../kernel
 clean:
 	rm *.bin -f 

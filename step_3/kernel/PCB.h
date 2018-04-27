@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "../include/utilities.h"
+#include "../include/kmm.h"
 #define P_RUNNING (0)
 #define P_SLEEPING (1)
 #define P_DEAD (2)
@@ -60,6 +61,7 @@ struct PCB {
     int16_t pid;
     pPCB* pFatherPCB;
     uint8_t state;
+    uint32_t address;
     // char comment[PCB_COMMENT_LENGTH];
 }__attribute__((packed));
 typedef struct PCB PCB;
@@ -92,7 +94,7 @@ static inline int32_t add_new_process(uint32_t segment) {
 
     struct RegisterImage* ri = &(PCB_manager.PCBList[index].register_image);
     ri->ss = 0;
-    ri->sp = 16*segment + 2048; //TODO: think twice: how sp should be
+    ri->sp = 16*segment + 0x700; //TODO: think twice: how sp should be
     ri->cs = segment;
     ri->ds = segment;
     ri->es = segment;
@@ -104,6 +106,7 @@ static inline int32_t add_new_process(uint32_t segment) {
     int32_t pid = PCB_manager.init_id++;
     PCB_manager.PCBList[index].pid = pid;
     PCB_manager.PCBList[index].state = P_RUNNING;
+    PCB_manager.PCBList[index].address = segment*16;
     //strcpy(PCB_manager.PCBList[index].comment, "None"); //TODO: should be altered
     return pid;
 }
@@ -111,6 +114,7 @@ static inline int32_t kill_process(uint32_t pid) {
     for (int32_t i = 0; i < PCB_manager.psize; ++i) {
         if (PCB_manager.PCBList[i].pid == pid && PCB_manager.PCBList[i].state == P_RUNNING) {
             PCB_manager.PCBList[i].state = P_DEAD;
+            mm_free(PCB_manager.PCBList[i].address, 0x800);
             return 0; //TODO: should return errno
         }
     }
@@ -121,10 +125,10 @@ struct RegisterImage* get_current_PCB_address();
 struct RegisterImage* get_next_PCB_address();
 int32_t get_process_num();
 static inline void __print_process_info() {
-    printf("%10s %3s\n", "comment", "pid");
+    printf("%10s %3s %10s\n", "comment", "pid", "address");
     for (int32_t i = 0; i < PCB_manager.psize; ++i) {
         if (PCB_manager.PCBList[i].state != P_DEAD) {
-            printf("%10s %3d \n", "none", PCB_manager.PCBList[i].pid);
+            printf("%10s %3d %10d\n", "none", PCB_manager.PCBList[i].pid, PCB_manager.PCBList[i].address);
         }
     }
 }

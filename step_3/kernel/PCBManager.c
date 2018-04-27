@@ -21,6 +21,7 @@ void init_PCBManager() {
     PCB_manager.init_id = 1;
     PCB_manager.PCBList[0].pid = 0;
     PCB_manager.PCBList[0].state = P_RUNNING;
+    PCB_manager.PCBList[0].address = 0;
 }
 
 // void add_new_process(uint32_t segment) {
