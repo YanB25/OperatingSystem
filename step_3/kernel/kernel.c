@@ -12,6 +12,7 @@
 #include "../include/mystring.h"
 #include "../filesystem/API/fsapi.h"
 #include "../user/terminal.h"
+#include "../include/kmm.h"
 #define true 1
 #define false 0
 extern void clock_install_interupt(); ///< used to install clock 
@@ -33,7 +34,26 @@ int main() {
         "cli\n"
         ".att_syntax\n"
     );
+    //TODO:debug
     init();
+    init_mm();
+    // uint32_t addr = 0;
+    // uint32_t addr2 = 0;
+    // for (int i = 0; i < 10; ++i) {
+    //     addr = mm_malloc(0x800);
+    //     putxln(addr);
+    //     addr2 = mm_malloc(0x800);
+    //     putxln(addr2);
+    //     mm_free(addr2, 0x800);
+
+    // }
+    // addr = mm_malloc(0x30);
+    // putxln(addr);
+    // addr = mm_malloc(0x700);
+    // putxln(addr);
+    // addr = mm_malloc(0x1200);
+    // putxln(addr);
+
     init_PCBManager();
     timeout_init();
     clock_install_interupt();

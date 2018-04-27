@@ -177,6 +177,9 @@ void parseCMD(int CMDindex) {
             }
         }
     }
+    else if (strcmp(CMD_BUFFER, "clear") == 0) {
+        resetTerminal();
+    }
     else if (strcmp(CMD_BUFFER, "gc") == 0) {
         uint16_t cursor_position = get_cursor();
         uint16_t col = GET_LOW_8BITS(cursor_position);

@@ -321,4 +321,33 @@ static inline int32_t sscanf(const char* s, const char* format, ...) {
     va_end(valist);
     return pcnt;
 }
+static inline int32_t d2x(int32_t d) {
+    if (d <= 9) return d + '0';
+    return (d-10) + 'A';
+}
+static inline int32_t putxln(int32_t num) {
+    if (num == 0) {
+        putln("0x0");
+        return 3;
+    }
+    char buffer[10] = {};
+    int32_t idx = 0;
+    int32_t ret = 0;
+    if (num < 0) {
+        putch('-');
+        ret++;
+        num = -num;
+    }
+    puts("0x");
+    while (num) {
+        buffer[idx++] = d2x(num % 16);
+        num /= 16;
+        ret++;
+    }
+    while (idx) {
+        putch(buffer[--idx]);
+    }
+    newline();
+    return ret;
+}
 #endif
