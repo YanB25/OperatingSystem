@@ -49,8 +49,8 @@ FAT_ITEM_T fat_items[] = {
     0x002B, // 42
     0x002C, // 43
     0x002D, // 44
-    0xFFFF, // 45 // kernel end
-    0x002F, // 46 // terminal start
+    0x002E, // 45 // kernel (8+16)th
+    0x002F, // 46 
     0x0030, // 47
     0x0031, // 48
     0x0032, // 49
@@ -65,7 +65,7 @@ FAT_ITEM_T fat_items[] = {
     0x003B, // 58
     0x003C, // 59
     0x003D, // 60
-    0xFFFF, // 61 //terminal end
+    0xFFFF, // 61 //kernel end
     0xFFFF, // 41
     0xFFFF, // 41
 };

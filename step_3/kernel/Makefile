@@ -20,7 +20,7 @@ all: kernel.bin
 kernel.bin: kernel.o $(INCLUDE)/utilities.o $(USER_OBJ) $(INCLUDE)/mystring.o $(FILESYSTEM)/fsutilities.o $(INT_OBJ) $(PCB_OBJ) $(USER)/terminal.o
 	$(LD) $(LDFLAGS) -Ttext 0xA200 --oformat binary -o $@ $^
 kernel.o: kernel.c kernel.h $(INCLUDE)/utilities.h $(USER_HEADER) $(FILESYSTEM)/API/fsapi.h
-	$(CC) $(CCFLAGS) -c $^
+	$(CC) $(CCFLAGS) -c $^ 
 clock_interupt_installer.o: clock_interupt_installer.asm 
 	$(AS) $(ASFLAGS) -f elf32 -o $@ $^
 global_custom_int_installer.o: global_custom_int_installer.asm 
