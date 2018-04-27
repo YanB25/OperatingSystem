@@ -10,6 +10,12 @@
 #include <stdarg.h>
 #define DEFAULT_STYLE_DARK (G_DEFAULT | G_DARK)
 #define DEFAULT_STYLE (G_DEFAULT)
+
+static inline int32_t d2x(int32_t d) {
+    if (d <= 9) return d + '0';
+    return (d-10) + 'A';
+}
+
 /**
  * low level char output function
  * @param ch that character that want to draw
@@ -183,6 +189,31 @@ static inline int16_t putiln(int num) {
     cnt += newline();
     return cnt;
 }
+static inline int32_t putx(int32_t num) {
+    if (num == 0) {
+        puts("0x0");
+        return 3;
+    }
+    char buffer[10] = {};
+    int32_t idx = 0;
+    int32_t ret = 0;
+    if (num < 0) {
+        putch('-');
+        ret++;
+        num = -num;
+    }
+    puts("0x");
+    while (num) {
+        buffer[idx++] = d2x(num % 16);
+        num /= 16;
+        ret++;
+    }
+    while (idx) {
+        putch(buffer[--idx]);
+    }
+    return ret;
+
+}
 /**
  * almost same as printf.
  * currently support %d, %s, %c, and %<num>d ...
@@ -214,7 +245,11 @@ static inline int printf(const char* format, ...) {
             if (format[index + digitLength + 1] == 'd') {
                 int data = va_arg(valist, int);
                 delta = puti(data);
-            } else if (format[index+ digitLength + 1] == 'c') {
+            } else if (format[index + digitLength + 1] == 'x') {
+                int32_t xint = va_arg(valist, int32_t);
+                delta = putx(xint);
+            }
+            else if (format[index+ digitLength + 1] == 'c') {
                 int c = va_arg(valist, int);
                 delta = putch(c);
             } else if (format[index + digitLength + 1] == 's') {
@@ -321,33 +356,10 @@ static inline int32_t sscanf(const char* s, const char* format, ...) {
     va_end(valist);
     return pcnt;
 }
-static inline int32_t d2x(int32_t d) {
-    if (d <= 9) return d + '0';
-    return (d-10) + 'A';
-}
 static inline int32_t putxln(int32_t num) {
-    if (num == 0) {
-        putln("0x0");
-        return 3;
-    }
-    char buffer[10] = {};
-    int32_t idx = 0;
     int32_t ret = 0;
-    if (num < 0) {
-        putch('-');
-        ret++;
-        num = -num;
-    }
-    puts("0x");
-    while (num) {
-        buffer[idx++] = d2x(num % 16);
-        num /= 16;
-        ret++;
-    }
-    while (idx) {
-        putch(buffer[--idx]);
-    }
-    newline();
+    ret += putx(num);
+    ret += newline();
     return ret;
 }
 #endif

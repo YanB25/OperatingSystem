@@ -128,7 +128,7 @@ static inline void __print_process_info() {
     printf("%10s %3s %10s\n", "comment", "pid", "address");
     for (int32_t i = 0; i < PCB_manager.psize; ++i) {
         if (PCB_manager.PCBList[i].state != P_DEAD) {
-            printf("%10s %3d %10d\n", "none", PCB_manager.PCBList[i].pid, PCB_manager.PCBList[i].address);
+            printf("%10s %3d %10x\n", "none", PCB_manager.PCBList[i].pid, PCB_manager.PCBList[i].address);
         }
     }
 }

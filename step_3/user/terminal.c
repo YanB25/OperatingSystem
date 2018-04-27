@@ -147,7 +147,7 @@ void parseCMD(int CMDindex) {
 
 
                 pid = add_new_process(address);
-                printf("new process created. pid is %d\n", pid);
+                printf("new process created. pid is %x\n", pid);
                 printf("new program at memory %d\n", address);
                 break;
         }
