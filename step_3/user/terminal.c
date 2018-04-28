@@ -28,9 +28,11 @@ __asm__(
 #define PROMT "yb@yb-thinkpad-e450:~$ "
 #define HELP_MSG "  run <program> : run program <program>\n\r" \
     "  \t e.g. run stoneQ: run program stoneQ.bin\n\r" \
-    "  \t in program, press Q to exit\n\r" \
     "  ls : list all file in root directory\n\r"\
-    "  showinfo: print my id 16337269 in 3-D mod"
+    "  showinfo: print my id 16337269 in 3-D mod\n\r"\
+    "  pc: print process information\n\r" \
+    "  clear: clear screen \n\r"\
+    "  kill <pid>: kill a process by its pid"
 #define LOW_8_MASK (0b11111111)
 #define GET_LOW_8BITS(X) (X & LOW_8_MASK)
 #define GET_HIGH_8BITS(X) (X >> 8)

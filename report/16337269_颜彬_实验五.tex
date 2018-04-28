@@ -212,8 +212,8 @@
 
 %----------------------------------------------------------------------------------------
 
-\newcommand{\hmwkTitle}{操作系统原理实验\ \#5} % Assignment title
-\newcommand{\hmwkDueDate}{Friday,\ April\ 13,\ 2018} % Due date
+\newcommand{\hmwkTitle}{操作系统原理实验\ \#6} % Assignment title
+\newcommand{\hmwkDueDate}{Saturday,\ April\ 28,\ 2018} % Due date
 \newcommand{\hmwkClass}{16级计科\ 7班} % Course/class
 \newcommand{\hmwkClassTime}{周一9-10节} % Class/lecture time
 \newcommand{\hmwkClassInstructor}{凌应标} % Teacher/lecturer
@@ -263,470 +263,285 @@
 
 % To have just one problem per page, simply put a \clearpage after each problem
 \section{实验目的}
-掌握PC微机的实模式硬件中断系统原理和中断服务程序设计方式，实现对时钟、
-键盘/鼠标等硬件中断的简单服务处理程序编程和调试，让你的原型操作系统
-在运行以前已有的用户程序时，能对异步事件正确地捕捉和响应。\\
-
-掌握操作系统的系统调用原理，实现原型操作系统中的系统调用框架，提供若干
-简单功能的系统调用。 \\
-
-学习掌握C语言库的实际方法，为自己的原型操作系统配套一个C程序开发环境，
-实现用自建的C语言开发简单的输入/输出的用户程序，展示封装的系统调用。
-\section{实验方案}
-    \subsubsection{中断调用原理}
-    在实模式下，内存0x0000起始处维护着一张中断服务程序入口的表。每个
-    表项站4字节，共同代表服务程序的入口地址。其中的低16位代表代码段
-    地址，高16位代表段内偏移地址。\\
-    
-    当调用中断时，中断号代表着服务程序地址在地址表中的索引。所以当
-    执行int $id$时，会将$0x0000 : id \times 4$起始的32 bits
-    作为入口地址。一般寄存器ah中的值会作为中断的``功能号''。其他寄存器
-    的值依据文档，相应地作为参数或作为返回值。\\
-    
-    当实模式下触发中断时，会首先将FLAGS寄存器压入栈中(32位模式下
-    是EFLAGS)，随后压入
-    cs:ip，并根据地址表中的信息，跳转到相应地址。在中断返回时，要
-    首先向硬件端口输出相应参数，告知中断处理硬件中断完成。随后，iret
-    指令将把FLAGS和cs:ip出栈，并跳转回相应的用户程序地址。\\
-    
-    这些中断调用的原理就给了自定义中断的可能。用户只需修改中断地址表，
-    并按照中断的行为书写自己的代码，就能实现自己的中断。 
-    \subsubsection{软硬中断简介}
-    软件和硬件都能引发中断。其中软件中断又称为系统调用。其与调用一个函数
-    （在程序员可见角度）类似，有输入的参数和相应的返回值。程序员在系统
-    调用前应手动保存需要保存的寄存器，并能预计到中断会修改相应寄存器的值。
-    系统调用都是不可屏蔽的。\\ 
-    
-    硬件中断有可屏蔽和不可屏蔽两种。其中时钟中断（watchdog)是
-    不可屏蔽中断。由于硬件中断可以发生在任何一个时间点，所以硬件中断
-    应能保证绝对不修改任何寄存器的值。即硬件中断对程序员是透明的。
-    \subsubsection{用户自定义中断}
-    用户自定义中断可以采用如下的方式。首先查阅中断地址表，找到未被
-    占用的中断号（例如本项目使用的0x2B号）。将地址表的相应表项修改
-    用户自定义的地址。则当中断发生时，程序控制流可以到达用户自定义地址。\\
-    
-    标准的中断实现中，用户自定义中断应该提取ah作为功能号，建立中断自己的
-    功能地址表，根据ah的值在功能地址表中提取相应功能的中断入口地址，并跳转
-    到该地址。\\
-    
-    中断返回时，要保证将栈退到``刚进入中断''时的状态，向硬件端口传送一些
-    数据，并用iret指令返回。
-    \subsection{实验环境}
-    \subsubsection{系统与虚拟机}
-    \begin{itemize} \item 操作系统 \\ 
-        本实验在Linux下完成。采用Ubuntu 16.04
-        \item 虚拟机\\
-        bochs.它是一款开源且跨平台的 IA-32 模拟器。
-    \end{itemize}
-    \subsubsection{相关工具、指令}
-        \begin{itemize}
-            \item 汇编器\\ 
-            NASM. NASM是一个轻量级的、模块化的 80x86 和 x86-64 汇编器。它的语法与
-            Intel 原语法十分相似，但更加简洁和易读。它对宏有十分强大的支持。
-            \item 编译器\\
-            GCC. GNU/GCC 是开源的C语言编译器。其产生的伪16位代码可以与NASM结合，混编生成伪16位程序。
-            \item 镜像文件产生工具\\ 
-            bximage. 该命令允许生成指定大小的软件镜像。
-            \item 二进制写入命令\\ 
-            dd. dd 允许指定源文件和目标文件，将源文件的二进制比特写入目标文件中的指定位置。
-            \item 二进制文件查看命令\\ 
-            xxd. xxd 允许将二进制文件中的内容按地址顺序依次输出，可读性强
-            \item 反汇编器\\
-            objdump. objump可以查看目标文件和二进制文件的反汇编代码，还能指令intel或at\&t格式显示。
-            \item 代码生成脚本\\
-            makefile. makefile脚本具有强大的功能，其可以识别文件依赖关系，自动构筑文件，自动执行shell脚本等。
-        \end{itemize}
- 
+理解多道程序和分时系统的实现原理。理解二进程模型的原理。熟悉进程调度的方法。
+理解并能自行设计进程控制块，存储必要的进程信息。设计进程表和相关底层函数
+接口供内核调用。进一了解时钟中断的工作原理，完成用户程序的轮流执行。
 \section{实验过程}
-    \subsubsection{GCC语言拓展的运用}\label{subsec:asm}
-    为了简化代码的书写,本项目进一步地使用了GCC的语言拓展，\_\_asm\_\_语法。代码\ref{lst:asm_ext}举出了两个
-    比较有说明性的道理，列举其用法。内嵌汇编的初衷是，若C语言不得不调用汇编，而汇编语句又很短（10行以内），为了汇编
-    而新建一个文件并编译链接显得很麻烦。内嵌汇编可以做到``细粒度''的C与汇编交互功能。\\
-    
-    volatile语句的作用是``禁止GCC优化（删除）掉汇编语句''。由于GCC在编译时无法解析汇编的内容，汇编的内容是在C
-    语言代码完全编译后，再由内置汇编器解释的。故GCC无法在编译期确定内嵌的汇编代码是否有副作用。若GCC（错误地）认为
-    这些汇编代码没有副作用，会把代码完全优化（删除）掉。volatile可以禁止这种优化。\\
-    
-    整个拓展语法为\_\_asm\_\_ volatile ( assembly : output : input : clobber );\\
-    
-    其中assembly为字符串表示的汇编代码。以回车结尾以分隔汇编代码。output显式地指明了汇编代码会``输出''到C变量，即
-    汇编代码会修改某个C变量的值。input显示地指明了汇编代码会从C语言``输入''值，即把C的某个变量赋给寄存器。clobber
-    显式地指明了汇编语句会修改到哪些内容（如标志寄存器，内存等）。如果不指明，C语言会（为了速度）而不刷新缓存，导致
-    汇编语句的修改没有更新到C语言环境中。\\
-    
-    代码\ref{lst:asm_ext}中，``c'', ``D''分别代表寄存器CX和DX，``CC''表示标志寄存器，其他标志可从字面意思弄懂。
-    这些标志与架构密切相关，可以从GCC官网的ASM语言拓展查到详细的使用手册。\\
-    
-    代码\ref{lst:asm_ext}的两个函数中，第一个函数通过中断的方式在屏幕的某个特定的位置显示字符。C语言对它做了便利
-    的封装。第二个函数用于得到光标位置，并自动导出到cursor\_pos中。
-    \begin{figure}[!htb]
+    \subsection{进程控制块}
+    进程控制块中最核心的部分是寄存器映像RegisterImage.其实现如代码\ref{lst:PCB}所示。
+    整个寄存器映像可以分为若干个部分。\\ 
+
+    第一个部分是flags, cs和ip。它在中断发生时自动入栈。\\ 
+
+    第二部分是ax, cs, dx, bx, sp, bp, si, di。这部分可以由pusha指令推入栈中。结构体中
+    这些寄存器的排列顺序恰好是pusha指令入栈的顺序。根据文档，pusha压入栈中的sp是
+    ``执行pusha前的sp的值''。在结构体中，该sp称为``old\_sp''。（与以后提到的``sp''相区分）
+    值得一提的是该C语言编译时必须关闭所有优化，否则
+    编译器可能会进行重排操作。\\ 
+
+    第三个部分是段寄存器，从ds到ss。这部分在保护现场时，用push指令手动入栈。\\ 
+
+    最后一个部分只包含一个寄存器,sp.该sp值的是在把所有的其他寄存器都压入栈中后的sp的值。该值
+    在\ref{sec:save}节的现场保护和第\ref{sec:load}节的现场恢复中极其重要。
+    \begin{figure}[!hbt]
     \begin{itemize}
-    \item[] \begin{lstlisting}[language=C, label=lst:asm_ext, caption=GCC内嵌汇编拓展语法详解]
-static inline int16_t _draw_char(char ch, int offset, uint8_t style) {
-    uint16_t written_data = ch | (style << 8);
-    __asm__ volatile (
-        "movb $1, %%ah\n"
-        "int $0x2B\n"
-        : /* no output */
-        : "c"(written_data), "D"(offset)
-        : "cc", "ax", "memory"
-    );
-    return 1;
-}
-static inline uint16_t get_cursor(){
-    uint16_t cursor_pos;
-    __asm__ volatile(
-        "pushw %%ax\n"
-        "pushw %%bx\n"
-        "movb $0x03, %%ah\n"
-        "movb $0, %%bh\n"
-        "int $0x10\n"
-        "popw %%bx\n"
-        "popw %%ax\n"
-        : "=d"(cursor_pos)
-        : /* no input */
-        : "cc", "cx"
-    );
-    return cursor_pos;
-}
+    \item[] \begin{lstlisting}[language=C, label=lst:PCB, caption=PCB寄存器映像]
+struct RegisterImage {
+    uint16_t sp;
+
+    //segments
+    uint16_t ss;
+    ...
+    uint16_t ds;
+
+    // pusha
+    uint16_t di;
+    uint16_t si;
+    uint16_t bp;
+    uint16_t old_sp;
+    uint16_t bx;
+    uint16_t dx;
+    uint16_t cx;
+    uint16_t ax;
+
+    // pushed by interupt
+    uint16_t ip;
+    uint16_t cs;
+    uint16_t flags;
+}__attribute__((packed));
     \end{lstlisting}
     \end{itemize}
     \end{figure}
-    \subsection{修改时钟中断}
-    本步骤的重点在于，保证时钟中断结束后不修改\textbf{任何}寄存器的值，且进入时钟中断的时立即将段寄存器初始化到正确的
-    状态.\\
-    
-    由于时钟中断可以发生在代码执行的任何一个时刻，用户程序在执行到任何一个状态时，都有可能被突然间中断。如果时钟中断没有
-    保存（哪怕一个）寄存器的值，当中断返回时，用户程序会直接崩溃。更可怕的是，有可能用户程序不立即崩溃，带着错误的状态继续
-    执行下去，错误像滚雪球般地越积越多。当程序错误地退出时，很难定位到BUG的具体发生位置。\\
-    
-    更需要注意的是，在时钟中断进入后，要尽快地将ds的值设置为cs的值。虽然本项目使用平坦模型（flatten model），
-    段寄存器的值都是0,但是由于时钟中断可以发生在任何时候（哪怕当前正在运行另外一个中断）。而另外的中断（例如int 16H)
-    的代码中很可能临时地修改段寄存器。在时钟中断突然来临后，ds的值将是错误的值。这同样会导致程序的异常出现。\\
-    
-    代码\ref{lst:clock_int}展示了自定义时钟中断的实现。假设代码已经成功地将中断向量表地址修改为timeOut汇编函数的
-    首地址。timeOut后，程序会先保存一些寄存器的值，将ds同步为cs，随后使用call指令调用C的真正的处理函数。当从C函数中
-    返回后，恢复相关寄存器，随后跳转到原时钟中断（0F000H:0FEA5H）的地址。由于不清楚原时钟中断做了什么，所以最好在程序
-    最后跳转回原中断，让它完成它想完成的事情。
-    \begin{figure}[!bht]
-    \begin{itemize}
-    \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:clock_int, caption=自定义时钟中断的部分代码]
-timeOut:
 
+    \subsection{保存上下文}\label{sec:save}
+    保存上下文的代码如代码\ref{lst:save}所示。代码大概分为若干的几个部分（空行隔开）。\\ 
+
+    pusha 和一系列的push <segment> 把寄存器保存在栈中。必须在时钟中断到达后的第一时间保存寄存器。这是因为这些寄存器应该与
+    flag, cs, ip连续存放。一旦这些寄存器和flag, cs, ip分隔开后，会对PCB块的保存带来很大的麻烦。\\ 
+
+    只有将所有寄存器都保存到栈后，才能执行 mov es, 0 和 mov ds, 0（本代码仅作示意）的操作。由于需要将sp压入栈中，但push sp
+    是有歧义的汇编代码，为了可读性和可维护性，这里采用mov [ss:sp-2], sp的写法（本代码仅作示意）。\\ 
+
+    寄存器都保存完毕后，采用rep movsb指令将栈中保存的所有内容复制到PCB块中。
+\begin{figure}
+\begin{itemize}
+\item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:save, caption=保存上下文的实现]
+saveRegisterImage:
+    ; 高地址
     pusha
-    push gs
-    push ds
-    push es
 
-    mov ax, cs 
-    mov ds, ax 
-    mov es, ax 
-
-    push cs 
-    call timeout ; timeout is a C function
-
-    pop es
-    pop ds
-    pop gs
-    popa
-
-    jmp 0F000H:0FEA5H ; 为了展示目的，这里采用硬编码的方式
-    \end{lstlisting}
-    \end{itemize}
-    \end{figure}
-    \subsection{修改键盘中断}
-    键盘中断的实现和时钟中断十分类似。首先修改中断向量表，保证中断发生时控制权能到达用户自定义程序。只要保证能恢复
-    到中断前的状态，程序一般就能正确运行。\\
+    push ds ; sp + 8
+    push es ; sp + 6
+    push fs ; sp +4
+    push gs ; sp + 2
+    push ss ; sp 
+    ; 低地址
     
-    本个实现的小技巧是，采用pushf 和 call far的方式先调用旧键盘中断处理程序。由于旧中断处理程序的最后一条指令必为iret,
-    刚好可以把pushf 和call far中压栈的内容正确地恢复到原有的寄存器中。随后自定义中断服务程序再通过一个iret把栈完全复原。
-    \subsection{安装用户自定义中断}
-    为了让用户自定义中断的行为和系统自带的中断保持类似，自定义中断也采用ah作为功能号标志。具体实现如代码\ref{lst:custom_int}所示。\\
-
-    global\_custom\_int\_install函数安装用户自定义中断，把2BH号中断链接到custom\_int\_hanlder函数中。该函数是个
-    中断处理函数，它负责解析功能号（ah）的值，在一个向量表中查询服务程序的地址，并将控制权移交给服务程序。值得注意的是，
-    所有的服务程序都通过retf的方式先返回到custom\_int\_handler，由其统一地使用iret结束中断。也就是custom\_int\_handler
-    是一个统一的入口和出口，做了封装和``分发处理''。\\
-    
-    custom\_int\_table地址表。功能号ah代表着地址在表中的位置。本项目定义了三个简单的中断程序。第一个叫testcase，它做了
-    若干入栈和出栈操作。它用来检测``从中断安装到中断执行''的过程中，栈是否正确地返回了。\_int\_draw\_char是重写的底层输出
-    函数。所有的IO函数几乎都依赖于这一中断调用。见\ref{sec:low_level}
-    节对输出的工作有其他的介绍。
-    \_int\_draw\_my\_info中断会在程序的特定位置显示3-D的学号。视觉效果较好。
-    
-    \begin{figure}[!h]
-    \begin{itemize}
-    \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:custom_int, caption=用户自定义中断的实现]
-global_custom_int_install:
-    push ds
-    mov ax, 0
+    mov ax, 0 ; cs is 0
+    mov es, ax
     mov ds, ax
 
-    mov word [ds:2BH * 4], custom_int_handler
-    mov word [ds:2BH * 4 + 2], cs
+    calll get_current_PCB_address
 
-    pop ds
-    retl
-custom_int_handler:
-    ; ah=01H: _draw_char
-    push bx
-    push ax
-    push dx 
+    mov bx, sp 
+    mov word [ss:bx-2], sp 
 
-    mov dl, 4
-    mov al, ah
-    xor ah, ah
-    mul dl
-    add ax, custom_int_table
-    mov bx, ax
+    mov di, ax
+    mov ax, sp
+    sub ax, 2
+    mov si, ax
 
-    pop dx
-    pop ax
+    mov cx, 17 * 2
+    cld
+    rep movsb
+\end{lstlisting}
+\end{itemize}
+\end{figure}
+    \subsection{恢复上下文}\label{sec:load}
+    恢复现场是保护现场的逆过程。这里采用略为讨巧的方法。恢复现场时，先恢复sp和ss，让栈指针指向``被恢复进程''的栈顶。随后，只需要按照``保存上下文的逆序''
+    执行pop指令。即可顺利地恢复所有寄存器的值。随后采用iret，再把flag, cs, ip出栈的同时，把cs和ip恢复到正确的值.\\ 
 
-    call far [bx]
+    这里有若干细节需要注意。首先是，popa指令不会修改sp的值（但它会把sp从栈中弹出）。popa的这个行为很好理解，因为随意修改sp会导致极其严重的错误。（虽然
+    在进程切换时，我会更希望popa指令能帮我把sp也修改了）。第二个细节是，无论如何都要先把PCB中的值复制到栈上（哪怕栈上已经有一份一模一样的副本），再做
+    进程恢复。这是因为，整个操作系统的第一个进程（INIT进程）需要靠``恢复上下文''操作来自动启动。而第一个进程（INIT进程）的初始化操作是在PCB上做的，而不是
+    栈上做的。
+    \subsection{内存分配模型}
+    本次项目还做了简单的内存分配，支持在内核上对某个保留内存空间的malloc 和free的操作。这允许了用户程序在运行前才分配和指定内存空间。配合项目4完成的
+    文件系统，本次项目能更自由和智能地执行用户程序。\\ 
 
-    pop bx
-    iret
+    内存分配器采用若干个链表来实现。首先将0x10000到0x20000的内存空间分成大小为0x20, 0x800, 0x1000的块。这些块组成3个独立的链表。
+    每次分配内存时，先计算出最合适的块，从将该块从链表中移除，并返回该块的首地址。在回收内存时，只需将该内存块回收入链表中即可。在经典的
+    内存池实现中，内存块的大小应包括4, 8, 16, ..., $2^n$, ..., 1024字节。如此，维护9个独立的链表。本实现简化了这些细节（考虑到项目时间问题），
+    仅提供了3种不同大小的块。\\ 
 
-testcase:
-    ...
+    内存分配需要做初始化。初始化函数如代码\ref{lst:mm_init}所示。代码只截取了有代表性的部分。\\ 
 
-    retf
-_int_draw_char:
-    ...
+    初始化中，``强行''将内存p中的值修改为p + offset,然后把p修改为p + offset,不断重复以上步骤。如此即可在内存空间中``强行''
+    构造出一个链表。\\ 
 
-    retf
+    在内存分配时，通过将phead = *phead这一操作，将头指针的值改为头指针指向的内存空间的值（下一个块的地址）。如此即可实现将块弹出链表的操作。
+    内存回收的代码如\ref{lst:mm_free}所示。若返回的内存块大小大于最大的块，则说明程序出错，直接返回。否则，找到该块属于哪个链表，
+    通过两行语句将回收的内存放回到链表的头。在下一次内存申请时，回收的内存可以被再次使用。\\ 
+    
+    内存分配的示意图如图\ref{fig:mm}所示。其中白色空心箭头（带有HEAD字样）的为内存分配器的头指针。白色空心箭头（带有RETUREN字样）
+    的为malloc函数的返回值。内存回收的示意图如\ref{fig:mm_free}所示。其中标号为x的block代表待回收的代码块。\\ 
 
-_int_draw_my_info:
-    ...
-
-    retf
-custom_int_table:
-    dw testcase
-    dw 0x0000
-    dw _int_draw_char
-    dw 0x0000
-    dw _int_draw_my_info
-    dw 0x0000  
-    \end{lstlisting}
-    \end{itemize}
+    由于本次项目时间紧迫。所以没有将malloc和free封装成系统调用。这就导致了分配0x10000~0x20000空间时，段还处在0x0000处。而访问
+    0x10000会因为偏移量过大而导致访问错误。所以此处采用了一个变通方案。在进入所有的内存分配器函数之后，先手动把ds置为0x1000.在离开后
+    手动恢复ds。如此即可暂时解决这个跨段修改内存的问题。在以后的版本中，会把内存分配封装成系统调用。
+    
+    \begin{figure}[!hbt]
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{assets/mm.png}
+    \caption{分配内存示意图} \label{fig:mm}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{assets/mm_free.png}
+    \caption{内存释放示意图} \label{fig:mm_free}
+    \end{minipage}
     \end{figure}
-
-
-    \subsection{自定义的底层输出函数} \label{sec:low_level}
-    为了给屏幕四周的边框预留位置，本实验实现了自定义的底层输出函数，只需要实现该底层输出函数，高层的IO函数可以几乎不经
-    任何修改，就能自动地腾出边框的位置。\\
-    
-    如代码\ref{lst:io}所示，要满足上述要求，首先需要具有手动设置光标的能力。当检测到光标的位置在倒数第二列时（因为要把
-    最后一列空出来给边框），在输出后需要手动设置光标到下一行的第一列。当检测到光标在倒数第二行时，（同理，让出最后一行给边框），
-    需要手动将屏幕向上滚动一行。\\
-    
-    还有一些细节需要考虑，例如输出回车，输出换行，输出退格等的光标操作。若输出回车，则将光标设置到行首，行号不变。
-    如果输出换行，则需要将光标向下移动一行，但光标的列号不变。注意，换行和回车是不一样的。
-    若输出退格，则需要将光标的列号-1.
-    这需要在输出函数中加入若干if语句做手动判断。\\
-    
-    函数中调用的\_draw\_char函数是C函数，它的函数体完全由内嵌汇编组成。该内嵌汇编只做了一件事情，调用中断。该中断
-    真正完成了输出字符到屏幕的操作。\\
-    
-    如何实现滚屏和光标设置不再赘述。可直接阅读源码。在stdio.h和utilities.h，两个文件中。也可在文档网页中
-    搜索函数名看具体实现。
-    \begin{figure}[!h]
+    \begin{figure}
     \begin{itemize}
-    \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:io, caption=自定义的底层输出函数的实现]
-static inline int16_t putch_style(char ch, uint8_t style) {
-    uint16_t cursor = get_cursor();
-    uint8_t crow = cursor >> 8;
-    uint8_t ccol = cursor & 0b11111111;
-    if (ch == '\r') {
-        set_cursor(crow, 1);
-    } else if (ch == '\n') {
-        if (crow >= 23) {
-            scroll_up_one_line();
-        } else {
-            set_cursor(crow + 1, ccol);
-        }
-    } else if (ch == '\b') {
-        set_cursor(crow, ccol-1);
+    \item[] \begin{lstlisting}[language=C, label=lst:mm_init, caption=内存分配器的初始化]
+void init_mm() {
+    __mm__enter();
+
+    MM_LITTLE_HEAD = (uint32_t*)LITTLE_BEGIN;
+
+    int i = 0;
+    void* p = (void* )(LITTLE_BEGIN);
+    while (p + BLOCK_LITTLE_SIZE * i <= (void*)LITTLE_END) {
+        *(uint32_t*) (p + BLOCK_LITTLE_SIZE * i) 
+            = (uint32_t)(p + BLOCK_LITTLE_SIZE * (i+1));
+        i++;
     }
-    else if (ch == '\t') {
-        set_cursor(crow, ccol + 4);
-    }
-    else {
-        _draw_char(ch, (crow * 80 + ccol)*2, style);
-        ccol++;
-        if (ccol == 79) {
-            crow++;
-            ccol = 1;
-        }
-        set_cursor(crow, ccol);
-    }
-    return 1;
+
+    ...
+
+    __mm__leave();
 }
     \end{lstlisting}
     \end{itemize}
     \end{figure}
+
+\begin{figure}
+\begin{itemize}
+\item[] \begin{lstlisting}[language=C, label=lst:mm_free, caption=内存分配器的free操作实现]
+void mm_free(uint32_t addr, int32_t size) {
+    __mm__enter();
+    if (size >= BLOCK_LARGE_SIZE) return;
+    else if (size > BLOCK_MID_SIZE) {
+        *(uint32_t*)addr = (uint32_t)MM_LARGE_HEAD;
+        MM_LARGE_HEAD = (uint32_t*)addr;
+    } 
+    
+    ...
+
+    __mm__leave();
+}
+\end{lstlisting}
+\end{itemize}
+\end{figure}
 \section{实验结果}
-\subsection{终端界面}
-图\ref{fig:terminal}展示了终端界面的外观。由于四周围的边框
-需要有闪动的字符，所以终端的所有提示信息都应自动地为边框腾出空间。\ref{sec:low_level}
-节详细介绍了如何为边框腾出空间。为了完成
-这个效果，本项目结合了滚屏中断和光标设置中断，实现了一个特殊的字符输出中断，
-原本写好的IO程序可以不加修改，只修改他们底层最终依赖的中断，即可自动地为
-边框腾出空间。\\
+    在进入程序后，输入run stoneQ，或run stoneW，或 run stoneA 或 run stoneS即可在屏幕的4个不同的位置运行stone程序。每次
+    新程序运行时，会先调用内存分配器获得分配的内存，初始化进程控制块，并开始进程的执行。
 
-图\ref{fig:terminal}还同时展示了改进版的ls指令。该指令会用对齐的
-方式输出根目录的所有文件，文件的大小以及文件所在的首扇区。对齐的输出
-使用了新增的printf定宽输出功能。它的相关实现可以见文档。\\ 
+    如图\ref{fig:3_stoneS}所示，进入程序后连续输入3次run stoneQ。随后输入pc指令查看当前线程的状态。可以看到屏幕右下角有3个不同
+    的字母'A'在独立地运动（\textbf{图片效果不好，请自行尝试}）。同时可以看到这3个不同的进程有自己独立的进程id和内存地址。由于中断占据了0号进程，
+    所以这3个用户进程的id为1-3.\\ 
 
-文件系统其实还实现了输出文件所有簇编号这一功能。只是由于内核程序太大，所
-占的簇数太多，导致输出的画面显得混乱。所以在这个版本中我把这个功能砍掉了。
-但我保留了一张截图，如\ref{fig:ls}所示。
-\begin{figure}[H]
-    \begin{center}
-    \includegraphics[scale=0.5]{assets/terminal.png}
-    \caption{带运动边框的终端界面\label{fig:terminal}} 
-    \end{center} 
-\end{figure} 
+    如图\ref{fig:kp}紧接着上图，继续执行kill 1,把1号进程杀死，并执行run stoneW,产生一个新的stone程序。
+    在杀死了1进程后，内存管理器会回收掉进程1占据的内存。在产生新进程时，可以把回收的内存重新分配出去。所以如图所示，
+    进程4的内存起始地址为0x11000,恰好为原来进程1的内存地址。\\ 
 
-\begin{figure}[H]
-    \begin{center}
-    \includegraphics[scale=0.5]{assets/fs_long_ls.png}
-    \caption{带有文件所有簇号列表的ls指令\label{fig:ls}} 
-    \end{center} 
-\end{figure} 
-\subsection{用户程序}
-图\ref{fig:user}实现了带按键反馈的用户程序。在进入用户程序时，安装
-自定义中断，键盘对每次按下都会输出 ``OUCH!''，而在离开用户程序后，中断
-复原，不再对键盘按下响应``OUCH!''。\\
-
-\begin{figure}[H]
-    \begin{center}
-    \includegraphics[scale=0.5]{assets/user.png}
-    \caption{带按键反馈的用户程序\label{fig:user}} 
-    \end{center} 
-\end{figure} 
-
-\subsection{特色中断}
-本实现实现了特色中断，可以以3D的形式输出本人的学号。如图\ref{fig:3_D_id}
-所示。
-
-\begin{figure}[H]
-    \begin{center}
-    \includegraphics[scale=0.5]{assets/16337269.png}
-    \caption{特色中断：个人学号的3D显示\label{fig:3_D_id}} 
-    \end{center} 
-\end{figure} 
-
-\section{实验总结}
-    \subsection{亮点介绍}
-    \subsubsection{极其详尽的文档}
-    本次项目为所有文件添加了足够的注释，并自动生成了说明文档。
-    说明文档可以见网页\\ 
-
-    \url{https://yanb25.github.io/OperatingSystem/files.html}。(可点击) \\
-
-    其上极其详细地为几乎所有函数增加说明，列举了函数间的依赖关系以及
-    调用方法等。\\
+    图\ref{fig:null}用于证明，本次实验中系统调用仍能正常进行。
     
-    同时，本项目中附属的项目文档pdf文件也由代码和注释自动生成。
-    \subsubsection{ASM拓展语法}
-    本实验在上个实验的基础上，更深入地使用了GCC的ASM语言拓展。ASM语言拓展分为
-    basic asm 和 extend asm。以往的项目只使用basic asm，从本项目起加入extend asm
-    语法的内容，为
-    C和汇编的交互带来了更大的便利。见\ref{subsec:asm}节。
-    \subsubsection{格式化ls输出}
-    本实验实现了格式化的ls输出，在输出文件名的同时，格式化地输出
-    文件大小和文件首簇位置。本实验还实现了函数，可以将文件的所有簇
-    按序输出。见图\ref{fig:ls}和图\ref{fig:terminal}。其他寄存器
-    \subsubsection{光标滚屏自主控制}
-    为了完成终端中闪烁的边框，本项目将IO函数的一个底层中断重写了一遍。并
-    结合了光标控制和自动滚屏。见\ref{sec:low_level}节的具体细节。
-
-    \subsection{更新细节}
-    \subsubsection{printf进一步完善}
-    实现了定宽输出的功能。即支持$ printf("\%4d", 1) $ 功能，
-    在输出的1前输出3个空格。
-    \\
-    同时，所有的IO函数重构成返回int16\_t类型，代表他们输出到屏幕的
-    字符数。这为格式化输出提供了巨大的帮助。
-    \subsubsection{目录树结构变更}
-    将C程序库进一步细分，分成了utilities.h, stdio.h, ctype.h, mystring.h 
-    等基本库。utilities.h负责内核所需的最基本的操作，例如扇区读写和
-    光标控制等。其他头文件作用类似与ANSI C的实现。
-    \subsection{心得体会}
-    本次实验稍微晚交了一天，因为这次实验中我又再次整理微调了目录树，并给所有的函数增加了详尽的文档。
-    以后的实验中，代码量会逐渐加大，翔实的文档应该能带来很大的帮助（也能给后来的人一些参考）。\\
+    \begin{figure}
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{assets/three_stone_S.png}
+    \caption{同时运行3个stoneQ程序的画面} \label{fig:3_stoneS}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{assets/kill_p.png}
+    \caption{杀死一个进程，又创建一个新进程后的画面} \label{fig:kp}
+    \end{minipage}
+    \end{figure}
     
-    这个实验遇到的BUG比上次文件系统的实验中还多。这主要是因为中断的DEBUG并不好进行。例如，我无法预知
-    下一次时钟中断发生的时间，不能在中断发生前（有预谋地）提前设置断点。两次时钟中断的时间间隔虽短，
-    但中间可能间隔着无数行代码了。这些因素都让我的这次DEBUG感到举步维艰。对BUG的具体讨论见
-    \ref{sec:bug}节。\\
-
-    这次实验的一部分工作量还在于完善底层的函数。例如IO函数和字符串处理函数等。这些改动在本项目
-    中还难以体现（唯一能体现的就是对齐的ls输出了），但在以后的实验中，相信能成为我最重要的工具。
-    
-
-    \subsection{BUG汇总}\label{sec:bug}
-    \subsubsection{扇区加载错误}
-    首先是发生了扇区加载不足的状况。操作系统内核共10个扇区长度，但在最开始的实现中
-    只向内存加载了8个扇区。其实这个BUG并没有带来多大的影响。这可能是因为最后两个扇区
-    中的代码都是些辅助函数，而这些函数恰好没有被调用到。但我依然在发现了这个问题后第一时间把
-    它改了过来。这也是为什么，内核的簇在文件系统中是不连续的：内核的后半部分是我后来才加入文件
-    系统的。图\ref{fig:ls}中也能看出，ls指令正确地显示了内核中每个簇的编号。也能看到
-    他们的确是不连续的。\\
-    
-    第二个问题是磁面号计算错误。我之前错误地将磁面的计算写成了$$logic-sector \div 18$$类似的写法。
-    这个写法对36号前的逻辑扇区换算都是正确的。但是当扇区号高于36时，会算出磁面号为2！这个隐秘的BUG很容易
-    捕捉：当我发现我最后一个用户程序一运行就卡死时，我就很快发现了它根本没有被加载入内存。但是找到我的磁面数
-    计算错误却花了我很多的时间。因为一开始我没有相通，为什么前面的扇区能载入，后面的扇区就无法载入了！
-
-    \subsubsection{时钟中断未正确保存上下文}
-    这个BUG花了我很多的时间，因为当时我几乎是把``程序化简到最简''再运行，程序却始终出错。有时是卡死，有时是
-    程序屏幕变花，有时甚至出现了如图\ref{fig:bug}所示的错误。这个错误极其让我困惑：中断16H越界？我根本
-    没有动过16H啊。我几乎只是把时钟中断安装了，自定义的时钟中断没有做任何事，立即就返回了。\\
-
-    后来我才想到，我在中断中没有把DS设置为CS。我的所有程序暂时还使用平坦内存模型（flatten model），
-    所有段寄存器都设置为0,我以为不可能出现DS被修改的状况。然而因为时钟中断可以发生在程序运行的任何
-    时刻，包括其他中断正在运行时。其他的中断有可能临时地修改了段寄存器，所以当进入时钟中断时，
-    段寄存器的值是错的。\\
-    
-    这个错误很难被找到。我确信我自己写的代码绝对不会修改到段寄存器，所以我潜意识地默认了，段寄存器
-    一定不会被修改，所以我很自然地就没有初始化DS寄存器。为了找到这个BUG，我用bochs跟着程序
-    控制流一路走，走过了6/7层嵌套的函数调用，最终在某刻突然发现段寄存器的值被改变了。最后发现是
-    中断16H在程序中会有修改DS的操作。虽然16H保证在返回前把DS复原，但时钟中断可能在DS复原前发生。\\ 
-
-    DS错误是一个很难捕捉的BUG。它不会让程序立即崩溃。相反，它让程序进入一个错误的状态，它任由
-    错误日积月累，让错误像滚雪球一样地越积越多，直到最后程序崩溃。程序崩溃的位置和错误发生的位置
-    相隔十万八千里了。\\
-    
-    这也让我理解到了软件开发的一些定律，例如：尽力让错误在编译期捕获;当程序无法处理该异常时
-    不要捕获该异常（let it crash 定律）。这些定律的目标都是一致的：让程序尽早地展现出它的
-    错误，而不是把错误隐藏，带着错误的状态继续运行程序。\\
-    
-    我会考虑在下一个版本的实验中增加assert函数。这个函数的参数是一个条件表达式，当表达式运算
-    为False时直接停止程序的继续运行，并报出文件名和行号（如果可以的话）。
-    \subsubsection{双次安装中断的错误}
-    这个错误完全是个人不小心。我在用户程序进入前，把键盘中断安装成自定义中断，但没有在退出时
-    把旧中断复原（我还没有实现复原中断的逻辑，我习惯写完一部分代码就先做测试，测试完了再继续开发）
-    。\\
-    
-    当我两次进入用户程序时，自定义中断就会被安装两次！第一次安装时，旧中断被缓存到old\_int\_address
-    变量中。第二次进入中断时，用户自定义中断就被写入到old\_int\_address中了！旧中断的地址就被
-    用户程序的地址改写了！\\
-    
-    这是个很蠢的BUG，但当时的注意力没有放在这里，一直怀疑自己是其他地方出了错，所以没有即时地
-    找到这个BUG。
-    
-    \begin{figure}[H]
+    \begin{figure}
         \begin{center}
-        \includegraphics[scale=0.3]{assets/bug_full_screen.png}
-        \caption{中断未正确保存上下文时遇到的诡异的BUG\label{fig:bug}} 
+        \includegraphics[scale=0.5]{assets/int_still_work.png}
+        \caption{用于证明系统调用仍能正常执行的例子\label{fig:null}} 
         \end{center} 
     \end{figure} 
     
+\section{实验总结}
+    \subsection{亮点介绍}
+    \subsubsection{方便的终端操控}
+    本实验提供了新的终端指令。run stoneQ（或把stoneQ替换为stoneW,stoneA, stoneS)可以产生4种不同的用户程序进程。pc指令可以
+    列出当前存在的所有进程、进程id以及他们所在的物理内存地址。kill <pid>命令可以杀死进程。clear命令可以做清屏。\\ 
 
+    本实验创新地采用了如下的实现：在用户程序运行时，不退出终端。于是可以一边观察用户程序的执行，一边通过终端的操作增添或删除进程。
+    这种交互性设计可以良好地检验出程序的正确性。用户只要乐意，可以创建任意多个进程，进程的代码段可以来自于四个用户程序中的任何一个。
+    \subsubsection{内存分配器}
+    本项目实现了内存分配。在运行一个新的用户程序时，不是通过硬编码的方式决定其内存位置，而是由内存分配器分配一段未只用的内存。\\ 
 
+    回收的内存可以重复使用。图\ref{fig:kp}展示了相关情况。在杀死一个进程后，产生一个新的进程时，被回收的内存又被重新分配出去了。\\ 
+
+    内存分配器的优点还在于，它允许了同一个用户程序被运行多次，例如图\ref{fig:3_stoneS}显示了相关情况。图中，同时运行了3个stoneS
+    程序，这3个程序不分享内存地址，互不干扰地在独立的内存中执行。
+    \subsubsection{与文件系统的配合}
+    由于以前的项目实现了文件系统，本项目又实现了内存分配器，两者可以配合工作，发挥最大的作用。\\ 
+
+    进程产生时，先通过内存分配器分配内存，再通过文件系统将文件载入到指定的内存空间中，再通过进程调度让进程自动执行。全程自动化程度高，
+    程序灵活。
+
+    \subsection{实验心得}
+    这个实验表面上看很简单，但我还是花费了比较多的时间。而且上两周的学习任务比较重，这次实验几乎是在舍友都睡着了的时间段写完的。\\ 
+
+    首先是进程的保存和恢复。由于思路没有完全理清，这部分的代码我重构了两三次。这之间我反复纠结的细节有：sp该如何存储？存储何时的sp?sp
+    和ss如何恢复？恢复后栈顶的位置变了怎么办？ds该合适恢复？恢复后所有访存操作的行为都会改变，怎么办？我甚至还一度认为，``将寄存器从
+    栈上拷贝到PCB''和``从PCB拷贝到栈上''这两个操作是没有必要的。 \\ 
+
+    这些问题单独出现的时候都不难解决。但当他们在进程保存和进程恢复时同时出现时，就会成为一个比较大的困难。因为我必须同时解决好全部的这些问题。
+    最终我采取的方案是，sp存储的是``保存完所有寄存器后''的sp，用mov的方式把sp压入栈中。恢复进程时先恢复sp和ss到被恢复进程的栈顶。ds
+    直接用pop恢复，并保证保存和恢复现场的全程不访问内存。我经过仔细的考虑（和代码的实践后）得出简论，栈和PCB之间的拷贝是必要的，不做拷贝总会
+    出现各种各样的困难，导致实现变得很复杂。\\ 
+
+    得出上述的思考只用几句话的时间，但这是我一个凌晨的试错换来的。在调试的期间还遇到上述提到的忘关中断的BUG。这些错误堆积起来，让这次
+    实验的完成变得更加困难了。但经过这次实验我对进程切换的理解也更深刻了。\\ 
+
+    这次实验还有很多不足。个人认为最大的不足在于，太多的过程没有被封装成系统调用。由于C程序是对段透明的，这导致了当一个进程的段不为0时，
+    调用许多C程序时，一旦发生寻址等操作，就会产生错误。正确的解决办法是利用中断修改cs,把ds同步成cs，此时ds就被同步到正确的段中。当执行完
+    相关的操作后，再恢复ds，离开中断。这样就可以让许多内核级的操作在段不为0的程序上运行。更进一步地，终端进程就可以脱离内核代码而独立存在。
+    在本项目中，终端依旧只能作为一个程序和内核链接在一起。
+    \subsection{细节上的更新}
+    \subsubsection{sscanf的实现}
+    本项目实现了sscanf的大部分操作。实现了\%s, \%d, \%x, \%c,等匹配操作。为终端指令的提取提供基石。
+    \subsubsection{内核拓展}
+    内核从预留24个扇区拓展到预留40个扇区。修改了文件系统的相关配置。
+    \subsubsection{文件系统的跨段处理}
+    由于本次实验出现了跨段问题，而这在前几次项目中没有出现，故本项目略微修改了文件系统的实现，使其支持跨段的载入。
+    \subsection{BUG汇总}\label{sec:bug}
+    \subsubsection{文件系统的历史遗留问题}
+    我的文件系统调用在传参时，某处地址的类型声明为了int16\_t。在之前这不会发生错误，因为以0x00为段寄存器时，偏移量最多为
+    0xFFFF,在int16\_t的范围内。但是本项目发生了跨段，当我传入更高的地址时，会被int16\_t类型截断。导致程序无法载入到内存
+    中。\\ 
+
+    这个错误花费了比较多的时间。因为我的文件系统的结构化做得比较好，这也意味着函数调用会比较深。错误的追踪也比较困难。
+    \subsubsection{中断未关闭的错误}
+    在项目实现到一半时，我发现程序会卡死，而且时钟中断没有触发。这极其令人费解，我刚开始考虑了很多的情况，都没有找到这个问题发生的
+    原因。我很疑惑为何时钟中断没有被触发。我试过手动往中断端口中写入数据允许下一次中断，确保硬件得到允许中断的信号。我使用手动调用
+    int 08H，观察程序执行状态，发现程序正常执行，且栈能回到正确的位置。由于此时我已经写好了进程切换（正在测试中），我试过反复注释掉
+    不同地方的代码观察情况。结果发现无论怎么改变代码，总有各种不同的错误。\\ 
+
+    在折腾了很久后，突然有一个瞬间想到中断的问题。在内核初始化过程中关中断。在所有初始化结束后开中断。于是bug解决。\\ 
+
+    我现在并没有完全弄懂为何这个BUG会导致时钟中断不再发生。毕竟时钟中断可能发生在程序执行的任何时刻，未关中断这个错误可能导致程序执行
+    的任何一个时刻出错。分析出具体的原因太难了。但可以得知的是，不正确地开关中断是很严重的错误。
 \begin{appendices}
 \section{参考文献} \label{sec:reference}
 \begin{enumerate}
