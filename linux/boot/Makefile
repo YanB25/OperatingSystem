@@ -5,7 +5,7 @@ CCFLAGS=-march=i386 -m16 -mpreferred-stack-boundary=2 -ffreestanding
 AS=nasm
 ASFLAGS=
 
-all: boot.bin head.bin setup.bin
+all: boot.bin setup.bin head.o
 boot.bin: boot.o
 	$(LD) $(LDFLAGS) -Ttext 0x0 --oformat binary -o $@ $^
 boot.o: boot.s
@@ -14,8 +14,6 @@ setup.bin: setup.o
 	$(LD) $(LDFLAGS) -Ttext 0x000 --oformat binary -o $@ $^
 setup.o: setup.s
 	$(AS) $(ASFLAGS) -f elf -o $@ $^
-head.bin: head.o
-	$(LD) $(LDFLAGS) -Ttext 0 --oformat binary -o $@ $^
 head.o: head.s
 	$(AS) $(ASFLAGS) -f elf -o $@ $^
 

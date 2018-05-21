@@ -83,14 +83,18 @@ end_move:
     jmp 8:0
 
 GDT:
-    dw 0, 0, 0, 0
-    dw 0x07FF
-    dw 0x0000
-    dw 0x9A00
-    dw 0x00C0
-    dw 0x07FF
-    dw 0x0000
-    dw 0x9200
+    dw 0, 0, 0, 0 ;dummy
+
+    ; code descriptor
+    dw 0x07FF ; limit
+    dw 0x0000 ; base address = 0
+    dw 0x9A00 ; code, read and exec
+    dw 0x00C0 
+
+    ; data descriptor
+    dw 0x07FF 
+    dw 0x0000 ; base address = 0
+    dw 0x9200 ; data, read and write
     dw 0x00C0
 idt_48:
     dw 0, 0, 0

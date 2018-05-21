@@ -1,20 +1,35 @@
+LD=ld 
+LDFLAGS=-melf_i386 -N
+CC=gcc
+CCFLAGS=-march=i386 -m16 -mpreferred-stack-boundary=2 -ffreestanding
+AS=nasm
+ASFLAGS=
+
+
 all: write_os_img
 BOOT=boot
-ALL_BIN = ${BOOT}/boot.bin ${BOOT}/setup.bin ${BOOT}/head.bin
+ALL_BIN = ${BOOT}/boot.bin ${BOOT}/setup.bin tools/system
 write_os_img: ${ALL_BIN}
 	dd if=boot/boot.bin of=OS.img bs=512 count=1 conv=notrunc
 	dd if=boot/setup.bin of=OS.img bs=512 count=4 conv=notrunc seek=1
-	dd if=boot/head.bin of=OS.img bs=512 count=24 conv=notrunc seek=5
+	dd if=tools/system of=OS.img bs=512 count=24 conv=notrunc seek=5
 
 boot/boot.bin: boot/boot.s
-	cd boot/ && make boot.bin
+	@make -C boot/
 boot/setup.bin: boot/setup.s
-	cd boot/ && make setup.bin
-boot/head.bin: boot/head.s
-	cd boot/ && make head.bin
+	@make -C boot/
+boot/head.o: boot/head.s
+	@make -C boot/
+
 clean:
 	find . -type f -name "*.o" -delete
 	find . -type f -name "*.bin" -delete
+
+init/main.o: init/main.c
+	${CC} ${CCFLAGS} -c $^ -o $@
+	
+tools/system: boot/head.o init/main.o
+	$(LD) $(LDFLAGS) -Ttext 0x0 --oformat binary -o $@ $^ -e startup_32
 
 run:
 	bochs -q
