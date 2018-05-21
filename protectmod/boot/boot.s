@@ -1,7 +1,5 @@
 %include "../include/boot/pm.inc"
-org 07c00H
-
-jmp begin
+jmp 07C0H:begin
 
 GDT:
 NULL_GDT: Descriptor 0, 0, 0; null
@@ -17,7 +15,7 @@ SelectorVideo equ CODE_VIDEO_GDT - GDT
 
 [BITS 16]
 begin:
-    mov ax, cs
+    mov ax, cs    
     mov es, ax
     mov ds, ax
     mov fs, ax
