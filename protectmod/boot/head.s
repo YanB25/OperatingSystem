@@ -4,11 +4,10 @@ jmp begin
 
 GDT:
 NULL_GDT: Descriptor 0, 0, 0; null
-CODE_32_GDT: Descriptor 0, CODE_32_LENGTH -1, DA_C + DA_32 
-CODE_VIDEO_GDT: Descriptor 0B8000H, 0FFFFH, DA_DRW
-LABEL_DESC_DATA: Descriptor 0, DataLen-1, DA_DRW ; data
-LABEL_DESC_TEST: Descriptor 0500000H, 0FFFFH, DA_DRW
-LABEL_DESC_STACK: Descriptor 0, 0FFFFH - 1, DA_DRW + DA_32
+CODE_32_GDT: Descriptor 0, CODE_32_LENGTH -1, DA_C + DA_32 ; main code
+CODE_VIDEO_GDT: Descriptor 0B8000H, 0FFFFH, DA_DRW ; for video
+LABEL_DESC_TEST: Descriptor 0500000H, 0FFFFH, DA_DRW ; a very far address for testing
+LABEL_DESC_STACK: Descriptor 0, STACK_LENGTH, DA_DRW + DA_32 ; for stack
 
 GDT_LENGTH equ $-GDT
 GDT_PTR dw GDT_LENGTH-1
@@ -16,22 +15,12 @@ GDT_PTR dw GDT_LENGTH-1
 
 SelectorCode32 equ CODE_32_GDT - GDT
 SelectorVideo equ CODE_VIDEO_GDT - GDT
-SelectorData equ LABEL_DESC_DATA - GDT
 SelectorTest equ LABEL_DESC_TEST - GDT
 SelectorStack equ LABEL_DESC_STACK - GDT
 
-LABEL_DATA:
-    SPValueInRealMode dw 0
-    PMMessage: db "In Protect Mode now. =)", 0
-    OffsetPMMessage equ PMMessage - $$
-    StrTest db "ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0
-    OffsetStrTest equ StrTest - $$
-
-    DataLen equ $ - LABEL_DATA
-
-
 [BITS 16]
 begin:
+    ; ax should be 0
     mov ax, cs    
     mov es, ax
     mov ds, ax
@@ -40,12 +29,11 @@ begin:
     mov ss, ax
     mov sp, 0FFH 
 
-    DescriptorBaseInitor CODE_32, LABEL_DESC_STACK
+    ; init base address in descriptor
+    DescriptorBaseInitor STACK, LABEL_DESC_STACK
     DescriptorBaseInitor CODE_32, CODE_32_GDT
-    DescriptorBaseInitor LABEL_DATA, LABEL_DESC_DATA
 
-
-
+    ;set base address for gdt_ptr
     xor eax, eax
     mov ax, ds
     shl eax, 4
@@ -68,8 +56,6 @@ begin:
 
 [BITS 32]
 CODE_32:
-    mov ax, SelectorData
-    mov ds, ax
     mov ax, SelectorTest
     mov es, ax
     mov ax, SelectorVideo
@@ -81,7 +67,6 @@ CODE_32:
     mov esp, 0FFF0H 
 
     mov ah, 0Ch
-    mov esi, OffsetPMMessage
     mov edi, (80 * 10 + 0 ) * 2
     cld
 
@@ -99,5 +84,9 @@ CODE_32:
 
     jmp $
 
-
 CODE_32_LENGTH equ $ - CODE_32
+
+STACK:
+    times 100 db 0
+STACK_END:
+STACK_LENGTH equ STACK_END - STACK
