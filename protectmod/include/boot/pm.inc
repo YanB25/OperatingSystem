@@ -79,4 +79,19 @@ SA_TIL		EQU	4	; ┛
 	dw	(%3 & 1Fh) | ((%4 << 8) & 0FF00h)	; 属性
 	dw	((%2 >> 16) & 0FFFFh)			; 偏移2
 %endmacro ; 共 8 字节
+
+; init descriptor base address
+%macro DescriptorBaseInitor 2
+    push eax
+    xor eax, eax
+    mov ax, ds
+    shl eax, 4
+    add eax, %1
+    mov word [%2 + 2], ax
+    shr eax, 16
+    mov byte [%2 + 4], al
+    mov byte [%2 + 7], ah
+    pop eax
+%endmacro
 ; ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
