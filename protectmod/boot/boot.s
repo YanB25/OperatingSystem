@@ -1,5 +1,6 @@
 %include "../include/boot/pm.inc"
-jmp 07C0H:begin
+
+jmp begin
 
 GDT:
 NULL_GDT: Descriptor 0, 0, 0; null
@@ -100,6 +101,3 @@ CODE_32:
 
 
 CODE_32_LENGTH equ $ - CODE_32
-
-times 510-($-$$) db 0
-dw 0xaa55
