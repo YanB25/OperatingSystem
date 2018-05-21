@@ -1,5 +1,8 @@
+; this file is the head of `system` so it is called head.s
+; 0000:0000
 [BITS 32]
 extern main
+; ld recognize startup_32 to be entry
 global startup_32
 startup_32:
     mov eax, 0x10 ; descriptor! RPL = 0. the third item(data descriptor)
@@ -9,7 +12,7 @@ startup_32:
     mov fs, ax
     ;lss esp, stack_start ;TODO: error! I still not have stack_start
     mov ss, ax
-    mov esp, tmp_STACK_end ;TODO: maybe bugs
+    mov esp, tmp_STACK_end ;TODO: maybe bugs. it seems to work pretty well =)
     call setup_idt
     call setup_gdt
 
@@ -42,7 +45,8 @@ after_page_table:
 L6:
     ; main never return. in case it returns, be into dead loop
     jmp $
-
+setup_page:
+    jmp $ ; not implemented
 
 setup_gdt:
     lgdt [GDT_PTR]
@@ -99,8 +103,6 @@ tmp_STACK_end:
 
 IDT:
     times 256 * 8 db 0 ; 256 items, 8 bytes for each item. fill 0
-
-
 
 GDT:
     dq 0; dummy

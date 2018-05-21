@@ -1,6 +1,7 @@
+; this file is used to load the whole system into memory.
 BITS 16
 SYSSIZE equ 0x3000
-SETUPLEN equ 4 ; in fact it is num of sectors of head.s
+SETUPLEN equ 4
 BOOTSEG equ 0x07c0
 INITSEG equ 0x9000
 SETUPSEG equ 0x9020
@@ -21,12 +22,13 @@ _start:
     rep movsw
     jmp INITSEG: go
 go:
+    ;now in 0x9000:xxxx
     mov ax, cs
     mov ds, ax
     mov es, ax
     mov ss, ax
     mov sp, 0xFF00
-load_setup: ; in fact it is `load head.s`
+load_setup: 
     mov dx, 0x0000
     mov cx, 0x0002
     mov bx, 0x0200
@@ -48,7 +50,7 @@ ok_load_setup: ; no error handler.
     ; load system at 0x10000
     mov ax, SYSSEG  
     mov es, ax ; segment of 0x010000
-    call read_it
+    call read_it ; an extremely complex function that handle everything
 
     jmp SETUPSEG: 0
 
@@ -57,7 +59,7 @@ sread dw 1+SETUPLEN
 head dw 0
 track dw 0
 
-read_it:
+read_it: ; never try to understand these codes. really HOPE they work well =)
     mov ax, es
 ;     test ax, 0x0fff
 ; die:

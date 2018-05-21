@@ -3,8 +3,8 @@ INITSEG equ 0x9000
 SYSSEG equ 0x1000
 SETUPSEG equ 0x9020
 %macro DELAY 0
-    dw 0x00eb 
-    dw 0x00eb
+    dw 0x00eb  ; jmp 0
+    dw 0x00eb  ; jmp 0
 %endmacro
 start:
     mov ax, INITSEG
@@ -16,7 +16,7 @@ start:
     int 0x10
     mov [0], dx
 
-    ;
+    ; save sth. oh just ignore them. never used (so far.) TODO:
     mov ah, 0x88
     int 0x15
     mov [2], ax
@@ -39,7 +39,7 @@ do_move:
     jmp do_move
 end_move:
     mov ax, SETUPSEG
-    mov ds, ax ;TODO: ??
+    mov ds, ax 
 
     lidt [idt_48]
     lgdt [gdt_48]
@@ -82,6 +82,7 @@ end_move:
     lmsw ax
     jmp 8:0
 
+; they are temporary. In `system`, a new GDT will be built up.
 GDT:
     dw 0, 0, 0, 0 ;dummy
 
