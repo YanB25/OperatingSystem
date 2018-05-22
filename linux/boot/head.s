@@ -3,7 +3,7 @@
 [BITS 32]
 extern main
 ; ld recognize startup_32 to be entry
-global startup_32
+global startup_32, gdt, idt
 startup_32:
     mov eax, 0x10 ; descriptor! RPL = 0. the third item(data descriptor)
     mov ds, ax
@@ -56,7 +56,7 @@ setup_idt:
     mov eax, 0x00080000
     mov ax, dx
     mov dx, 0x8E00
-    lea edi, [IDT]
+    lea edi, [idt]
     mov ecx, 256
 rp_sidt:
     mov [edi], eax
@@ -70,11 +70,11 @@ rp_sidt:
 
 IDT_PTR:
     dw 256*8-1
-    dd IDT
+    dd idt
 
 GDT_PTR:
     dw 256*8-1
-    dd GDT
+    dd gdt
 
 ignore_int:
     push eax
@@ -101,10 +101,10 @@ tmp_STACK: ;TODO: temporary stack. should be changed
     times 1024 db 0
 tmp_STACK_end:
 
-IDT:
+idt:
     times 256 * 8 db 0 ; 256 items, 8 bytes for each item. fill 0
 
-GDT:
+gdt:
     dq 0; dummy
     dq 0x00C09A0000000FFF ; code
     dq 0x00C0920000000FFF ; data
