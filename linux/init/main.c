@@ -13,7 +13,19 @@ void main() {
     //blk_dev_init();
     //chr_dev_init();
     //test_write();
-    printks("hello world\nnewline");
+    //printks("hello world\nnewline");
+    // __asm__ volatile(
+    //     "movb $0x0, %%ah\n"
+    //     "div %%ah\n"
+    //     ::
+    // );
+    // __asm__ volatile(
+    //     "movl 0x28, %%eax\n"
+    //     "movw %%ax, %%ds\n"
+    //     "movl (0xFFFF), %%eax\n"
+    //     ::
+    // );
+    printks("now in protected mode");
     while(1) {}
     return;
 }
