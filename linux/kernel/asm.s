@@ -1,6 +1,11 @@
 [BITS 32] ;TODO: really?
-global divide_error
-extern do_divide_error
+global divide_error 
+global debug 
+global int3 
+global bounds
+extern do_divide_error 
+extern do_int3 
+extern do_bounds
 
 divide_error:
     push dword do_divide_error
@@ -35,3 +40,14 @@ no_error_code:
     pop dword ebx
     pop dword eax
     iret
+
+debug:
+    push dword do_int3
+    jmp no_error_code
+
+int3:
+    push dword do_int3
+    jmp no_error_code
+bounds:
+    push dword do_bounds
+    jmp no_error_code
