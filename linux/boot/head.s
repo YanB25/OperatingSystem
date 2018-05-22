@@ -111,5 +111,7 @@ gdt:
     dq 0x00C0920000000FFF ; data
     dq 0; don't use.
     Descriptor 0B8000H, 0FFFFH, DA_DRW
-    times 255 * 8 db 0 ; 256 items, 8 bytes for each item. fill 0
-    ;TODO: I change here from 256 to 255, because I add video descriptor
+    Descriptor 090000H, 000FFH, DA_DRW
+    times 254 * 8 db 0 ; 256 items, 8 bytes for each item. fill 0
+    ;TODO: I change here from 256 to 254, because I add video descriptor
+    ; and a global config data descriptor

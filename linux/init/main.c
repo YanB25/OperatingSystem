@@ -13,7 +13,7 @@ void main() {
     //blk_dev_init();
     //chr_dev_init();
     //test_write();
-    printks("hello world");
+    printks("hello world\nnewline");
     while(1) {}
     return;
 }
