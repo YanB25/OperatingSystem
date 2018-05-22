@@ -10,7 +10,7 @@ ASFLAGS=
 all: write_os_img
 BOOT=boot
 ALL_BIN = ${BOOT}/boot.bin ${BOOT}/setup.bin tools/system
-SYSTEM_OBJ=boot/head.o init/main.o kernel/asm.o kernel/traps.o
+SYSTEM_OBJ=boot/head.o init/main.o kernel/asm.o kernel/traps.o init/testscript.o
 write_os_img: ${ALL_BIN}
 	dd if=boot/boot.bin of=OS.img bs=512 count=1 conv=notrunc
 	dd if=boot/setup.bin of=OS.img bs=512 count=4 conv=notrunc seek=1
@@ -27,6 +27,9 @@ kernel/asm.o: kernel/asm.s
 	@make -C kernel/
 kernel/traps.o: kernel/traps.c
 	@make -C kernel/
+init/testscript.o: init/testscript.s
+	$(AS) $(ASFLAGS) -f elf -o $@ $^
+
 clean:
 	find . -type f -name "*.o" -delete
 	find . -type f -name "*.bin" -delete

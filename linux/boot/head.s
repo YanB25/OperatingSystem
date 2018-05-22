@@ -1,6 +1,7 @@
 ; this file is the head of `system` so it is called head.s
 ; 0000:0000
 [BITS 32]
+%include "../include/boot/pm.inc"
 extern main
 ; ld recognize startup_32 to be entry
 global startup_32, gdt, idt
@@ -109,4 +110,6 @@ gdt:
     dq 0x00C09A0000000FFF ; code
     dq 0x00C0920000000FFF ; data
     dq 0; don't use.
-    times 256 * 8 db 0 ; 256 items, 8 bytes for each item. fill 0
+    Descriptor 0B8000H, 0FFFFH, DA_DRW
+    times 255 * 8 db 0 ; 256 items, 8 bytes for each item. fill 0
+    ;TODO: I change here from 256 to 255, because I add video descriptor
