@@ -3,6 +3,7 @@
 ; this file is only used as workaround
 global putch 
 global newline
+global I_AM_HERE
 ;TODO: should use cursor information
 putch:
     enter 0, 0
@@ -65,5 +66,21 @@ newline:
     mov word [0], dx
 
     pop ds
+    leave
+    ret
+
+I_AM_HERE:
+    enter 0, 0
+    push ebx
+    push ds
+
+    mov eax, 0x20
+    mov ds, ax
+    mov ebx, [ebp + 8]
+    add ebx, ebx
+    inc byte [ebx]
+    inc byte [ebx+1]
+
+    pop es
     leave
     ret

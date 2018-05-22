@@ -3,6 +3,7 @@
 const char* msg = "now in main function";
 extern void trap_init();
 void test_write();
+void I_AM_HERE(int32_t id);
 int32_t printks(const char*);
 void main() {
     // b 0x14d5
@@ -26,7 +27,9 @@ void main() {
     //     ::
     // );
     printks("\nnow in protected mode!");
-    while(1) {}
+    while(1) {
+        I_AM_HERE(6);
+    }
     return;
 }
 
