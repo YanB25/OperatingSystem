@@ -6,8 +6,13 @@ CCFLAGS=-march=i386 -m32 -mpreferred-stack-boundary=2 -ffreestanding -I ../inclu
 AS=nasm
 ASFLAGS=
 
-all: asm.o traps.o
+all: asm.o traps.o printk.o printk_tmp.o
 asm.o: asm.s 
 	$(AS) $(ASFLAGS) -f elf -o $@ $^
 traps.o: traps.c
 	$(CC) $(CCFLAGS) -c $^
+
+printk.o: printk.c
+	$(CC) $(CCFLAGS) -c $^
+printk_tmp.o: printk.s #TODO: only as workaround. delete me.
+	$(AS) $(ASFLAGS) -f elf -o $@ $^
