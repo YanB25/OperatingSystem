@@ -1,7 +1,8 @@
 [BITS 32]
 ; NOTICE:
 ; this file is only used as workaround
-global putch
+global putch 
+global newline
 ;TODO: should use cursor information
 putch:
     enter 0, 0
@@ -48,4 +49,21 @@ putch:
     leave
     ret
 
-.rearenge:
+newline:
+    enter 0, 0
+    push ds
+
+    mov eax, 0x28
+    mov ds, ax
+    mov word dx, [0]
+    xor dl, dl
+    inc dh
+    cmp dh, 24
+    jne .writeback
+    mov dh, 0
+.writeback:
+    mov word [0], dx
+
+    pop ds
+    leave
+    ret

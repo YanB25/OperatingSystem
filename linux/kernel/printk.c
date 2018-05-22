@@ -4,9 +4,15 @@
  */
 #include <stdint.h>
 void putch(char);
+void newline();
 int32_t printks(const char* str) {
     while (*str) {
-        putch(*str);
+        if (*str == '\n') {
+            newline();
+        }
+        else {
+            putch(*str);
+        }
         str++;
     }
 }

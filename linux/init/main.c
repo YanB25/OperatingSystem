@@ -25,7 +25,7 @@ void main() {
     //     "movl (0xFFFF), %%eax\n"
     //     ::
     // );
-    printks("now in protected mode");
+    printks("\nnow in protected mode!");
     while(1) {}
     return;
 }
