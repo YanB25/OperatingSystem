@@ -1,5 +1,6 @@
 // init main function.
 #include <stdint.h>
+#include "../include/asm/system.h"
 const char* msg = "now in main function";
 extern void trap_init();
 extern void sched_init();
@@ -29,10 +30,11 @@ void main() {
     //     ::
     // );
     printks("\nnow in protected mode!");
+    sti();
     while(1) {
-        __asm__ volatile(
-            "int $0x20\n"
-        );
+        //__asm__ volatile(
+        //    "int $0x20\n"
+        //);
         //I_AM_HERE(6);
     }
     return;
