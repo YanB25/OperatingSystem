@@ -14,7 +14,7 @@ traps.o: traps.c
 	$(CC) $(CCFLAGS) -c $^
 # sched.o: sched.c
 # 	$(CC) $(CCFLAGS) -c $^
-sched.o: sched.c
+sched.o: sched.c ../include/linux/sys.h
 	gcc -m32 -fno-builtin -fno-stack-protector -fomit-frame-pointer -fstrength-reduce  -I../include -c -o sched.o sched.c
 
 printk.o: printk.c

@@ -6,6 +6,7 @@ extern void trap_init();
 extern void sched_init();
 void test_write();
 void I_AM_HERE(int32_t id);
+int system_call();
 int32_t printks(const char*);
 void main() {
     // b 0x14d5
@@ -29,14 +30,22 @@ void main() {
     //     "movl (0xFFFF), %%eax\n"
     //     ::
     // );
-    printks("\nnow in protected mode!");
+    printks("\nnow in protected mode!\n");
     sti();
+    int errno;
+    __asm__ volatile(
+        "movl $0x0, %%eax\n"
+        "int $0x80\n"
+        :"=a"(errno):
+    );
+    char arr[] = "hello!\n";
     while(1) {
         //__asm__ volatile(
         //    "int $0x20\n"
         //);
         //I_AM_HERE(6);
+        arr[0]++;
+        printks(arr);
     }
     return;
 }
-

@@ -35,7 +35,7 @@ kernel/printk_tmp.o: kernel/printk.s
 	@make -C kernel/
 kernel/system_call.o: kernel/system_call.s
 	@make -C kernel/
-kernel/sched.o: kernel/sched.c
+kernel/sched.o: kernel/sched.c include/linux/sys.h
 	@make -C kernel/
 
 init/testscript.o: init/testscript.s
