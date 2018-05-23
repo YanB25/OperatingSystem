@@ -81,6 +81,7 @@ I_AM_HERE:
     inc byte [ebx]
     inc byte [ebx+1]
 
-    pop es
+    pop ds
+    pop ebx
     leave
     ret

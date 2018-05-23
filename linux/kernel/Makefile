@@ -1,8 +1,9 @@
 LD=ld 
 LDFLAGS=-melf_i386 -N
 CC=gcc
-#CCFLAGS=-march=i386 -m32 -mpreferred-stack-boundary=2 -ffreestanding
+CCFLAGS=-m32 -mpreferred-stack-boundary=2 -ffreestanding
 #TODO: in pm, here should be -m32 not -m16
+#TODO: delete -march=i386
 AS=nasm
 ASFLAGS=
 
@@ -11,8 +12,10 @@ asm.o: asm.s
 	$(AS) $(ASFLAGS) -f elf -o $@ $^
 traps.o: traps.c
 	$(CC) $(CCFLAGS) -c $^
+# sched.o: sched.c
+# 	$(CC) $(CCFLAGS) -c $^
 sched.o: sched.c
-	$(CC) $(CCFLAGS) -c $^
+	gcc -m32 -fno-builtin -fno-stack-protector -fomit-frame-pointer -fstrength-reduce  -I../include -c -o sched.o sched.c
 
 printk.o: printk.c
 	$(CC) $(CCFLAGS) -c $^

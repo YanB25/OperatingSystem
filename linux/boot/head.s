@@ -4,7 +4,8 @@
 %include "../include/boot/pm.inc"
 extern main
 ; ld recognize startup_32 to be entry
-global startup_32, gdt, idt
+global startup_32, gdt, idt, pg_dir
+pg_dir:
 startup_32:
     mov eax, 0x10 ; descriptor! RPL = 0. the third item(data descriptor)
     mov ds, ax

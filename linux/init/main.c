@@ -30,7 +30,10 @@ void main() {
     // );
     printks("\nnow in protected mode!");
     while(1) {
-        I_AM_HERE(6);
+        __asm__ volatile(
+            "int $0x20\n"
+        );
+        //I_AM_HERE(6);
     }
     return;
 }

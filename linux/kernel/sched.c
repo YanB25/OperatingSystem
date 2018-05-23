@@ -2,11 +2,13 @@
 #include "../include/asm/system.h"
 #include "../include/asm/io.h"
 #include "../include/linux/signal.h"
+#include "../include/linux/sys.h"
 
 #define LATCH (1193180/HZ)
 #define S(nr) (1 << ((nr)-1))
-extern int system_call(void);
-extern int timer_interrupt(void);
+
+int system_call(void);
+int timer_interrupt(void);
 union task_union {
     struct task_struct task;
     char stack[PAGE_SIZE];

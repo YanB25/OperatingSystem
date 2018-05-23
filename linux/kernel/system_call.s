@@ -6,8 +6,10 @@ extern jiffies
 extern do_timer
 extern current
 extern task
+extern I_AM_HERE
 
 global timer_interrupt
+global system_call
 
 offEAX equ 00H
 offEBX equ 0x04
@@ -65,6 +67,10 @@ system_call:
     ; je reschedule
 
 ret_from_sys_call:
+    ;TODO: delete it, only for debug
+    push dword 5
+    call I_AM_HERE
+    add esp, 4
     ;TODO: 不考虑信号量，也就不需要这些代码了
     ; mov eax, [current]
     ; cmp eax, [task] ;TODO: maybe BUGs
@@ -122,6 +128,7 @@ timer_interrupt:
     push eax
     call do_timer
     add esp, 0x4
+
     jmp ret_from_sys_call
 
 sys_execve:

@@ -1,11 +1,11 @@
 /// this file finished
 #ifndef __HEAD_H_
 #define __HEAD_H_
-#include <stdint.h>
+//#include <stdint.h>
 typedef struct desc_struct {
-    uint32_t a, b; // 64 bits
+    unsigned long a, b; // 64 bits
 } desc_table[256];
-extern uint32_t pg_dir[1024];
+extern unsigned long pg_dir[1024];
 extern desc_table idt, gdt;
 
 #define GDT_NUL 0

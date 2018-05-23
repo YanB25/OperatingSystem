@@ -11,6 +11,8 @@
 #include "signal.h"
 #include "mm.h"
 
+#define int32_t long
+#define uint32_t unsigned long
 
 #define TASK_RUNNING  0// running or ready
 #define TASK_INTERRUPTIBLE 1// wait and interruptible
