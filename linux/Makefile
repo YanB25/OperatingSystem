@@ -7,11 +7,12 @@ AS=nasm
 ASFLAGS=
 
 
-all: write_os_img
+all: write_os_img kernel/system_call.o
 BOOT=boot
 ALL_BIN = ${BOOT}/boot.bin ${BOOT}/setup.bin tools/system
 # NOTICE: printk_tmp.o only used as workaround
-SYSTEM_OBJ=boot/head.o init/main.o kernel/asm.o kernel/traps.o init/testscript.o kernel/printk.o kernel/printk_tmp.o
+SYSTEM_OBJ=boot/head.o init/main.o kernel/asm.o kernel/traps.o init/testscript.o kernel/printk.o kernel/printk_tmp.o kernel/system_call.o kernel/sched.o
+# TODO: remember to link system_call.o into it
 write_os_img: ${ALL_BIN}
 	dd if=boot/boot.bin of=OS.img bs=512 count=1 conv=notrunc
 	dd if=boot/setup.bin of=OS.img bs=512 count=4 conv=notrunc seek=1
@@ -31,6 +32,10 @@ kernel/traps.o: kernel/traps.c
 kernel/printk.o: kernel/printk.c
 	@make -C kernel/
 kernel/printk_tmp.o: kernel/printk.s
+	@make -C kernel/
+kernel/system_call.o: kernel/system_call.s
+	@make -C kernel/
+kernel/sched.o: kernel/sched.c
 	@make -C kernel/
 
 init/testscript.o: init/testscript.s

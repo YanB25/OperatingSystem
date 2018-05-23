@@ -2,6 +2,7 @@
 #include <stdint.h>
 const char* msg = "now in main function";
 extern void trap_init();
+extern void sched_init();
 void test_write();
 void I_AM_HERE(int32_t id);
 int32_t printks(const char*);
@@ -11,6 +12,7 @@ void main() {
 
     //mm_init(...)
     trap_init();
+    sched_init();
     //blk_dev_init();
     //chr_dev_init();
     //test_write();
