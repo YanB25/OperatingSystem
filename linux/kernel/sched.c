@@ -51,7 +51,8 @@ void schedule() {
             }
         }
     }
-    switch_to(next);
+    switch_to(next); 
+    int magic_number = 0x12345678;//TODO: delete me, magic number for following control flows
 }
 void do_timer(long cpl) {
     if (cpl) {

@@ -131,11 +131,13 @@ extern long startup_time; // boot time
 #define lldt(n) __asm__("lldt %%ax"::"a"(_LDT(n)))
 #define switch_to(n) {\
     struct {long a,b; } __tmp;\
-    __asm__("cmpl %%ecx, current\n"\
+    __asm__(\
+        "cmpl %%ecx, current\n"\
         "je 1f\n"\
         "movw %%dx, %1\n"\
         "xchgl %%ecx, current\n"\
         "ljmp %0\n"\
+        "1:\n"\
         /* TODO: I let out some code here */ \
         ::"m"(*&__tmp.a), "m"(*&__tmp.b), \
         "d"(_TSS(n)), "c"((long) task[n]));\

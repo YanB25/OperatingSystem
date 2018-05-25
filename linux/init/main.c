@@ -38,6 +38,7 @@ void main() {
         "int $0x80\n"
         :"=a"(errno):
     );
+    __asm__("int $0x20\n"::);
     char arr[] = "hello!\n";
     while(1) {
         //__asm__ volatile(
@@ -47,5 +48,6 @@ void main() {
         arr[0]++;
         printks(arr);
     }
+    //while (1);
     return;
 }
