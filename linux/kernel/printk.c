@@ -6,7 +6,8 @@
 void putch(char);
 void newline();
 int32_t printks(const char* str) {
-    while (*str) {
+ 
+   while (*str) {
         if (*str == '\n') {
             newline();
         }

@@ -40,13 +40,14 @@ void main() {
     );
     __asm__("int $0x20\n"::);
     char arr[] = "hello!\n";
+    move_to_user_mode();
+
     while(1) {
-        //__asm__ volatile(
-        //    "int $0x20\n"
-        //);
-        //I_AM_HERE(6);
-        arr[0]++;
-        printks(arr);
+        __asm__(
+            "movl $0x1, %%eax\n"
+            "int $0x80\n"
+            ::
+        );
     }
     //while (1);
     return;
