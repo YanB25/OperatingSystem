@@ -107,29 +107,46 @@ ret_from_sys_call:
 
 
 timer_interrupt:
-    push ds
-    push es
-    push fs
-    push edx
+    ;xchg bx, bx
+    push eax
     push ecx
+    push edx
     push ebx
-    push eax
-    mov eax, 0x10
-    mov ds, ax
-    mov es, ax
-    mov eax, 0x17
-    mov fs, ax ;TODO: 0x17 again
-    inc dword [jiffies]
-    ; EOI
-    mov al, 0x20
-    out 0x20, al ;TODO: order correct?
-    mov eax, [esp + offCS]
-    and eax, 0x3 ;cpl
-    push eax
-    call do_timer
-    add esp, 0x4
 
-    jmp ret_from_sys_call
+    push 0; false push esp
+    push ebp
+    push esi
+    push edi
+
+    push es
+    push ss
+    push ds
+    push fs
+    push gs
+
+    sub esp, 4
+    mov [esp], esp
+
+.return_from_timer_interrupt:
+    add esp, 4
+    pop gs
+    pop fs
+    pop ds
+    pop ss
+    pop es
+    pop edi
+    pop esi
+    pop ebp
+    add esp, 4 ; false pop
+    pop ebx
+    pop edx
+    pop ecx
+    pop eax
+    iret
+
+    ; a c d b
+    ; sp bp si di
+    ; es cs ss ds fs gs
 
 sys_execve:
     jmp $ ; TODO: NIY

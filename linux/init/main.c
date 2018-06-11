@@ -8,10 +8,9 @@ void test_write();
 void I_AM_HERE(int32_t id);
 int system_call();
 int32_t printks(const char*);
+#define BochsBreak() \
+__asm__("xchgw %%bx, %%bx\n"::)
 void main() {
-    // b 0x14d5
-    // here's what I think I should do
-
     //mm_init(...)
     trap_init();
     sched_init();
@@ -30,6 +29,8 @@ void main() {
     //     "movl (0xFFFF), %%eax\n"
     //     ::
     // );
+    BochsBreak();
+    __asm__("int $0x20\n"::);
     printks("\nnow in protected mode!\n");
     sti();
     int errno;
