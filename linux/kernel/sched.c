@@ -69,8 +69,8 @@ void do_timer(long cpl) {
 void sched_init() {
     int i;
     struct desc_struct* p;
-    set_tss_desc(gdt + FIRST_TSS_ENTRY, &(init_task.task.tss));
-    set_ldt_desc(gdt+FIRST_LDT_ENTRY, &(init_task.task.ldt));
+    set_tss_desc(gdt + FIRST_TSS_ENTRY, &(_MY_FIRST_TSS));
+    set_ldt_desc(gdt+FIRST_LDT_ENTRY, &(_MY_FIRST_LDT));
     p = gdt+2+FIRST_TSS_ENTRY;
     for (i = 1; i < NR_TASKS; ++i) {
         task[i] = NULL;

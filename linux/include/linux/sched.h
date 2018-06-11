@@ -116,7 +116,6 @@ struct task_struct {
         {}\
     },\
 }
-
 extern struct task_struct* task[NR_TASKS];
 extern struct task_struct* last_task_used_math;
 extern struct task_struct* current;
@@ -142,4 +141,24 @@ extern long startup_time; // boot time
         ::"m"(*&__tmp.a), "m"(*&__tmp.b), \
         "d"(_TSS(n)), "c"((long) task[n]));\
 }
+
+#define _INIT_MY_TSS \
+{0, PAGE_SIZE , 0x10, 0, 0, 0, 0, (long)&pg_dir,\
+    0, 0, 0, 0, 0, 0, 0, 0,\
+    0, 0, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17,/*ds~gs 0x17*/ \
+    _LDT(0), 0x80000000, \
+    {}\
+}
+
+#define _INIT_MY_LDT \
+{\
+    {0, 0},\
+    {0x9f, 0xc0fa00},/*code length 640k, base 0, G=1, D=1, DPL=3, P=1, type=0x0a */ \
+    {0x9f, 0xc0f200},/*640k base 0, G=1, D=1, DPL=3, P=1, type=0x02  */\
+}
+
+struct tss_struct _MY_FIRST_TSS = _INIT_MY_TSS;
+struct desc_struct _MY_FIRST_LDT[3] = _INIT_MY_LDT;
+
+
 #endif
