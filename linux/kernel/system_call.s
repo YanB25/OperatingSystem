@@ -108,7 +108,7 @@ ret_from_sys_call:
 
 
 timer_interrupt:
-    ;xchg bx, bx
+    xchg bx, bx
     push eax
     push ecx
     push edx
@@ -140,7 +140,7 @@ timer_interrupt:
     call sys_save
 return_from_timer_interrupt:
     ; for debug: calling I_AM_HERE
-    push 5
+    push 20
     call I_AM_HERE
     add esp, 4
 

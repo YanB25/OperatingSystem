@@ -11,24 +11,8 @@ int32_t printks(const char*);
 #define BochsBreak() \
 __asm__("xchgw %%bx, %%bx\n"::)
 void main() {
-    //mm_init(...)
     trap_init();
     sched_init();
-    //blk_dev_init();
-    //chr_dev_init();
-    //test_write();
-    //printks("hello world\nnewline");
-    // __asm__ volatile(
-    //     "movb $0x0, %%ah\n"
-    //     "div %%ah\n"
-    //     ::
-    // );
-    // __asm__ volatile(
-    //     "movl 0x28, %%eax\n"
-    //     "movw %%ax, %%ds\n"
-    //     "movl (0xFFFF), %%eax\n"
-    //     ::
-    // );
     printks("\nnow in protected mode!\n");
     sti();
     int errno;
@@ -37,32 +21,20 @@ void main() {
         "int $0x80\n"
         :"=a"(errno):
     );
-    //__asm__("int $0x20\n"::);
     char arr[] = "hello!\n";
 
     while(1) {
-        //BochsBreak();
-        //printks("aba\n");
-        // __asm__(
-        //     "movl $0x1, %%eax\n"
-        //     "int $0x80\n"
-        //     ::
-        // );
-        //__asm__("int $0x20\n"::);
         printks("Notice me please!!!!\n");
     }
-    //while (1);
     return;
 }
 
 void test_second_process() {
     while(1) {
-        //BochsBreak();
         __asm__(
             "movl $0x1, %%eax\n"
             "int $0x80\n"
             ::
         );
-        __asm__("int $0x20\n"::);
     }
 }
