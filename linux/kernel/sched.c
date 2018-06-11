@@ -13,7 +13,7 @@ long volatile jiffies = 0;
 long startup_time = 0;
 extern void test_second_process();
 void temp_generate_second_process();
-uint32_t last_pid = 0;
+uint32_t last_pid = 1;
 typedef struct Stack {
     uint32_t space[1024];
 } Stack;
@@ -52,7 +52,12 @@ void sched_init() {
     set_intr_gate(0x20, &timer_interrupt);
     outb(inb_p(0x21)&~0x01, 0x21);
     set_system_gate(0x80, &system_call);
+    init_first_process();
     temp_generate_second_process(); //TODO: delete me!!
+}
+void init_first_process() {
+    PCB_List[0].pid = 0;
+    PCB_List[0].state = TASK_RUNNING;
 }
 void sys_save(
     int32_t esp,
@@ -125,4 +130,5 @@ void temp_generate_second_process() {
     stacks[2].space[15] = 0x08;
     stacks[2].space[16] = 0x00000206;
     PCB_List[1].state = TASK_RUNNING;
+    PCB_List[1].pid = last_pid++;
 }
