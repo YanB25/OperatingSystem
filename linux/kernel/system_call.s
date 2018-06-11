@@ -7,9 +7,13 @@ extern do_timer
 extern current
 extern task
 extern I_AM_HERE
+extern sys_save
+extern sys_restart
 
 global timer_interrupt
 global system_call
+global return_from_timer_interrupt
+global return_from_sys_restart
 
 offEAX equ 00H
 offEBX equ 0x04
@@ -127,7 +131,13 @@ timer_interrupt:
     sub esp, 4
     mov [esp], esp
 
-.return_from_timer_interrupt:
+    call sys_save
+return_from_timer_interrupt:
+    mov eax, 0; TODO: change here!!!
+    push eax
+    call sys_restart
+    add esp, 4
+return_from_sys_restart:
     add esp, 4
     pop gs
     pop fs
@@ -152,3 +162,5 @@ sys_execve:
     jmp $ ; TODO: NIY
 sys_fork:
     jmp $ ; TODO: NIY
+
+
