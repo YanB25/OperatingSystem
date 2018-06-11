@@ -108,7 +108,6 @@ ret_from_sys_call:
 
 
 timer_interrupt:
-    xchg bx, bx
     push eax
     push ecx
     push edx

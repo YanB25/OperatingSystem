@@ -100,12 +100,15 @@ void sys_restart(int32_t dst_pcb) {
     );
 }
 int32_t schedule() {
-    if (current == 1)
-        current = 0;
-    else 
-        current = 1;
-    return current;
-    //return 0;
+    while (++current < NR_TASKS) {
+        if (PCB_List[current].state != TASK_RUNNING) {
+            continue;
+        } else {
+            return current;
+        }
+    }
+    current = 0;
+    return 0;
 }
 
 void temp_generate_second_process() {
