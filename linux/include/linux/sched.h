@@ -66,36 +66,6 @@ struct tss_struct {
     int32_t trace_bitmap;
     struct i387_struct i387;
 };
-struct task_struct {
-    int32_t state;
-    int32_t counter;
-    int32_t priority;
-    int32_t signal;
-    struct sigaction sigaction[32];//TODO: not imple
-    int32_t blocked;
-/* various fields */
-    int exit_code;
-    uint32_t start_code, end_code, end_data, brk, start_stack;
-    int32_t pid, father, pgrp, session, leader;
-    unsigned short uid, euid, suid;
-    unsigned short gid, egid, sgid;
-    int32_t alarm;
-    int32_t utime, stime, cutime, sctime, start_time;
-    unsigned short used_math;
-/* file system info */
-    int tty;
-    unsigned short umask;
-    struct m_inode* pwd;
-    struct m_inode* root;
-    struct m_inode* executable;
-    unsigned long close_on_exec;
-    struct file* filp[NR_OPEN];
-    struct desc_struct ldt[3];
-    struct tss_struct tss;
-};
-extern struct task_struct* task[NR_TASKS];
-extern struct task_struct* last_task_used_math;
-extern struct task_struct* current;
 extern long volatile jiffies;
 extern long startup_time; // boot time
 

@@ -9,10 +9,6 @@
 
 int system_call(void);
 int timer_interrupt(void);
-union task_union {
-    struct task_struct task;
-    char stack[PAGE_SIZE];
-};
 long volatile jiffies = 0;
 long startup_time = 0;
 
