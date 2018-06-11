@@ -3,6 +3,7 @@
 [BITS 32]
 %include "../include/boot/pm.inc"
 extern main
+extern INIT_STACK
 ; ld recognize startup_32 to be entry
 global startup_32, gdt, idt, pg_dir
 pg_dir:
@@ -14,7 +15,7 @@ startup_32:
     mov fs, ax
     ;lss esp, stack_start ;TODO: error! I still not have stack_start
     mov ss, ax
-    mov esp, tmp_STACK_end ;TODO: maybe bugs. it seems to work pretty well =)
+    mov esp, INIT_STACK ;TODO: maybe bugs. it seems to work pretty well =)
     call setup_idt
     call setup_gdt
 
@@ -26,7 +27,7 @@ startup_32:
     mov gs, ax
     ;lss esp, stack_start ;TODO: same, see above
     mov ss, ax
-    mov esp, tmp_STACK_end ;TODO: maybe bugs
+    mov esp, INIT_STACK ;TODO: maybe bugs
 
    ; .temp used to test A20 really ok
 .tmp:

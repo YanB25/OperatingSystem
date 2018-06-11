@@ -12,6 +12,8 @@ asm.o: asm.s
 	$(AS) $(ASFLAGS) -f elf -o $@ $^
 traps.o: traps.c
 	$(CC) $(CCFLAGS) -c $^
+fork.o: fork.c
+	$(CC) $(CCFLAGS) -c $^
 # sched.o: sched.c
 # 	$(CC) $(CCFLAGS) -c $^
 sched.o: sched.c ../include/linux/sys.h

@@ -108,6 +108,7 @@ ret_from_sys_call:
 
 
 timer_interrupt:
+    ;xchg bx, bx
     push eax
     push ecx
     push edx
@@ -147,6 +148,7 @@ return_from_timer_interrupt:
     mov al, 0x20
     out 0x20, al
     
+    ;xchg bx, bx;NOTICE: delete me
     call schedule
     push eax
     call sys_restart

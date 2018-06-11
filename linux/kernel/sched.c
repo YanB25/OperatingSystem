@@ -19,6 +19,7 @@ typedef struct Stack {
 } Stack;
 
 Stack stacks[NR_TASKS + 1];
+uint32_t INIT_STACK = (uint32_t)&stacks[1];
 typedef struct PCB PCB_List_T;
 PCB_List_T PCB_List[NR_TASKS] = {};
 int32_t current = 0;
@@ -54,7 +55,7 @@ void sched_init() {
     outb(inb_p(0x21)&~0x01, 0x21);
     set_system_gate(0x80, &system_call);
     init_first_process();
-    temp_generate_second_process(); //TODO: delete me!!
+    //temp_generate_second_process(); //TODO: delete me!!
 }
 void init_first_process() {
     PCB_List[0].pid = 0;

@@ -10,19 +10,15 @@ int system_call();
 int32_t printks(const char*);
 #define BochsBreak() \
 __asm__("xchgw %%bx, %%bx\n"::)
-
-#define fork() \
-__asm__(\
-    "movw $0x02, %%eax\n"\
-    "int $0x80\n"\
-    ::)
-
+int fork();
 void main() {
+    BochsBreak();
     trap_init();
     sched_init();
     printks("\nnow in protected mode!\n");
     sti();
     int errno;
+    BochsBreak();
     __asm__ volatile(
         "movl $0x0, %%eax\n"
         "int $0x80\n"
@@ -30,8 +26,17 @@ void main() {
     );
     char arr[] = "hello!\n";
 
-    while(1) {
-        printks("Notice me please!!!!\n");
+    // while(1) {
+    //     printks("Notice me please!!!!\n");
+    // }
+    int id = fork();
+
+    if (id == 1) {
+        printks("I am 1\n");
+        while(1);
+    } else {
+        printks("I am not 1\n");
+        while(1);
     }
     return;
 }
