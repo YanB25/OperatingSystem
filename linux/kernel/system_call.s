@@ -1,6 +1,6 @@
 ;TODO: maybe bugs check twice
 extern sys_call_table
-extern schedule
+;extern schedule
 extern do_signal
 extern jiffies
 extern do_timer
@@ -39,7 +39,7 @@ bad_sys_call:
 
 reschedule:
     push dword ret_from_sys_call
-    jmp schedule ;TODO: in file sched.c, not imple yet
+    ;jmp schedule ;TODO: in file sched.c, not imple yet
 
 system_call:
     cmp eax, nr_system_calls

@@ -93,29 +93,6 @@ struct task_struct {
     struct desc_struct ldt[3];
     struct tss_struct tss;
 };
-#define INIT_TASK \
-{ 0, 15, 15, \
-    0, {{}, }, 0, \
-    0, 0, 0, 0, 0, 0,\
-    0, -1, 0, 0, 0,\
-    0, 0, 0, 0, 0, 0,\
-    0, 0, 0, 0, 0, 0,\
-    0,\
-    -1, 0022, NULL, NULL, NULL, 0,\
-    {NULL, }, \
-\
-    {\
-        {0, 0},\
-        {0x9f, 0xc0fa00},/*code length 640k, base 0, G=1, D=1, DPL=3, P=1, type=0x0a */ \
-        {0x9f, 0xc0f200},/*640k base 0, G=1, D=1, DPL=3, P=1, type=0x02  */\
-    },\
-    {0, PAGE_SIZE + (long)&init_task, 0x10, 0, 0, 0, 0, (long)&pg_dir,\
-        0, 0, 0, 0, 0, 0, 0, 0,\
-        0, 0, 0x17, 0x17, 0x17, 0x17, 0x17, 0x17,/*ds~gs 0x17*/ \
-        _LDT(0), 0x80000000, \
-        {}\
-    },\
-}
 extern struct task_struct* task[NR_TASKS];
 extern struct task_struct* last_task_used_math;
 extern struct task_struct* current;
