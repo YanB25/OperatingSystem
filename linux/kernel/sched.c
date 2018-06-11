@@ -22,6 +22,7 @@ Stack stacks[NR_TASKS + 1];
 typedef struct PCB PCB_List_T;
 PCB_List_T PCB_List[NR_TASKS] = {};
 int32_t current = 0;
+void init_first_process();
 
 void sched_init() {
     last_pid = 0;
@@ -131,4 +132,42 @@ void temp_generate_second_process() {
     stacks[2].space[16] = 0x00000206;
     PCB_List[1].state = TASK_RUNNING;
     PCB_List[1].pid = last_pid++;
+}
+
+int32_t first_empty_pcb() {
+    for (int i = 0; i < NR_TASKS; ++i) {
+        if (PCB_List[i].state == TASK_ZOMBIE || PCB_List[i].state == TASK_NOT_USED)
+            return i;
+    }
+    return -1;
+}
+void _memcpy(void*, void*, int);
+void copy_process(int32_t dst_index, int32_t src_index) {
+    struct RegisterImage* dst = &PCB_List[dst_index].register_image;
+    struct RegisterImage* src = &PCB_List[src_index].register_image; 
+    int32_t new_pid = last_pid++;
+    dst->eax = new_pid;
+    src->eax = 1;
+    dst->ecx = src->ecx;
+    dst->edx = src->edx;
+    dst->ebx = src->ebx;
+    dst->esp = src->esp + 1024;
+    dst->ebp = src->ebp + 1024;
+    dst->esi = src->esi;
+    dst->edi = src->edi;
+    dst->es = src->es;
+    dst->ss = src->ss;
+    dst->ds = src->ds;
+    dst->fs = src->fs;
+    dst->gs = src->gs;
+    dst->cs = src->cs;
+    _memcpy(&stacks[dst_index + 1], &stacks[src_index + 1], 1024);
+    PCB_List[dst_index].state = TASK_RUNNING;
+    PCB_List[dst_index].pid = new_pid;
+}
+
+void _memcpy(void* dst, void* src, int size) {
+    for (int i = 0; i < size; ++i) {
+        ((char*)dst)[i] = ((char*)src)[i];
+    }
 }
