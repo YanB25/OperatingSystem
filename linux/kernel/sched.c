@@ -13,6 +13,7 @@ long volatile jiffies = 0;
 long startup_time = 0;
 extern void test_second_process();
 void temp_generate_second_process();
+void init_first_process();
 uint32_t last_pid = 1;
 typedef struct Stack {
     uint32_t space[1024];
