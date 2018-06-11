@@ -29,7 +29,7 @@ void main() {
     //     "movl (0xFFFF), %%eax\n"
     //     ::
     // );
-    BochsBreak();
+    // BochsBreak();
     __asm__("int $0x20\n"::);
     printks("\nnow in protected mode!\n");
     sti();
@@ -41,19 +41,20 @@ void main() {
     );
     __asm__("int $0x20\n"::);
     char arr[] = "hello!\n";
-    move_to_user_mode();
 
     while(1) {
-        __asm__(
-            "movl $0x1, %%eax\n"
-            "int $0x80\n"
-            ::
-        );
+        //__asm__(
+        //    "movl $0x1, %%eax\n"
+        //    "int $0x80\n"
+        //    ::
+        //);
     }
     //while (1);
     return;
 }
 
-void test() {
-    while (1);
+void test_second_process() {
+    while(1) {
+        printks("tttt\n");
+    }
 }

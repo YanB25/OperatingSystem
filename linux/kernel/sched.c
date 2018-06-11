@@ -11,14 +11,13 @@ int system_call(void);
 int timer_interrupt(void);
 long volatile jiffies = 0;
 long startup_time = 0;
+extern void test_second_process();
 uint32_t last_pid = 0;
-long user_stack [PAGE_SIZE >> 2];
+typedef struct Stack {
+    uint32_t space[1024];
+} Stack;
 
-struct {
-    long* a;
-    short b;
-} stack_start = {&user_stack[PAGE_SIZE >> 2], 0x10};
-
+Stack stacks[NR_TASKS + 1];
 typedef struct PCB PCB_List_T;
 PCB_List_T PCB_List[NR_TASKS] = {};
 int32_t current = 0;
@@ -107,4 +106,19 @@ int32_t schedule() {
     }
     current = 0;
     return current;
+}
+
+void temp_generate_second_process() {
+    PCB_List[1].register_image.cs = 0x08;
+    PCB_List[1].register_image.ss = 0x10;
+    PCB_List[1].register_image.esp = (uint32_t)&(stacks[1].space[1023]);
+    stacks[1].space[1023-4] = 0x10;
+    stacks[1].space[1023-4*2] = 0x10;
+    stacks[1].space[1023-4*3] = 0x10;
+    stacks[1].space[1023-4*4] = 0x10;
+    stacks[1].space[1023-4*5] = 0x10;
+    stacks[1].space[1023-4*14] = (uint32_t)test_second_process;
+    stacks[1].space[1023-4*15] = 0x08;
+    stacks[1].space[1023-4*16] = 0x0;
+
 }
