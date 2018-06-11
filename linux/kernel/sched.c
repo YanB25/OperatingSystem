@@ -105,6 +105,7 @@ int32_t schedule() {
     else 
         current = 1;
     return current;
+    //return 0;
 }
 
 void temp_generate_second_process() {
@@ -119,6 +120,6 @@ void temp_generate_second_process() {
     stacks[2].space[5] = 0x10;
     stacks[2].space[14] = (uint32_t)test_second_process;
     stacks[2].space[15] = 0x08;
-    stacks[2].space[16] = 0x0;
+    stacks[2].space[16] = 0x00000206;
     PCB_List[1].state = TASK_RUNNING;
 }

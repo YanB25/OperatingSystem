@@ -72,10 +72,6 @@ system_call:
     ; je reschedule
 
 ret_from_sys_call:
-    ;TODO: delete it, only for debug
-    push dword 5
-    call I_AM_HERE
-    add esp, 4
     ;TODO: 不考虑信号量，也就不需要这些代码了
     ; mov eax, [current]
     ; cmp eax, [task] ;TODO: maybe BUGs
@@ -128,6 +124,15 @@ timer_interrupt:
     push ds
     push fs
     push gs
+
+    ;
+    ; set to same
+    mov eax, 0x10
+    mov es, eax
+    mov ss ,eax
+    mov ds, eax
+    mov fs, eax
+    mov gs, eax
 
     sub esp, 4
     mov [esp], esp
