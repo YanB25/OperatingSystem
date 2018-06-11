@@ -138,6 +138,10 @@ return_from_timer_interrupt:
     push 5
     call I_AM_HERE
     add esp, 4
+
+    ; for open hardware 8259A
+    mov al, 0x20
+    out 0x20, al
     
     call schedule
     push eax

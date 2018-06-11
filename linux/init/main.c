@@ -29,7 +29,7 @@ void main() {
     //     "movl (0xFFFF), %%eax\n"
     //     ::
     // );
-    // BochsBreak();
+    BochsBreak();
     __asm__("int $0x20\n"::);
     printks("\nnow in protected mode!\n");
     sti();
