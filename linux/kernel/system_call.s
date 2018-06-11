@@ -146,7 +146,6 @@ return_from_timer_interrupt:
     call schedule
     push eax
     call sys_restart
-    add esp, 4
 return_from_sys_restart:
     add esp, 4
     pop gs

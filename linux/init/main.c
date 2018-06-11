@@ -31,6 +31,7 @@ void main() {
     // );
     BochsBreak();
     __asm__("int $0x20\n"::);
+    BochsBreak();
     printks("\nnow in protected mode!\n");
     sti();
     int errno;
@@ -39,15 +40,16 @@ void main() {
         "int $0x80\n"
         :"=a"(errno):
     );
-    __asm__("int $0x20\n"::);
+    //__asm__("int $0x20\n"::);
     char arr[] = "hello!\n";
 
     while(1) {
-        //__asm__(
-        //    "movl $0x1, %%eax\n"
-        //    "int $0x80\n"
-        //    ::
-        //);
+        __asm__(
+            "movl $0x1, %%eax\n"
+            "int $0x80\n"
+            ::
+        );
+        __asm__("int $0x20\n"::);
     }
     //while (1);
     return;
@@ -55,6 +57,7 @@ void main() {
 
 void test_second_process() {
     while(1) {
-        printks("tttt\n");
+        BochsBreak();
+        __asm__("int $0x20\n"::);
     }
 }

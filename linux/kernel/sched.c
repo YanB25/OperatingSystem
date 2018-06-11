@@ -12,6 +12,7 @@ int timer_interrupt(void);
 long volatile jiffies = 0;
 long startup_time = 0;
 extern void test_second_process();
+void temp_generate_second_process();
 uint32_t last_pid = 0;
 typedef struct Stack {
     uint32_t space[1024];
@@ -51,6 +52,7 @@ void sched_init() {
     set_intr_gate(0x20, &timer_interrupt);
     outb(inb_p(0x21)&~0x01, 0x21);
     set_system_gate(0x80, &system_call);
+    temp_generate_second_process(); //TODO: delete me!!
 }
 void sys_save(
     int32_t esp,
@@ -98,27 +100,25 @@ void sys_restart(int32_t dst_pcb) {
     );
 }
 int32_t schedule() {
-    while (current < NR_TASKS && PCB_List[current].state != TASK_RUNNING) {
-        current++;
-    }
-    if (PCB_List[current].state == TASK_RUNNING) {
-        return current;
-    }
-    current = 0;
+    if (current == 1)
+        current = 0;
+    else 
+        current = 1;
     return current;
 }
 
 void temp_generate_second_process() {
     PCB_List[1].register_image.cs = 0x08;
     PCB_List[1].register_image.ss = 0x10;
-    PCB_List[1].register_image.esp = (uint32_t)&(stacks[1].space[1023]);
-    stacks[1].space[1023-4] = 0x10;
-    stacks[1].space[1023-4*2] = 0x10;
-    stacks[1].space[1023-4*3] = 0x10;
-    stacks[1].space[1023-4*4] = 0x10;
-    stacks[1].space[1023-4*5] = 0x10;
-    stacks[1].space[1023-4*14] = (uint32_t)test_second_process;
-    stacks[1].space[1023-4*15] = 0x08;
-    stacks[1].space[1023-4*16] = 0x0;
-
+    PCB_List[1].register_image.esp = (uint32_t)&(stacks[2]);
+    stacks[2].space[0] = 0x01; // trivial, will not be used
+    stacks[2].space[1] = 0x10;
+    stacks[2].space[2] = 0x10;
+    stacks[2].space[3] = 0x10;
+    stacks[2].space[4] = 0x10;
+    stacks[2].space[5] = 0x10;
+    stacks[2].space[14] = (uint32_t)test_second_process;
+    stacks[2].space[15] = 0x08;
+    stacks[2].space[16] = 0x0;
+    PCB_List[1].state = TASK_RUNNING;
 }
