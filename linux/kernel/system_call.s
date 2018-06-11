@@ -9,6 +9,7 @@ extern task
 extern I_AM_HERE
 extern sys_save
 extern sys_restart
+extern schedule
 
 global timer_interrupt
 global system_call
@@ -133,7 +134,7 @@ timer_interrupt:
 
     call sys_save
 return_from_timer_interrupt:
-    mov eax, 0; TODO: change here!!!
+    call schedule
     push eax
     call sys_restart
     add esp, 4

@@ -19,13 +19,13 @@
 #define TASK_UNINTERRUPTIBLE 2// ;wait and no interruptible
 #define TASK_ZOMBIE 3
 #define TASK_STOPPED 4
+#define TASK_NOT_USED -1
 
 #ifndef NULL
 #define NULL ((void*)0)
 #endif
 
 extern void sched_init();
-extern void schedule();
 extern void trap_init();
 extern void panic(const char*);
 typedef int (*fn_ptr)();
@@ -85,6 +85,7 @@ struct RegisterImage {
 struct PCB {
     struct RegisterImage register_image;
     uint32_t pid;
+    int32_t state;
 }__attribute((packed));
 extern long volatile jiffies;
 extern long startup_time; // boot time
