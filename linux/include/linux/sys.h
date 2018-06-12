@@ -16,7 +16,6 @@ int print_hello() {
 }
 
 int sys_fork() {
-    cli();
     printks("fork\n");
     int32_t pindex = first_empty_pcb();
     printks("after get empty pcb\n");
@@ -26,7 +25,6 @@ int sys_fork() {
     copy_process(pindex, current);
     printks("after copy_process\n");
     __asm__("xchgw %%bx, %%bx\n"::); //TODO: delete me
-    sti();
     printks("after sti\n");
     return 1;
 }

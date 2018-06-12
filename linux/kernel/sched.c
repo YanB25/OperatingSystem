@@ -121,16 +121,16 @@ int32_t schedule() {
 void temp_generate_second_process() {
     PCB_List[1].register_image.cs = 0x08;
     PCB_List[1].register_image.ss = 0x10;
-    PCB_List[1].register_image.esp = (uint32_t)&(stacks[2]);
-    stacks[2].space[0] = 0x01; // trivial, will not be used
-    stacks[2].space[1] = 0x10;
-    stacks[2].space[2] = 0x10;
-    stacks[2].space[3] = 0x10;
-    stacks[2].space[4] = 0x10;
-    stacks[2].space[5] = 0x10;
-    stacks[2].space[14] = (uint32_t)test_second_process;
-    stacks[2].space[15] = 0x08;
-    stacks[2].space[16] = 0x00000206;
+    PCB_List[1].register_image.esp = ((uint32_t)&(stacks[2])) - 17*4;
+    stacks[2].space[-17] = 0x01; // trivial, will not be used
+    stacks[2].space[-16] = 0x10;
+    stacks[2].space[-15] = 0x10;
+    stacks[2].space[-14] = 0x10;
+    stacks[2].space[-13] = 0x10;
+    stacks[2].space[-12] = 0x10;
+    stacks[2].space[-3] = (uint32_t)test_second_process;
+    stacks[2].space[-2] = 0x08;
+    stacks[2].space[-1] = 0x00000206;
     PCB_List[1].state = TASK_RUNNING;
     PCB_List[1].pid = last_pid++;
 }
@@ -142,7 +142,7 @@ int32_t first_empty_pcb() {
     }
     return -1;
 }
-void _memcpy(void*, void*, int);
+void _rev_memcpy(void*, void*, int);
 void copy_process(int32_t dst_index, int32_t src_index) {
     struct RegisterImage* dst = &PCB_List[dst_index].register_image;
     struct RegisterImage* src = &PCB_List[src_index].register_image; 
@@ -162,13 +162,13 @@ void copy_process(int32_t dst_index, int32_t src_index) {
     dst->fs = src->fs;
     dst->gs = src->gs;
     dst->cs = src->cs;
-    _memcpy(&stacks[dst_index + 1], &stacks[src_index + 1], 1024 * 4);
+    _rev_memcpy(&stacks[dst_index + 1], &stacks[src_index + 1], 1024 * 4);
     PCB_List[dst_index].state = TASK_RUNNING;
     PCB_List[dst_index].pid = new_pid;
 }
 
-void _memcpy(void* dst, void* src, int size) {
+void _rev_memcpy(void* dst, void* src, int size) {
     for (int i = 0; i < size; ++i) {
-        ((char*)dst)[i] = ((char*)src)[i];
+        ((char*)dst)[-i-1] = ((char*)src)[-i-1];
     }
 }

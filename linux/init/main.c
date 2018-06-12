@@ -54,10 +54,10 @@ void test_second_process() {
     // }
 
     while(1) {
-        __asm__(
-            "movl $0x1, %%eax\n"
-            "int $0x80\n"
-            ::
-        );
+        // __asm__(
+        //     "movl $0x1, %%eax\n"
+        //     "int $0x80\n"
+        //     ::
+        // );
     }
 }
