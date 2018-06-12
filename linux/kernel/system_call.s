@@ -100,7 +100,7 @@ system_call:
 
 
 timer_interrupt:
-    ;xchg bx, bx
+    xchg bx, bx
     push eax
     push ecx
     push edx
