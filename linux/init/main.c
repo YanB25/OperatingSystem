@@ -28,8 +28,8 @@ void main() {
     //     printks("Notice me please!!!!\n");
     // }
     sti();
-    BochsBreak();
-    int id = fork();
+    //BochsBreak();
+    //int id = fork();
 
     // if (id == 1) {
     //     printks("I am 1\n");

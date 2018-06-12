@@ -56,7 +56,7 @@ void sched_init() {
     outb(inb_p(0x21)&~0x01, 0x21);
     set_system_gate(0x80, &system_call);
     init_first_process();
-    //temp_generate_second_process(); //TODO: delete me!!
+    temp_generate_second_process(); //TODO: delete me!!
 }
 void init_first_process() {
     PCB_List[0].pid = 0;
@@ -122,16 +122,18 @@ int32_t schedule() {
 void temp_generate_second_process() {
     PCB_List[1].register_image.cs = 0x08;
     PCB_List[1].register_image.ss = 0x10;
-    PCB_List[1].register_image.esp = ((uint32_t)&(stacks[2])) - 17*4;
-    stacks[2].space[-17] = 0x01; // trivial, will not be used
-    stacks[2].space[-16] = 0x10;
-    stacks[2].space[-15] = 0x10;
-    stacks[2].space[-14] = 0x10;
-    stacks[2].space[-13] = 0x10;
-    stacks[2].space[-12] = 0x10;
-    stacks[2].space[-3] = (uint32_t)test_second_process;
-    stacks[2].space[-2] = 0x08;
-    stacks[2].space[-1] = 0x00000206;
+    uint32_t p_esp = (0x20800) - 17 * 4;
+    PCB_List[1].register_image.esp = p_esp;
+
+    *((uint32_t*)p_esp) = 0x01; // trivial, will not be used
+    *((uint32_t*)p_esp+1) = 0x10;
+    *((uint32_t*)p_esp+2) = 0x10;
+    *((uint32_t*)p_esp+3) = 0x10;
+    *((uint32_t*)p_esp+4) = 0x10;
+    *((uint32_t*)p_esp+5) = 0x10;
+    *((uint32_t*)p_esp+14) = (uint32_t)test_second_process;
+    *((uint32_t*)p_esp+15) = 0x08;
+    *((uint32_t*)p_esp+16) = 0x00000206;
     PCB_List[1].state = TASK_RUNNING;
     PCB_List[1].pid = last_pid++;
 }
