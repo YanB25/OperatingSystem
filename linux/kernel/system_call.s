@@ -94,12 +94,12 @@ system_call:
     pop edx
     pop ecx
     pop eax ;TODO: very important!! eax is wrong!!
+    mov eax, [esp - 4*15]
 
     iret
 
 
 timer_interrupt:
-    xchg bx, bx
     push eax
     push ecx
     push edx
@@ -139,7 +139,7 @@ return_from_timer_interrupt:
     mov al, 0x20
     out 0x20, al
     
-    xchg bx, bx;NOTICE: delete me
+    ;xchg bx, bx;NOTICE: delete me
     call schedule
     push eax
     call sys_restart

@@ -14,7 +14,7 @@ long startup_time = 0;
 extern void test_second_process();
 void temp_generate_second_process();
 extern uint32_t tmp_STACK_end;
-uint32_t last_pid = 1;
+uint32_t last_pid = 2;
 typedef struct Stack {
     uint32_t space[1024];
 } Stack;
@@ -27,7 +27,7 @@ int32_t current = 0;
 void init_first_process();
 
 void sched_init() {
-    last_pid = 0;
+    last_pid = 2;
     current = 0;
     int i;
     struct desc_struct* p;
@@ -146,10 +146,28 @@ int32_t first_empty_pcb() {
     return -1;
 }
 void _rev_memcpy(void*, void*, int);
+
+#define OFFSET_IGNORE 0
+#define OFFSET_GS 1
+#define OFFSET_FS 2
+#define OFFSET_DS 3
+#define OFFSET_SS 4
+#define OFFSET_ES 5
+#define OFFSET_EDI 6
+#define OFFSET_ESI 7
+#define OFFSET_EBP 8
+#define OFFSET_ESP_NO_USED 9
+#define OFFSET_EBX 10
+#define OFFSET_EDX 11
+#define OFFSET_ECX 12
+#define OFFSET_EAX 13
+
 void copy_process(int32_t dst_index, int32_t src_index) {
     struct RegisterImage* dst = &PCB_List[dst_index].register_image;
     struct RegisterImage* src = &PCB_List[src_index].register_image; 
     int32_t new_pid = last_pid++;
+
+    //TODO: take care of pid
     dst->eax = new_pid;
     src->eax = 1;
     dst->ecx = src->ecx;
@@ -163,29 +181,17 @@ void copy_process(int32_t dst_index, int32_t src_index) {
     dst->fs = src->fs;
     dst->gs = src->gs;
     dst->cs = src->cs;
+
     int32_t esp_offset = ProcessStack(src_index) - src->esp;
     int32_t ebp_offset = ProcessStack(src_index) - src->ebp;
     _rev_memcpy((void*)ProcessStack(dst_index), (void*)ProcessStack(src_index), 1024);
     dst->esp = ProcessStack(dst_index) - esp_offset;
-    //dst->esp = src->esp;
     dst->ebp = ProcessStack(dst_index) - ebp_offset;
-    // if (src_index == 0) {
-    //     _rev_memcpy(&stacks[dst_index + 1], (void*)tmp_STACK_end, 1024*4);
-    //     // calculate esp and ebp
-    //     //NOTICE: very important & before tmp_STACK_end
-    //     int32_t esp_offset = (uint32_t)&tmp_STACK_end - src->esp; // 81520 - 441??;
-    //     int32_t ebp_offset = (uint32_t)&tmp_STACK_end - src->ebp;
-    //     // 这条语句有执行。等号右侧的值不对？
-    //     //0x5780 - 0x810df ???
-    //     dst->esp = ((uint32_t)&stacks[dst_index + 1]) - esp_offset;
-    //     dst->ebp = ((uint32_t)&stacks[dst_index + 1]) - ebp_offset;
-    // } else {
-    //     _rev_memcpy(&stacks[dst_index + 1], &stacks[src_index + 1], 1024 * 4);
-    //     int32_t esp_offset = ((uint32_t)&stacks[src_index+1]) - src->esp;
-    //     int32_t ebp_offset = ((uint32_t)&stacks[src_index+1]) - src->ebp;
-    //     dst->esp = ((uint32_t)&stacks[dst_index+1] - esp_offset);
-    //     dst->ebp = ((uint32_t)&stacks[dst_index+1] - ebp_offset);
-    // }
+
+    uint32_t* pesp = (uint32_t*)dst->esp;
+    *(pesp + OFFSET_EBP) = dst->ebp;
+    *(pesp + OFFSET_EAX) = dst->eax;
+
     PCB_List[dst_index].state = TASK_RUNNING;
     PCB_List[dst_index].pid = new_pid;
 }

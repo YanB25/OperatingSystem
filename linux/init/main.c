@@ -16,6 +16,7 @@ __asm__("xchgw %%bx, %%bx\n"::)
 
 
 void main() {
+    //BochsBreak();
     uint32_t tmp = (uint32_t)&tmp_STACK_end;
     trap_init();
     sched_init();
@@ -32,7 +33,26 @@ void main() {
     //     printks("Notice me please!!!!\n");
     // }
     sti();
+    //BochsBreak();
     int id = fork();
+    if (id == 1) {
+        printks("111\n");
+        int id2 = fork();
+        if (id2 == 1) {
+            printks("333\n");
+        } else {
+            printks("444\n");
+        }
+    } else {
+        printks("222\n");
+        int id2 = fork();
+        if (id2 == 1) {
+            printks("555\n");
+        } else {
+            printks("666\n");
+        }
+    }
+    while(1);
 
     // if (id == 1) {
     //     printks("I am 1\n");
