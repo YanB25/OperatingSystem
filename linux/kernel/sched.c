@@ -55,7 +55,7 @@ void sched_init() {
     outb(inb_p(0x21)&~0x01, 0x21);
     set_system_gate(0x80, &system_call);
     init_first_process();
-    //temp_generate_second_process(); //TODO: delete me!!
+    temp_generate_second_process(); //TODO: delete me!!
 }
 void init_first_process() {
     PCB_List[0].pid = 0;

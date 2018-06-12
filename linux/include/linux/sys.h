@@ -20,9 +20,9 @@ int sys_fork() {
     printks("fork\n");
     int32_t pindex = first_empty_pcb();
     printks("after get empty pcb\n");
-    // if (pindex == -1) {
-    //     return -1;
-    // }
+    if (pindex == -1) {
+        return -1;
+    }
     copy_process(pindex, current);
     printks("after copy_process\n");
     __asm__("xchgw %%bx, %%bx\n"::); //TODO: delete me

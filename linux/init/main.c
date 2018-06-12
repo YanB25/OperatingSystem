@@ -12,6 +12,7 @@ int32_t printks(const char*);
 __asm__("xchgw %%bx, %%bx\n"::)
 int fork();
 void main() {
+    //BochsBreak();
     trap_init();
     sched_init();
     printks("\nnow in protected mode!\n");
@@ -27,7 +28,7 @@ void main() {
     // while(1) {
     //     printks("Notice me please!!!!\n");
     // }
-    int id = fork();
+    //int id = fork();
 
     // if (id == 1) {
     //     printks("I am 1\n");
@@ -41,21 +42,22 @@ void main() {
 }
 
 void test_second_process() {
-    printks("enter test\n");
-    int id = fork();
-    if (id == 1) {
-        printks("I am 1\n");
-        while(1);
-    } else {
-        printks("I am not 1\n");
-        while(1);
-    }
+    BochsBreak();
+    // printks("enter test\n");
+    // int id = fork();
+    // if (id == 1) {
+    //     printks("I am 1\n");
+    //     while(1);
+    // } else {
+    //     printks("I am not 1\n");
+    //     while(1);
+    // }
 
     while(1) {
-        // __asm__(
-        //     "movl $0x1, %%eax\n"
-        //     "int $0x80\n"
-        //     ::
-        // );
+        __asm__(
+            "movl $0x1, %%eax\n"
+            "int $0x80\n"
+            ::
+        );
     }
 }

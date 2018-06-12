@@ -6,6 +6,7 @@ extern main
 extern INIT_STACK
 ; ld recognize startup_32 to be entry
 global startup_32, gdt, idt, pg_dir
+global tmp_STACK_end
 pg_dir:
 startup_32:
     mov eax, 0x10 ; descriptor! RPL = 0. the third item(data descriptor)
