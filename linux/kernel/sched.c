@@ -95,6 +95,7 @@ void sys_save(
 void sys_restart(int32_t dst_pcb) {
     int32_t dst_ss = PCB_List[dst_pcb].register_image.ss;
     int32_t dst_sp = PCB_List[dst_pcb].register_image.esp;
+    PCB_List[current].state = TASK_INTERRUPTIBLE;
     __asm__(
         "movl %0, %%ss\n"
         "movl %1, %%esp\n"
@@ -105,7 +106,7 @@ void sys_restart(int32_t dst_pcb) {
 }
 int32_t schedule() {
     while (++current < NR_TASKS) {
-        if (PCB_List[current].state != TASK_RUNNING) {
+        if (PCB_List[current].state != TASK_INTERRUPTIBLE) {
             continue;
         } else {
             return current;
@@ -130,7 +131,7 @@ void temp_generate_second_process() {
     *((uint32_t*)p_esp+14) = (uint32_t)test_second_process;
     *((uint32_t*)p_esp+15) = 0x08;
     *((uint32_t*)p_esp+16) = 0x00000206;
-    PCB_List[1].state = TASK_RUNNING;
+    PCB_List[1].state = TASK_INTERRUPTIBLE;
     PCB_List[1].pid = 2;
     PCB_List[1].parent_id = -1;
     last_pid++;
@@ -186,7 +187,7 @@ void copy_process(int32_t dst_index, int32_t src_index) {
     *(pesp + OFFSET_ECX) = dst->ecx;
     *(pesp + OFFSET_EAX) = dst->eax;
 
-    PCB_List[dst_index].state = TASK_RUNNING;
+    PCB_List[dst_index].state = TASK_INTERRUPTIBLE;
     PCB_List[dst_index].pid = new_pid;
     PCB_List[dst_index].parent_id = src_index;
 }
