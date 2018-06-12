@@ -15,7 +15,7 @@ startup_32:
     mov fs, ax
     ;lss esp, stack_start ;TODO: error! I still not have stack_start
     mov ss, ax
-    mov esp, INIT_STACK ;TODO: maybe bugs. it seems to work pretty well =)
+    mov esp, tmp_STACK_end ;TODO: maybe bugs. it seems to work pretty well =)
     call setup_idt
     call setup_gdt
 
@@ -27,7 +27,7 @@ startup_32:
     mov gs, ax
     ;lss esp, stack_start ;TODO: same, see above
     mov ss, ax
-    mov esp, INIT_STACK ;TODO: maybe bugs
+    mov esp, tmp_STACK_end ;TODO: maybe bugs
 
    ; .temp used to test A20 really ok
 .tmp:
