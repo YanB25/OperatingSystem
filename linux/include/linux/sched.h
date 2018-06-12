@@ -115,5 +115,4 @@ extern long startup_time; // boot time
 struct tss_struct _MY_FIRST_TSS = _INIT_MY_TSS;
 struct desc_struct _MY_FIRST_LDT[3] = _INIT_MY_LDT;
 
-
 #endif

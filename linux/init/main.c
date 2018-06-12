@@ -1,6 +1,7 @@
 // init main function.
 #include <stdint.h>
 #include "../include/asm/system.h"
+#include "../include/linux/fork.h"
 const char* msg = "now in main function";
 extern void trap_init();
 extern void sched_init();
@@ -11,14 +12,15 @@ extern uint32_t tmp_STACK_end;
 int32_t printks(const char*);
 #define BochsBreak() \
 __asm__("xchgw %%bx, %%bx\n"::)
-int fork();
+
+
+
 void main() {
     uint32_t tmp = (uint32_t)&tmp_STACK_end;
     trap_init();
     sched_init();
     printks("\nnow in protected mode!\n");
     int errno;
-    BochsBreak();
     __asm__ volatile(
         "movl $0x0, %%eax\n"
         "int $0x80\n"

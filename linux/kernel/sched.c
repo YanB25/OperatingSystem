@@ -166,8 +166,8 @@ void copy_process(int32_t dst_index, int32_t src_index) {
     int32_t esp_offset = ProcessStack(src_index) - src->esp;
     int32_t ebp_offset = ProcessStack(src_index) - src->ebp;
     _rev_memcpy((void*)ProcessStack(dst_index), (void*)ProcessStack(src_index), 1024);
-    //dst->esp = ProcessStack(dst_index) - esp_offset;
-    dst->esp = src->esp;
+    dst->esp = ProcessStack(dst_index) - esp_offset;
+    //dst->esp = src->esp;
     dst->ebp = ProcessStack(dst_index) - ebp_offset;
     // if (src_index == 0) {
     //     _rev_memcpy(&stacks[dst_index + 1], (void*)tmp_STACK_end, 1024*4);
