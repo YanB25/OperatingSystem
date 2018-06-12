@@ -13,10 +13,12 @@ int32_t printks(const char*);
 __asm__("xchgw %%bx, %%bx\n"::)
 int fork();
 void main() {
+    uint32_t tmp = (uint32_t)&tmp_STACK_end;
     trap_init();
     sched_init();
     printks("\nnow in protected mode!\n");
     int errno;
+    BochsBreak();
     __asm__ volatile(
         "movl $0x0, %%eax\n"
         "int $0x80\n"
@@ -28,8 +30,7 @@ void main() {
     //     printks("Notice me please!!!!\n");
     // }
     sti();
-    //BochsBreak();
-    //int id = fork();
+    int id = fork();
 
     // if (id == 1) {
     //     printks("I am 1\n");

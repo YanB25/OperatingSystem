@@ -66,9 +66,8 @@ system_call:
     sub esp, 4
     mov [esp], esp
 
-    push eax
     call sys_save
-    pop eax
+    mov eax, [esp + 4 *13]
 
     mov edx, 0x10
     mov ds, edx
