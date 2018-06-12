@@ -24,7 +24,7 @@ int sys_fork() {
     }
     copy_process(pindex, current);
     printks("after copy_process\n");
-    __asm__("xchgw %%bx, %%bx\n"::); //TODO: delete me
+    //__asm__("xchgw %%bx, %%bx\n"::); //TODO: delete me
     printks("after sti\n");
     return 1;
 }

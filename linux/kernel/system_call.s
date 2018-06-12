@@ -47,6 +47,39 @@ reschedule:
     ;jmp schedule ;TODO: in file sched.c, not imple yet
 
 system_call:
+.save:
+    push eax
+    push ecx
+    push edx
+    push ebx
+    push 0; false push esp
+    push ebp
+    push esi
+    push edi
+    push es
+    push ss
+    push ds
+    push fs
+    push gs
+    sub esp, 4
+    mov [esp], esp
+.final_restore:
+    add esp, 4
+    pop gs
+    pop fs
+    pop ds
+    pop ss
+    pop es
+    pop edi
+    pop esi
+    pop ebp
+    add esp, 4 ; false pop
+    pop ebx
+    pop edx
+    pop ecx
+    pop eax
+
+.body:
     cmp eax, nr_system_calls
     ja bad_sys_call
     push ds
@@ -96,6 +129,7 @@ ret_from_sys_call:
     ; push ecx
     ; call do_signal
     ; pop eax ;no, it is deliberately duplecated.
+
 .final:
     pop eax
     pop ebx
@@ -104,7 +138,10 @@ ret_from_sys_call:
     pop fs
     pop es
     pop ds
+
     iret
+
+
 
 
 timer_interrupt:
@@ -148,7 +185,7 @@ return_from_timer_interrupt:
     mov al, 0x20
     out 0x20, al
     
-    ;xchg bx, bx;NOTICE: delete me
+    xchg bx, bx;NOTICE: delete me
     call schedule
     push eax
     call sys_restart
