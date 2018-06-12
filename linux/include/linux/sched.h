@@ -100,8 +100,9 @@ struct RegisterImage {
 }__attribute((packed));
 struct PCB {
     struct RegisterImage register_image;
-    uint32_t pid;
+    int32_t pid;
     int32_t state;
+    int32_t parent_id;
 }__attribute((packed));
 extern long volatile jiffies;
 extern long startup_time; // boot time

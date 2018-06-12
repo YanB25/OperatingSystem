@@ -56,6 +56,7 @@ void sched_init() {
 void init_first_process() {
     PCB_List[0].pid = 0;
     PCB_List[0].state = TASK_RUNNING;
+    PCB_List[0].parent_id = -1;
 }
 void sys_save(
     int32_t esp,
@@ -131,6 +132,7 @@ void temp_generate_second_process() {
     *((uint32_t*)p_esp+16) = 0x00000206;
     PCB_List[1].state = TASK_RUNNING;
     PCB_List[1].pid = 2;
+    PCB_List[1].parent_id = -1;
     last_pid++;
 }
 
@@ -186,6 +188,7 @@ void copy_process(int32_t dst_index, int32_t src_index) {
 
     PCB_List[dst_index].state = TASK_RUNNING;
     PCB_List[dst_index].pid = new_pid;
+    PCB_List[dst_index].parent_id = src_index;
 }
 
 void _rev_memcpy(void* dst, void* src, int size) {
