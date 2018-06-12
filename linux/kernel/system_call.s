@@ -43,11 +43,13 @@ bad_sys_call:
     iret
 
 reschedule:
-    push dword ret_from_sys_call
+    ; push dword ret_from_sys_call ;TODO: not
     ;jmp schedule ;TODO: in file sched.c, not imple yet
 
 system_call:
-.save:
+
+    cmp eax, nr_system_calls
+    ja bad_sys_call
     push eax
     push ecx
     push edx
@@ -64,8 +66,21 @@ system_call:
     sub esp, 4
     mov [esp], esp
 
+    push eax
     call sys_save
-.final_restore:
+    pop eax
+
+    mov edx, 0x10
+    mov ds, edx
+    mov es, edx
+    mov fs, edx
+    mov gs, edx
+
+    call [sys_call_table + 4 * eax] ;TODO: probably it is correct. not pretty sure
+    push eax ;sys call return value
+
+.final:
+    pop eax
     add esp, 4
     pop gs
     pop fs
@@ -75,75 +90,13 @@ system_call:
     pop edi
     pop esi
     pop ebp
-    add esp, 4 ; false pop
+    add esp, 4
     pop ebx
     pop edx
     pop ecx
-    pop eax
-
-.body:
-    cmp eax, nr_system_calls
-    ja bad_sys_call
-    push ds
-    push es 
-    push fs
-    push edx
-    push ecx
-    push ebx
-    mov edx, 0x10
-    mov ds, dx
-    mov es, dx
-    mov edx, 0x17 ;TODO: LDT?? where is LDT?? what?
-    mov fs, dx ;TODO: so???
-
-    call [sys_call_table + 4 * eax] ;TODO: probably it is correct. not pretty sure
-    push eax ;sys call return value
-
-    ;NOTICE: 抢占式。可以不这样实现
-    ; mov eax, [current] ; current is a pointer. TODO: is it right?
-    ; cmp 0, [state + eax]
-    ; jne reschedule ; not standby
-    ; cmp 0, [counter + eax]
-    ; je reschedule
-
-ret_from_sys_call:
-    ;TODO: 不考虑信号量，也就不需要这些代码了
-    ; mov eax, [current]
-    ; cmp eax, [task] ;TODO: maybe BUGs
-    ; je .final
-
-    ; cmp word [esp + offCS], 0x0F
-    ; jne .final
-
-    ; cmp word 0x17, [esp + offOLDSS]
-    ; jne .final
-
-    ;TODO: 不考虑信号量
-    ; mov ebx, [signal + eax]
-    ; mov ecx, [blocked + eax]
-    ; not ecx
-    ; and ecx, ebx
-    ; bsf ecx, ecx
-    ; je .final
-    ; btr ebx, ecx
-    ; mov [signal + eax], ebx
-    ; inc ecx
-    ; push ecx
-    ; call do_signal
-    ; pop eax ;no, it is deliberately duplecated.
-
-.final:
-    pop eax
-    pop ebx
-    pop ecx
-    pop edx
-    pop fs
-    pop es
-    pop ds
+    pop eax ;TODO: very important!! eax is wrong!!
 
     iret
-
-
 
 
 timer_interrupt:
