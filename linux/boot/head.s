@@ -28,6 +28,7 @@ startup_32:
     mov gs, ax
     ;lss esp, stack_start ;TODO: same, see above
     mov ss, ax
+    ; tmp_STACK_end about 0x04b8
     mov esp, tmp_STACK_end ;TODO: maybe bugs
 
    ; .temp used to test A20 really ok

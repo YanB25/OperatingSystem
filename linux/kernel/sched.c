@@ -13,7 +13,7 @@ long volatile jiffies = 0;
 long startup_time = 0;
 extern void test_second_process();
 void temp_generate_second_process();
-extern int32_t tmp_STACK_end;
+extern uint32_t tmp_STACK_end;
 uint32_t last_pid = 1;
 typedef struct Stack {
     uint32_t space[1024];
@@ -164,8 +164,11 @@ void copy_process(int32_t dst_index, int32_t src_index) {
     if (src_index == 0) {
         _rev_memcpy(&stacks[dst_index + 1], (void*)tmp_STACK_end, 1024*4);
         // calculate esp and ebp
-        int32_t esp_offset = tmp_STACK_end - src->esp;
-        int32_t ebp_offset = tmp_STACK_end - src->ebp;
+        //NOTICE: very important & before tmp_STACK_end
+        int32_t esp_offset = (uint32_t)&tmp_STACK_end - src->esp; // 81520 - 441??;
+        int32_t ebp_offset = (uint32_t)&tmp_STACK_end - src->ebp;
+        // 这条语句有执行。等号右侧的值不对？
+        //0x5780 - 0x810df ???
         dst->esp = ((uint32_t)&stacks[dst_index + 1]) - esp_offset;
         dst->ebp = ((uint32_t)&stacks[dst_index + 1]) - ebp_offset;
     } else {

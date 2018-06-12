@@ -7,16 +7,16 @@ extern void sched_init();
 void test_write();
 void I_AM_HERE(int32_t id);
 int system_call();
+extern uint32_t tmp_STACK_end;
 int32_t printks(const char*);
 #define BochsBreak() \
 __asm__("xchgw %%bx, %%bx\n"::)
 int fork();
 void main() {
-    //BochsBreak();
+    BochsBreak();
     trap_init();
     sched_init();
     printks("\nnow in protected mode!\n");
-    sti();
     int errno;
     __asm__ volatile(
         "movl $0x0, %%eax\n"
@@ -28,7 +28,9 @@ void main() {
     // while(1) {
     //     printks("Notice me please!!!!\n");
     // }
-    //int id = fork();
+    sti();
+    BochsBreak();
+    int id = fork();
 
     // if (id == 1) {
     //     printks("I am 1\n");

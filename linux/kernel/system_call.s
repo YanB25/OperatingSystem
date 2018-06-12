@@ -63,6 +63,8 @@ system_call:
     push gs
     sub esp, 4
     mov [esp], esp
+
+    call sys_save
 .final_restore:
     add esp, 4
     pop gs
