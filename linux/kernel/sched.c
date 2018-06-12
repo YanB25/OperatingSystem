@@ -152,8 +152,8 @@ void copy_process(int32_t dst_index, int32_t src_index) {
     int32_t new_pid = last_pid++;
 
     //TODO: take care of pid
-    dst->eax = new_pid;
-    src->eax = 1;
+    src->eax = new_pid;
+    dst->eax = 1;
     dst->ecx = src->ecx;
     dst->edx = src->edx;
     dst->ebx = src->ebx;
