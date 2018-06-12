@@ -50,7 +50,6 @@ void main() {
 }
 
 void test_second_process() {
-    BochsBreak();
     // printks("enter test\n");
     // int id = fork();
     // if (id == 1) {
@@ -61,6 +60,12 @@ void test_second_process() {
     //     while(1);
     // }
 
+    int id = fork();
+    if (id == 1) {
+        printks("777\n");
+    } else {
+        printks("888\n");
+    }
     while(1) {
         // __asm__(
         //     "movl $0x1, %%eax\n"
