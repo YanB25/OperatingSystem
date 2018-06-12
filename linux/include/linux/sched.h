@@ -21,6 +21,22 @@
 #define TASK_STOPPED 4
 #define TASK_NOT_USED -1
 
+// for offset in copy_process()
+#define OFFSET_IGNORE 0
+#define OFFSET_GS 1
+#define OFFSET_FS 2
+#define OFFSET_DS 3
+#define OFFSET_SS 4
+#define OFFSET_ES 5
+#define OFFSET_EDI 6
+#define OFFSET_ESI 7
+#define OFFSET_EBP 8
+#define OFFSET_ESP_NO_USED 9
+#define OFFSET_EBX 10
+#define OFFSET_EDX 11
+#define OFFSET_ECX 12
+#define OFFSET_EAX 13
+
 #ifndef NULL
 #define NULL ((void*)0)
 #endif

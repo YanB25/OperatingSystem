@@ -14,13 +14,8 @@ long startup_time = 0;
 extern void test_second_process();
 void temp_generate_second_process();
 extern uint32_t tmp_STACK_end;
-uint32_t last_pid = 2;
-typedef struct Stack {
-    uint32_t space[1024];
-} Stack;
+uint32_t last_pid = 2; //important. do not start at one.
 #define ProcessStack(id) (id==0? ((uint32_t) &tmp_STACK_end) : (0x20000) + (0x400*id))
-Stack stacks[NR_TASKS + 1];
-uint32_t INIT_STACK = (uint32_t)&stacks[1];
 typedef struct PCB PCB_List_T;
 PCB_List_T PCB_List[NR_TASKS] = {};
 int32_t current = 0;
@@ -146,21 +141,6 @@ int32_t first_empty_pcb() {
     return -1;
 }
 void _rev_memcpy(void*, void*, int);
-
-#define OFFSET_IGNORE 0
-#define OFFSET_GS 1
-#define OFFSET_FS 2
-#define OFFSET_DS 3
-#define OFFSET_SS 4
-#define OFFSET_ES 5
-#define OFFSET_EDI 6
-#define OFFSET_ESI 7
-#define OFFSET_EBP 8
-#define OFFSET_ESP_NO_USED 9
-#define OFFSET_EBX 10
-#define OFFSET_EDX 11
-#define OFFSET_ECX 12
-#define OFFSET_EAX 13
 
 void copy_process(int32_t dst_index, int32_t src_index) {
     struct RegisterImage* dst = &PCB_List[dst_index].register_image;

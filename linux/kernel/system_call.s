@@ -1,4 +1,3 @@
-;TODO: maybe bugs check twice
 extern sys_call_table
 ;extern schedule
 extern do_signal
@@ -42,10 +41,6 @@ bad_sys_call:
     mov eax, -1
     iret
 
-reschedule:
-    ; push dword ret_from_sys_call ;TODO: not
-    ;jmp schedule ;TODO: in file sched.c, not imple yet
-
 system_call:
 
     cmp eax, nr_system_calls
@@ -75,7 +70,7 @@ system_call:
     mov fs, edx
     mov gs, edx
 
-    call [sys_call_table + 4 * eax] ;TODO: probably it is correct. not pretty sure
+    call [sys_call_table + 4 * eax] 
     push eax ;sys call return value
 
 .final:
@@ -93,7 +88,8 @@ system_call:
     pop ebx
     pop edx
     pop ecx
-    pop eax ;TODO: very important!! eax is wrong!!
+    ;NOTICE: pop eax, but eax is wrong. the correct one is the one that get from call
+    pop eax
     mov eax, [esp - 4*15]
 
     iret
@@ -139,7 +135,6 @@ return_from_timer_interrupt:
     mov al, 0x20
     out 0x20, al
     
-    ;xchg bx, bx;NOTICE: delete me
     call schedule
     push eax
     call sys_restart
@@ -163,10 +158,3 @@ return_from_sys_restart:
     ; a c d b
     ; sp bp si di
     ; es cs ss ds fs gs
-
-sys_execve:
-    jmp $ ; TODO: NIY
-sys_fork:
-    jmp $ ; TODO: NIY
-
-
