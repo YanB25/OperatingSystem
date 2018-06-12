@@ -152,8 +152,8 @@ void copy_process(int32_t dst_index, int32_t src_index) {
     dst->ecx = src->ecx;
     dst->edx = src->edx;
     dst->ebx = src->ebx;
-    dst->esp = src->esp + 1024;
-    dst->ebp = src->ebp + 1024;
+    dst->esp = src->esp + 1024 * 4;
+    dst->ebp = src->ebp + 1024 * 4;
     dst->esi = src->esi;
     dst->edi = src->edi;
     dst->es = src->es;
@@ -162,7 +162,7 @@ void copy_process(int32_t dst_index, int32_t src_index) {
     dst->fs = src->fs;
     dst->gs = src->gs;
     dst->cs = src->cs;
-    _memcpy(&stacks[dst_index + 1], &stacks[src_index + 1], 1024);
+    _memcpy(&stacks[dst_index + 1], &stacks[src_index + 1], 1024 * 4);
     PCB_List[dst_index].state = TASK_RUNNING;
     PCB_List[dst_index].pid = new_pid;
 }

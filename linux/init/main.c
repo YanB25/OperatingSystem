@@ -12,13 +12,11 @@ int32_t printks(const char*);
 __asm__("xchgw %%bx, %%bx\n"::)
 int fork();
 void main() {
-    BochsBreak();
     trap_init();
     sched_init();
     printks("\nnow in protected mode!\n");
     sti();
     int errno;
-    BochsBreak();
     __asm__ volatile(
         "movl $0x0, %%eax\n"
         "int $0x80\n"
@@ -31,6 +29,20 @@ void main() {
     // }
     int id = fork();
 
+    // if (id == 1) {
+    //     printks("I am 1\n");
+    //     while(1);
+    // } else {
+    //     printks("I am not 1\n");
+    //     while(1);
+    // }
+    while(1);
+    return;
+}
+
+void test_second_process() {
+    printks("enter test\n");
+    int id = fork();
     if (id == 1) {
         printks("I am 1\n");
         while(1);
@@ -38,15 +50,12 @@ void main() {
         printks("I am not 1\n");
         while(1);
     }
-    return;
-}
 
-void test_second_process() {
     while(1) {
-        __asm__(
-            "movl $0x1, %%eax\n"
-            "int $0x80\n"
-            ::
-        );
+        // __asm__(
+        //     "movl $0x1, %%eax\n"
+        //     "int $0x80\n"
+        //     ::
+        // );
     }
 }

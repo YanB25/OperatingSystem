@@ -19,11 +19,15 @@ int sys_fork() {
     cli();
     printks("fork\n");
     int32_t pindex = first_empty_pcb();
-    if (pindex == -1) {
-        return -1;
-    }
+    printks("after get empty pcb\n");
+    // if (pindex == -1) {
+    //     return -1;
+    // }
     copy_process(pindex, current);
+    printks("after copy_process\n");
+    __asm__("xchgw %%bx, %%bx\n"::); //TODO: delete me
     sti();
+    printks("after sti\n");
     return 1;
 }
 
