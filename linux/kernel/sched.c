@@ -169,7 +169,18 @@ void copy_process(int32_t dst_index, int32_t src_index) {
     dst->ebp = ProcessStack(dst_index) - ebp_offset;
 
     uint32_t* pesp = (uint32_t*)dst->esp;
+    *(pesp + OFFSET_EAX) = dst->eax;
+    *(pesp + OFFSET_GS) = dst->gs;
+    *(pesp + OFFSET_FS) = dst->fs;
+    *(pesp + OFFSET_DS) = dst->ds;
+    *(pesp + OFFSET_SS) = dst->ss;
+    *(pesp + OFFSET_ES) = dst->es;
+    *(pesp + OFFSET_EDI) = dst->edi;
+    *(pesp + OFFSET_ESI) = dst->esi;
     *(pesp + OFFSET_EBP) = dst->ebp;
+    *(pesp + OFFSET_EBX) = dst->ebx;
+    *(pesp + OFFSET_EDX) = dst->edx;
+    *(pesp + OFFSET_ECX) = dst->ecx;
     *(pesp + OFFSET_EAX) = dst->eax;
 
     PCB_List[dst_index].state = TASK_RUNNING;
