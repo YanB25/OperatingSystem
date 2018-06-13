@@ -37,11 +37,18 @@ int sys_fork() {
 
 int sys_wait() {
     PCB_List[current].state = TASK_UNINTERRUPTIBLE;
+    reschedule(); //TODO: maybe bug;
     return 1;
 }
 
 int sys_exit() {
     PCB_List[current].state = TASK_NOT_USED;
+    int parent_id = PCB_List[current].parent_id;
+    if (parent_id != -1) {
+        if (PCB_List[parent_id].state == TASK_UNINTERRUPTIBLE) {
+            PCB_List[parent_id].state = TASK_INTERRUPTIBLE;
+        }
+    }
     reschedule();
     return 1;
 }

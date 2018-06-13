@@ -63,7 +63,9 @@ void test_second_process() {
     int id = fork();
     if (id == 1) {
         printks("777\n");
+        exit();
     } else {
+        wait();
         printks("888\n");
     }
     while(1) {
