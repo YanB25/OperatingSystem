@@ -263,15 +263,228 @@
 
 % To have just one problem per page, simply put a \clearpage after each problem
 \section{实验目的}
+在实验六或更后的原型基础上,进化你的原型操作系统,原型保留原有特征的
+基础上,设计满足下列要求的新原型操作系统:\\ 
+
+实现控制的基本原语 do_fork() 、 do_wait() 、 do_exit() 、 blocked() 和 wakeup()\\ 
+
+内核实现三系统调用 fork() 、 wait() 和 exit() ,并在 c 库中封装相关的系统调用\\ 
+
+编写一个 c 语言程序,实现多进程合作的应用程序\\ 
 \section{实验过程}
-    \subsection{进程控制块}
-    \subsection{保存上下文}\label{sec:save}
-    \subsection{恢复上下文}\label{sec:load}
-    \subsection{内存分配模型}
+    \subsection{fork逻辑}
+    \begin{figure}
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language=C, label=lst:fork, caption=C库中封装的fork]
+#define fork() \
+({\
+    cli();\
+    int32_t __fork_ret;\
+    __asm__(\
+        "movl $0x02, %%eax\n"\
+        "int $0x80\n"\
+        : "=r"(__fork_ret)\
+        :\
+    );\
+    sti();\
+    __fork_ret;\
+})
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
+    如代码\ref{lst:fork}所示，将fork封装到C函数库中。在进入fork的前后要关中断和开中断。\\ 
+
+    本代码最重要的细节在于，它不以函数的形式实现。这是因为函数结束时的语句一般是leave和ret。这两条
+    语句会对esp的值有影响。但是在fork完后，子进程会继承父进程的eip（在本项目的实现中，是这样处理的）。
+    所以子进程被调度后，会继续执行fork函数的后半部分。为了避免fork的leave 和ret弄乱子进程的esp和
+    ebp，fork不应实现成函数调用。\\ 
+
+    另一种实现的方法是，修改子进程的eip,使得子进程被调度时，返回到fork的下一条语句中。 \\ 
+
+    由于fork有返回值，故这里利用了C语言的$({...})$语法。这个语法中，C程序会把...中的代码全部执行完，
+    然后把...中的最后一个表达式作为整个表达式的值。这样，在程序调用int pid = fork();时，可以恰好
+    把pid赋为fork的返回值。
+    \subsection{sys_fork逻辑}
+    在fork中，通过调用0x80中断的0x2号功能实现fork。
+    \begin{figure}
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language=C, label=lst:sys_fork, caption=sys_fork逻辑]
+fn_ptr sys_call_table[] = {
+    test_print, print_hello, sys_fork, sys_wait, sys_exit
+};
+
+...
+
+int sys_fork() {
+    printks("[debug]fork\n");
+    int32_t pindex = first_empty_pcb();
+    if (pindex == -1) {
+        return -1;
+    }
+    copy_process(pindex, current);
+    return PCB_List[current].register_image.eax;
+}
+
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
+    如代码\ref{lst:sys_fork}所示。\\ 
+
+    sys_call_table是一个函数数组，存储着若干函数的首地址。在调用0x80号中断时，
+    功能号会成为索引，跳转到该地址表中。所以fork的0x2功能号会跳转到函数sys_fork.
+    其中数组类型fn_ptr是一个typedef,类型是int (*) ()，即返回int的，不接受参数的
+    函数。\\ 
+
+    在sys_fork中，首先调用first_empty_pcb得到第一个空闲的pcb表。然后调用copy_process
+    ，将当前的pcb表复制到空闲的pcb表中。随后显式地返回当前进程的eax的值。
+
+    \subsection{copy_process逻辑}
+    \begin{figure}
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language=C, label=lst:copy_process, caption=copy_process的主要代码]
+void copy_process(int32_t dst_index, int32_t src_index) {
+    struct RegisterImage* dst = &PCB_List[dst_index].register_image;
+    struct RegisterImage* src = &PCB_List[src_index].register_image; 
+    int32_t new_pid = last_pid++;
+
+    src->eax = new_pid;
+    dst->eax = 1;
+    dst->ecx = src->ecx;
+    ...
+    dst->cs = src->cs;
+
+    int32_t esp_offset = ProcessStack(src_index) - src->esp;
+    int32_t ebp_offset = ProcessStack(src_index) - src->ebp;
+    _rev_memcpy((void*)ProcessStack(dst_index), (void*)ProcessStack(src_index), 1024);
+    dst->esp = ProcessStack(dst_index) - esp_offset;
+    dst->ebp = ProcessStack(dst_index) - ebp_offset;
+
+    uint32_t* pesp = (uint32_t*)dst->esp;
+    *(pesp + OFFSET_EAX) = dst->eax;
+    ...
+    *(pesp + OFFSET_EAX) = dst->eax;
+
+    PCB_List[dst_index].state = TASK_INTERRUPTIBLE;
+    PCB_List[dst_index].pid = new_pid;
+    PCB_List[dst_index].parent_id = src_index;
+}
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
+    如代码\ref{lst:copy_process}所示。\\ 
+
+    首先将源PCB中的寄存器副本复制到目的PCB中。源和目的的eax需要根据fork的语义
+    特殊处理。\\ 
+
+    目的esp和ebp需要特殊地计算。程序为每个（内核）进程分配固定的栈空间。所以PCB
+    索引和栈空间可以相互计算的。在fork后，旧esp和ebp相对于旧栈的位置，等于新
+    esp和新ebp相对于新栈的位置。利用这个条件，可以求出新esp和新ebp。\\ 
+
+    由于实验6中，进程切换的寄存器都是通过在栈中Pop来恢复的（实现细节问题），故
+    此处需要把部分寄存器中PCB中手动复制到栈中，覆盖掉旧的内容。这是通过计算栈中
+    寄存器（如eax)和栈顶的相对位置来实现的。\\ 
+
+    最后，设置pid, parent_pid,以及进程的状态。
+    \subsection{_rev_memcpy的实现}
+    _rev_memcpy是反向内存复制的函数。它专门用来在fork中复制栈的值。\\ 
+
+    由于栈从高地址增长到低地址，采用反向内存复制会更便于编程。该函数暂不考虑跨段
+    的问题。
 \section{实验结果}
+    \subsection{fork测试}
+    \begin{figure}[!hbt]
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language=C, label=lst:testcase, caption=测试样例代码]
+int main(){    
+    sti();
+    int id = fork();
+    if (id == 1) {
+        printks("111\n");
+        int id2 = fork();
+        if (id2 == 1) {
+            printks("333\n");
+        } else {
+            printks("444\n");
+        }
+    } else {
+        printks("222\n");
+        int id2 = fork();
+        if (id2 == 1) {
+            printks("555\n");
+        } else {
+            printks("666\n");
+        }
+    }
+    while(1);
+    return;
+}
+void second_process() {
+    int id = fork();
+    if (id == 1) {
+        printks("777\n");
+    } else {
+        printks("888\n");
+    }
+    while(1);
+}
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
+    测试样例的代码如\ref{lst:testcase}所示。\\ 
+    
+    在主进程中，通过fork产生进程2和3.在进程2和3中，分别再调用fork，产生进程4和5.
+    通过在各个分支中输出111到666，可以检验fork的确正确工作了。\\ 
+
+    程序初始化时，会利用实验6的成果，手动产生新进程。在新进程中，同样调用fork，
+    并输出777和888。当在屏幕上最终显示111到888，且恰好显示一次时，说明所有的
+    fork都正常工作。\\ 
+
+    fork正常工作的情景如图\ref{fig:ts_n_fork}所示。
+    \begin{figure}
+        \begin{center}
+        \includegraphics[scale=0.8]{./assets/pm-ex7-taskswitch-and-fork.png}
+        \caption{进程切换和fork结合的测试样例\label{fig:ts_n_fork}} 
+        \end{center} 
+    \end{figure} 
+    \subsection{wait和exit测试}
+    在输出888的分支之前加入wait指令，888将不会输出，如图\ref{fig:wait}所示。\\
+
+    但是在777的分支中加入exit指令后，由于子进程的exit解除了父进程的
+    阻塞，888分支又可以再次输出到屏幕上。如图\ref{fig:exit}所示。\\ 
+
+    值得注意的是，wait + exit的情况和一开始的图\ref{fig:ts_n_fork}不同。
+    区别在于，各个进程被调度的顺序是不同的。\\
+    
+    \begin{figure}
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{assets/pm-ex7-wait.png}
+    \caption{加入一条wait指令的图片} \label{fig:wait}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{assets/pm-ex7-wait-and-exit.png}
+    \caption{再加入exit指令后的图片} \label{fig:exit}
+    \end{minipage}
+    \end{figure}    
 \section{实验总结}
-    \subsection{亮点介绍}
     \subsection{实验心得}
+    实验七拖得比较晚才交，因为我尝试了保护模式，在保护模式下重做了前面的
+    几个实验，并最终实现了实验7.保护模式耗费了我不少时间。其中无数的
+    试错和重写，让我的代码改了又改。\\ 
+
+    这个实验我感觉略有困难，难度不亚于实验6。这是因为我之前参考了Linux
+    的保护模式的实现，其在中断方面和进程切换方面，思路和课内的思路（也是
+    大部分同学的思路）都不一样。这导致了我在做实验7时，几乎把进程切换和
+    系统调用又再重写了一遍。其中还陷入许多常规保护错误中。debug比较困难。\\ 
+
+    遇到最坑的一点是，汇编代码中的label,在C程序中，需要用&label的方式
+    取得它的地址。我在做栈切换时，需要取得汇编中栈的起始地址，但一直不知道
+    要加&号，导致取出来的值非常奇怪（实际上取出来的是label标签处内存的值）。\\ 
+
+    在fork中把栈复制后，需要把新进程的esp和ebp正确地设置，由于历史实现
+    的问题，进程在恢复时，除了ss和sp以外的所有寄存器的值都是从栈中恢复的。
+    所以copy_process还要负责把栈中的某个位置的寄存器的值正确地修改。
     \subsection{BUG汇总}\label{sec:bug}
 \begin{appendices}
 \section{参考文献} \label{sec:reference}
