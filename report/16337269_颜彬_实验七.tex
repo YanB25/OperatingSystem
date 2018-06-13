@@ -266,14 +266,14 @@
 在实验六或更后的原型基础上,进化你的原型操作系统,原型保留原有特征的
 基础上,设计满足下列要求的新原型操作系统:\\ 
 
-实现控制的基本原语 do_fork() 、 do_wait() 、 do_exit() 、 blocked() 和 wakeup()\\ 
+实现控制的基本原语 do\_fork() 、 do\_wait() 、 do\_exit() 、 blocked() 和 wakeup()\\ 
 
 内核实现三系统调用 fork() 、 wait() 和 exit() ,并在 c 库中封装相关的系统调用\\ 
 
 编写一个 c 语言程序,实现多进程合作的应用程序\\ 
 \section{实验过程}
     \subsection{fork逻辑}
-    \begin{figure}
+    \begin{figure}[!hbt]
     \begin{itemize}
     \item[] \begin{lstlisting}[language=C, label=lst:fork, caption=C库中封装的fork]
 #define fork() \
@@ -301,14 +301,14 @@
 
     另一种实现的方法是，修改子进程的eip,使得子进程被调度时，返回到fork的下一条语句中。 \\ 
 
-    由于fork有返回值，故这里利用了C语言的$({...})$语法。这个语法中，C程序会把...中的代码全部执行完，
+    由于fork有返回值，故这里利用了C语言的$(\{...\})$语法。这个语法中，C程序会把...中的代码全部执行完，
     然后把...中的最后一个表达式作为整个表达式的值。这样，在程序调用int pid = fork();时，可以恰好
     把pid赋为fork的返回值。
-    \subsection{sys_fork逻辑}
+    \subsection{sys\_fork逻辑}
     在fork中，通过调用0x80中断的0x2号功能实现fork。
-    \begin{figure}
+    \begin{figure}[!hbt]
     \begin{itemize}
-    \item[] \begin{lstlisting}[language=C, label=lst:sys_fork, caption=sys_fork逻辑]
+    \item[] \begin{lstlisting}[language=C, label=lst:sys_fork, caption=sys\_fork逻辑]
 fn_ptr sys_call_table[] = {
     test_print, print_hello, sys_fork, sys_wait, sys_exit
 };
@@ -330,18 +330,18 @@ int sys_fork() {
     \end{figure}
     如代码\ref{lst:sys_fork}所示。\\ 
 
-    sys_call_table是一个函数数组，存储着若干函数的首地址。在调用0x80号中断时，
-    功能号会成为索引，跳转到该地址表中。所以fork的0x2功能号会跳转到函数sys_fork.
-    其中数组类型fn_ptr是一个typedef,类型是int (*) ()，即返回int的，不接受参数的
+    sys\_call\_table是一个函数数组，存储着若干函数的首地址。在调用0x80号中断时，
+    功能号会成为索引，跳转到该地址表中。所以fork的0x2功能号会跳转到函数sys\_fork.
+    其中数组类型fn\_ptr是一个typedef,类型是int (*) ()，即返回int的，不接受参数的
     函数。\\ 
 
-    在sys_fork中，首先调用first_empty_pcb得到第一个空闲的pcb表。然后调用copy_process
+    在sys\_fork中，首先调用first\_empty\_pcb得到第一个空闲的pcb表。然后调用copy\_process
     ，将当前的pcb表复制到空闲的pcb表中。随后显式地返回当前进程的eax的值。
 
-    \subsection{copy_process逻辑}
-    \begin{figure}
+    \subsection{copy\_process逻辑}
+    \begin{figure}[!hbt]
     \begin{itemize}
-    \item[] \begin{lstlisting}[language=C, label=lst:copy_process, caption=copy_process的主要代码]
+    \item[] \begin{lstlisting}[language=C, label=lst:copy_process, caption=copy\_process的主要代码]
 void copy_process(int32_t dst_index, int32_t src_index) {
     struct RegisterImage* dst = &PCB_List[dst_index].register_image;
     struct RegisterImage* src = &PCB_List[src_index].register_image; 
@@ -355,7 +355,10 @@ void copy_process(int32_t dst_index, int32_t src_index) {
 
     int32_t esp_offset = ProcessStack(src_index) - src->esp;
     int32_t ebp_offset = ProcessStack(src_index) - src->ebp;
-    _rev_memcpy((void*)ProcessStack(dst_index), (void*)ProcessStack(src_index), 1024);
+    _rev_memcpy(
+        (void*)ProcessStack(dst_index), 
+        (void*)ProcessStack(src_index), 1024
+    );
     dst->esp = ProcessStack(dst_index) - esp_offset;
     dst->ebp = ProcessStack(dst_index) - ebp_offset;
 
@@ -384,9 +387,9 @@ void copy_process(int32_t dst_index, int32_t src_index) {
     此处需要把部分寄存器中PCB中手动复制到栈中，覆盖掉旧的内容。这是通过计算栈中
     寄存器（如eax)和栈顶的相对位置来实现的。\\ 
 
-    最后，设置pid, parent_pid,以及进程的状态。
-    \subsection{_rev_memcpy的实现}
-    _rev_memcpy是反向内存复制的函数。它专门用来在fork中复制栈的值。\\ 
+    最后，设置pid, parent\_pid,以及进程的状态。
+    \subsection{\_rev\_memcpy的实现}
+    \_rev\_memcpy是反向内存复制的函数。它专门用来在fork中复制栈的值。\\ 
 
     由于栈从高地址增长到低地址，采用反向内存复制会更便于编程。该函数暂不考虑跨段
     的问题。
@@ -442,7 +445,7 @@ void second_process() {
     fork正常工作的情景如图\ref{fig:ts_n_fork}所示。
     \begin{figure}
         \begin{center}
-        \includegraphics[scale=0.8]{./assets/pm-ex7-taskswitch-and-fork.png}
+        \includegraphics[scale=0.4]{./assets/pm-ex7-taskswitch-and-fork.png}
         \caption{进程切换和fork结合的测试样例\label{fig:ts_n_fork}} 
         \end{center} 
     \end{figure} 
@@ -478,14 +481,13 @@ void second_process() {
     大部分同学的思路）都不一样。这导致了我在做实验7时，几乎把进程切换和
     系统调用又再重写了一遍。其中还陷入许多常规保护错误中。debug比较困难。\\ 
 
-    遇到最坑的一点是，汇编代码中的label,在C程序中，需要用&label的方式
+    遇到最坑的一点是，汇编代码中的label,在C程序中，需要用\&label的方式
     取得它的地址。我在做栈切换时，需要取得汇编中栈的起始地址，但一直不知道
-    要加&号，导致取出来的值非常奇怪（实际上取出来的是label标签处内存的值）。\\ 
+    要加\&号，导致取出来的值非常奇怪（实际上取出来的是label标签处内存的值）。\\ 
 
     在fork中把栈复制后，需要把新进程的esp和ebp正确地设置，由于历史实现
     的问题，进程在恢复时，除了ss和sp以外的所有寄存器的值都是从栈中恢复的。
-    所以copy_process还要负责把栈中的某个位置的寄存器的值正确地修改。
-    \subsection{BUG汇总}\label{sec:bug}
+    所以copy\_process还要负责把栈中的某个位置的寄存器的值正确地修改。
 \begin{appendices}
 \section{参考文献} \label{sec:reference}
 \begin{enumerate}
