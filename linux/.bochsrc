@@ -1,0 +1,18 @@
+# memory
+megs: 32
+
+# filename of ROM images
+romimage: file=/usr/share/bochs/BIOS-bochs-latest
+vgaromimage: file=/usr/share/vgabios/vgabios.bin
+
+floppya: 1_44=OS.img, status=inserted
+
+boot: floppy
+
+log: log/bochsout.log
+
+mouse: enabled=0
+
+keyboard_mapping: enabled=1, map=/usr/share/bochs/keymaps/x11-pc-us.map
+
+magic_break: enabled=1

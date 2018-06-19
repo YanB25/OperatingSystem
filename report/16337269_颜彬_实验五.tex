@@ -288,7 +288,7 @@
     system文件。system文件的开头部分被固定地设置为``head.s文件编译后得到的二进制代码''，这是为了确保从setup.s模块
     跳转到system模块（绝对跳转）时，能执行到我们想要执行的代码。通过在链接时加上简单的链接命令，即可让head.s始终
     位于system的头部，这也是head.s文件如此命名的原因。
-    \begin{figure}
+    \begin{figure}[!hbt]
         \begin{center}
         \includegraphics[scale=0.6]{assets/boot_address.png}
         \caption{内核引导过程中的地址变化\label{fig:boot_address}} 
@@ -306,6 +306,13 @@
         刻画了段的起点和长度。对段外的访问都会出发常规保护错误。可读可写位描述了段的读写权限。一般数据段可读可写，
         代码段只可读，不可写。违反了访问权限，也会触发常规保护错误。\\ 
 
+        \begin{figure}[!hbt]
+            \begin{center}
+            \includegraphics[scale=0.6]{assets/segment.png}
+            \caption{代码段和数据段描述符格式\label{fig:segment}} 
+            \end{center} 
+        \end{figure} 
+
         指令ldgt使用内存中的一个6字节操作数来加载GDTR寄存器。前两字节用于表示描述符的长度，后4个字节是描述符的基地址。\\
 
         选择子的作用是指定一个描述符。选择子的低3位用于指令请求特权级（RPL）和访问的是GDT还是LDT（TI）。高13位用于
@@ -315,9 +322,15 @@
         陷入意外的引用。剩下的第二和第三个表项分别是代码段和数据段。代码段需要提供只写的保护权限，而数据段需要提供读和
         写的保护权限。\\ 
 
-        \begin{figure}
+        代码\ref{lst:gdtidt}展示了gdt表的情况。其中表的第一项，即dw 0, 0, 0, 0，是空项，不被使用。第二项
+        的dw 0x07FF表示8Mb的段界限，dw 0x0000表示基地址为0，dw 0x9A00表示代码段为只读和可执行，dw 0x00C0表示
+        粒度为4096,处于32位模式。这里采用硬编码的方式设置gdt表。第三项的解释略。\\ 
+
+        gdt\_48标签处的前两个字节存储长度。后四个字节存储基地址。基地址形如0x9xxxx，故采用512+gdt, 0x9的方式表示。
+
+        \begin{figure}[!hbt]
         \begin{itemize}
-        \item[] \begin{lstlisting}[language={[x86masm]Assempler}, label=lst:gdtidt, caption=GDT和IDT]
+        \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:gdtidt, caption=GDT和IDT]
 GDT:
     dw 0, 0, 0, 0 ;dummy
 
@@ -344,27 +357,193 @@ gdt_48:
         \end{itemize}
         \end{figure}
 
-        
-        \begin{figure}
-            \begin{center}
-            \includegraphics[scale=0.6]{assets/segment.png}
-            \caption{代码段和数据段描述符格式\label{fig:segment}} 
-            \end{center} 
-        \end{figure} 
-        
+        \subsubsection{A20地址线和PE位}        
+        代码\ref{lst:A20pe}展示了如何打开A20地址线，以及设置PE位。\\ 
 
-    \subsection{恢复上下文}\label{sec:load}
-    \subsection{内存分配模型}
+        A20地址线是一个历史遗留问题。若不开启A20地址线，会发生回滚。即访问的地址超过上限后，会滚回0x0000起始地址继续访问。由于保护模式下
+        寻址空间变为了32bit，故必须开启A20地址线，以允许更大的地址空间。\\ 
+
+        PE位是处理器区别实模式和保护模式的控制位。
+        \begin{figure}[!hbt]
+        \begin{itemize}
+        \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:A20pe, caption=打开A20地址线，设置PE位]
+...
+in al, 92H
+or al, 00000010b
+out 92h, al   
+...
+
+mov ax, 0x0001
+lmsw ax
+jmp 0x8:0x00
+        \end{lstlisting}
+        \end{itemize}
+        \end{figure}
+
+    \subsection{中断的设置}\label{sec:int}
+    中断的服务程序如下所示。以常规保护错误为例来介绍工作原理.\\ 
+
+    在把常规保护错误的陷阱门安装好后，发生常规保护错误时，会把do\_general\_protection的处理程序的
+    首地址亚茹栈中，然后跳转到error\_code程序中继续执行。Linux的中断处理程序分为有错误码和无错误
+    码两种类型。\\ 
+
+    在error\_code中，首先将错误码和do\_general\_protection的值交换到寄存器中，随后将一系列
+    寄存器压入栈中。指令call ebx的作用是调用do\_general\_protection函数。在调用结束后，
+    add esp, 8将栈复原，并通过一系列Pop离开中断服务程序。\\ 
+
+    no\_error\_code的版本和有错误码的版本很类似，唯一不同的地方在于，其不向栈交换错误码，也不向
+    处理程序传递错误码。\\ 
+
+    在do\_general\_protection中，完整的实现应是杀死进程。本实现还未有进程的概念，故本实现会让
+    处理器陷入死循环。
+\begin{figure}[!hbt]
+\begin{itemize}
+\item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:int, caption=中断的处理]
+general_protection:
+    push dword do_general_protection
+    jmp error_code
+
+error_code:
+    xchg [esp + 4], eax
+    xchg [esp], ebx
+    push ecx
+    push edx
+    push edi
+    push esi
+    push ebp
+    push ds
+    push es
+    push fs
+    push eax
+    lea eax, [esp + 44]
+    push eax
+    mov eax, 0x10
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    call ebx
+    add esp, 8
+    pop fs
+    pop es
+    pop ds
+    pop ebp
+    pop esi
+    pop edi
+    pop edx
+    pop ecx
+    pop ebx
+    pop eax
+    iret
+
+\end{lstlisting}
+\end{itemize}
+\end{figure}
+\begin{figure}
+\begin{itemize}
+\item[] \begin{lstlisting}[language=C, label=lst:do_general_protection, caption=do\_general\_protection的实现]
+void do_general_protection(int32_t esp, int32_t error_code) {
+    die("general protection", esp, error_code);
+}
+\end{lstlisting}
+\end{itemize}
+\end{figure}
+    \subsubsection{系统调用}
+    系统调用的实现如代码\ref{lst:syscall}所示。首先比较调用号eax，若超出了一定的范围，则跳转到bad\_sys\_call中，返回-1.
+    否则，将必须的寄存器压入栈中，执行call [sys\_call\_table + 4 * eax]。\ 
+
+    sys\_call\_table是函数数组的首地址，每个地址的长度是4字节。sys\_call\_table + 4 * eax刚好是系统调用函数的首地址。采用
+    call [xxx]的方式可以直接调用该函数。\\ 
+
+    在调用返回后，执行一系列的pop和iret返回到原先的执行点。\\ 
+
+    值得注意的是，sys\_call\_table中的函数都带有int的返回值，保证每次系统调用都有返回码。
+
+    \begin{figure}[!hbt]
+    \begin{itemize}
+    \item[] \begin{lstlisting}[language={[x86masm]Assembler}, label=lst:syscall, caption=系统调用的实现]
+system_call:
+cmp eax, nr_system_calls
+ja bad_sys_call
+push ds
+push es 
+push fs
+push edx
+push ecx
+push ebx
+mov edx, 0x10
+mov ds, dx
+mov es, dx
+
+call [sys_call_table + 4 * eax] 
+push eax ;sys call return value
+
+ret_from_sys_call:
+pop eax
+pop ebx
+pop ecx
+pop edx
+pop fs
+pop es
+pop ds
+iret
+    \end{lstlisting}
+    \end{itemize}
+    \end{figure}
 \section{实验结果}
+如图\ref{fig:runing}所示，展示了操作系统正在运行的场景。在一个while(1)的死循环中，不断调用系统调用。
+该系统调用的作用是，将hello的第一个字母的ascii加1，并打印出来。从图上看，系统调用可以正常地执行。系统没有
+被卡死，说明系统调用工作正确。\\ 
+
+\begin{figure}[!hbt]
+    \begin{center}
+    \includegraphics[scale=0.4]{assets/running.png}
+    \caption{正在运行时的场景\label{fig:runing}} 
+    \end{center} 
+\end{figure} 
+
+如图\ref{fig:divideerror}所示，即是发生除零异常时，陷阱门的工作过程。在main函数中，执行一条0除以0的指令，
+在指令执行之后，跳转到陷阱门中，打印处divide zero error,并将程序卡死。可见陷阱门正确工作。\\ 
+
+\begin{figure}[!hbt]
+    \begin{center}
+    \includegraphics[scale=0.4]{assets/divideerror.png}
+    \caption{除零异常的捕获\label{fig:divideerror}} 
+    \end{center} 
+\end{figure} 
+
+如图\ref{fig:general}所示，即是发生常规保护错误时的场景。通过刻意地访问被保护的内存，出发常规保护错误，
+屏幕上显示了general protection，程序被阻塞。\\ 
+
+\begin{figure}[!hbt]
+    \begin{center}
+    \includegraphics[scale=0.4]{assets/generalprotectionerror.png}
+    \caption{常规保护错误的场景\label{fig:general}} 
+    \end{center} 
+\end{figure} 
+
+
+
 \section{实验总结}
     \subsection{实验心得}
-\begin{appendices}
-\section{参考文献} \label{sec:reference}
-\begin{enumerate}
-    \item https://blog.csdn.net/longintchar/article/details/50602851 \\
-    16位和32位汇编指令的不同（尤其是push指令）
-    \item https://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html\#s1 \\
-    GCC 内嵌汇编的书写。
-  \end{enumerate}
-\end{appendices}
+    本次实验的收获非常巨大。这次实验让我更深入地了解了保护模式，让我知道了如何进入保护模式，保护模式的意义
+    以及保护二字体现在哪。\\ 
+
+    实验的代码参考了Linus写下的GNU/Linux操作系统的0.11版本。由于保护模式、中断等内容过于复杂，完全依靠
+    自己的能力不可能完成。故我适当地参考了前人的代码。\\ 
+
+    参考代码其实也是个技术活。由于参考的代码的汇编格式不是intel格式，而我并没有配置at\&t格式的汇编器，
+    也不确定能否将其连接到C程序中，故我在参考代码时，几乎是完全翻译了一遍它的代码。把他的代码从at\&t转换
+    到intel格式中。由于其代码是运行在真实机器上的，而本项目运行在虚拟机上。虚拟机和真实的机器略有不同，
+    有许多操作在真实机器上会发生，但在虚拟机上不会发生。我在参考代码时，判断出了哪些代码是必要的，哪些代码是
+    不必要的，将不必要的代码删除，只留下必要的。\\ 
+
+    Linus写下的代码的耦合度很高，在参考的过程中带给了我很大的挑战。例如分页机制，在刚开始写本项目时，马上分页会
+    带来很大的累赘和压力。故我必须看懂Linus的分页代码，判断出哪些代码用于分页，哪些不是，再把分页的代码剔除掉。
+    由于代码的耦合度非常高，哪怕我没有实现分页，我还是需要保留必要的（与分页有关的）接口和变量，供后续的程序调用。
+    我甚至都不能十分确定，直接将分页代码删除，是否会对其他地方的代码造成影响。我几乎是在反复的编译、报错、修改、运行
+    的循环中完成本个实验的。\\ 
+
+    感觉学习的最快捷的方式是模仿代码，参考代码，修改其不适应的地方，运用到自己的项目上。这可以在短时间内
+    了解到更多的内容，同时也确保别人的代码你可以真正的弄懂。通过这次实验，我对整个操作系统的理解深入了一个层次。
+
 \end{document}
