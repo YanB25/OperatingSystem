@@ -25,3 +25,5 @@ system_call.o: system_call.s
 	$(AS) $(ASFLAGS) -f elf -o $@ $^
 semaphore.o : semaphore.c
 	$(CC) $(CCFLAGS) -c $^
+vsprintf.o: vsprintf.c
+	$(CC) $(CCFLAGS) -c $^

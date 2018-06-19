@@ -26,6 +26,9 @@ boot/setup.bin: boot/setup.s
 boot/head.o: boot/head.s
 	@make -C boot/
 
+lib/string.o: lib/string.c
+	@make -C lib/ string.o
+
 kernel/asm.o: kernel/asm.s
 	@make -C kernel/
 kernel/traps.o: kernel/traps.c
@@ -42,6 +45,8 @@ kernel/fork.o: kernel/fork.c
 	@make -C kernel/ fork.o
 kernel/semaphore.o: kernel/semaphore.c
 	@make -C kernel/ semaphore.o
+kernel/vsprintf.o: kernel/vsprintf.c
+	@make -C kernel/ vsprintf.o
 
 init/testscript.o: init/testscript.s
 	$(AS) $(ASFLAGS) -f elf -o $@ $^
