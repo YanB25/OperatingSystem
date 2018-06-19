@@ -129,7 +129,5 @@ extern long startup_time; // boot time
     {0x9f, 0xc0f200},/*640k base 0, G=1, D=1, DPL=3, P=1, type=0x02  */\
 }
 
-struct tss_struct _MY_FIRST_TSS = _INIT_MY_TSS;
-struct desc_struct _MY_FIRST_LDT[3] = _INIT_MY_LDT;
 
 #endif

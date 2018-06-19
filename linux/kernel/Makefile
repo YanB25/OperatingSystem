@@ -7,7 +7,7 @@ CCFLAGS=-m32 -mpreferred-stack-boundary=2 -ffreestanding
 AS=nasm
 ASFLAGS=
 
-all: asm.o traps.o printk.o printk_tmp.o system_call.o sched.o
+all: asm.o traps.o printk.o printk_tmp.o system_call.o sched.o semaphore.o
 asm.o: asm.s 
 	$(AS) $(ASFLAGS) -f elf -o $@ $^
 traps.o: traps.c
@@ -23,3 +23,5 @@ printk_tmp.o: printk.s #TODO: only as workaround. delete me.
 	$(AS) $(ASFLAGS) -f elf -o $@ $^
 system_call.o: system_call.s
 	$(AS) $(ASFLAGS) -f elf -o $@ $^
+semaphore.o : semaphore.c
+	$(CC) $(CCFLAGS) -c $^

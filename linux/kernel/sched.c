@@ -21,6 +21,8 @@ PCB_List_T PCB_List[NR_TASKS] = {};
 int32_t current = 0;
 void init_first_process();
 
+struct tss_struct _MY_FIRST_TSS = _INIT_MY_TSS;
+struct desc_struct _MY_FIRST_LDT[3] = _INIT_MY_LDT;
 void sched_init() {
     last_pid = 2;
     current = 0;
