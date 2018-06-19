@@ -10,6 +10,7 @@ extern void trap_init();
 extern void sched_init();
 void test_write();
 void I_AM_HERE(int32_t id);
+void testPV();
 int system_call();
 int32_t printks(const char*);
 extern int current;
@@ -58,27 +59,7 @@ void main() {
     //int mgnum2 = 5678;
     int id = fork();
     if (id == 1) {
-        int lock = getsem(0);
-        int id = fork();
-        if (id != 1) {
-            //puti(lock);
-            //puti(current);
-            while(1){
-                //printks("aa\n");
-                p(lock);
-                printks("aaa\n");
-            }
-        } else {
-            //puti(lock);
-            //puti(current);
-            //printks("other state is ");
-            //printks("\n");
-            while(1) {
-                v(lock);
-                v(lock);
-                printks("bbb\n");
-            }
-        }
+        testPV();
     }
     while(1);
     return;
@@ -110,5 +91,62 @@ void test_second_process() {
         //     "int $0x80\n"
         //     ::
         // );
+    }
+}
+int full_lock;
+int empty_lock;
+int queue[25];
+int beg = 0;
+int end = 0;
+int next(int i) { return (i + 1) % 20; }
+int full() {
+    return next(end) == beg;
+}
+int empty() {
+    return beg == end;
+}
+void push() {
+    if (full())
+        p(full_lock);
+    if (empty()) {
+        v(empty_lock);
+    }
+    end = next(end);
+}
+void pop() {
+    if (empty()) {
+        p(empty_lock);
+    }
+    if (full()) {
+        v(full_lock);
+    }
+    beg = next(beg);
+}
+#define D 1000000
+void testPV() {
+    full_lock = getsem(1);
+    empty_lock = getsem(1);
+    beg = end = 0;
+    int id = fork();
+    if (id == 1) {
+        while(1) {
+            for (int i = 0; i < D; ++i) {}
+            push();
+            printks("push ");
+            puti(beg);
+            printks(" ");
+            puti(end);
+            printks("\n");
+        }        
+    } else {
+        while (1) {
+            for (int i = 0; i < D; ++i) {}
+            pop();
+            printks("pop\n");
+            puti(beg);
+            printks(" ");
+            puti(end);
+            printks("\n");
+        }
     }
 }
