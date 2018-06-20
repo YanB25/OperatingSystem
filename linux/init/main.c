@@ -26,6 +26,7 @@ void main() {
     sched_init();
     printks("\nnow in protected mode!\n");
     int errno;
+    BochsBreak();
     __asm__ volatile(
         "movl $0x0, %%eax\n"
         "int $0x80\n"

@@ -70,7 +70,18 @@ system_call:
     mov fs, edx
     mov gs, edx
 
+    mov ebx, [esp + 10*4]
+    mov ecx, [esp + 12*4]
+    mov edx, [esp + 11*4]
+
+    push edx
+    push ecx
+    push ebx
+
     call [sys_call_table + 4 * eax] 
+
+    add esp, 12
+
     push eax ;sys call return value
 
 .final:

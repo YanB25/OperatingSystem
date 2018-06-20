@@ -56,5 +56,4 @@ fn_ptr sys_call_table[] = {
     test_print, print_hello, sys_fork, sys_wait, sys_exit
 };
 
-
 #endif
