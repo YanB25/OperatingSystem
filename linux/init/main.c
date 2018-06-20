@@ -106,43 +106,43 @@ int empty() {
     return beg == end;
 }
 void push() {
-    if (full())
-        p(full_lock);
-    if (empty()) {
-        v(empty_lock);
-    }
     end = next(end);
 }
 void pop() {
-    if (empty()) {
-        p(empty_lock);
-    }
-    if (full()) {
-        v(full_lock);
-    }
     beg = next(beg);
 }
-#define D 1000000
+//#define D 1000000
+#define D 1000
 void testPV() {
-    full_lock = getsem(1);
-    empty_lock = getsem(1);
+    full_lock = getsem(15);
+    empty_lock = getsem(0);
     beg = end = 0;
     int id = fork();
     if (id == 1) {
         while(1) {
             for (int i = 0; i < D; ++i) {}
-            push();
+            p(empty_lock);
+
             printks("push ");
+
+            push();
+
             puti(beg);
             printks(" ");
             puti(end);
             printks("\n");
+
+            v(full_lock);
+
         }        
     } else {
         while (1) {
             for (int i = 0; i < D; ++i) {}
+            p(full_lock);
+            v(empty_lock);
+
             pop();
-            printks("pop\n");
+            printks("pop ");
             puti(beg);
             printks(" ");
             puti(end);
