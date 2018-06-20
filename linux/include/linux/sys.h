@@ -109,6 +109,14 @@ int do_v(int id) {
     // puti(val);
     // printks("\n");
     if (semaphone_list[id].value <= 0) {
+        int size = semaphone_list[id].bsize;
+        int block_process_id = semaphone_list[id].block_processes[0];
+        PCB_List[block_process_id].state = TASK_INTERRUPTIBLE;
+        for (int i = 0; i < size-1; ++i) {
+            semaphone_list[id].block_processes[i] = semaphone_list[id].block_processes[i+1];
+        }
+        semaphone_list[id].bsize--;
+        /*
         semaphone_list[id].bsize--;
         int size = semaphone_list[id].bsize;
         int block_processes_id = semaphone_list[id].block_processes[size];
@@ -117,6 +125,7 @@ int do_v(int id) {
         PCB_List[block_processes_id].state = TASK_INTERRUPTIBLE;
         // printks("   ");
         // printks(" v-work ");
+        */
     }
     // puti(semaphone_list[id].value);
     // printks("\n");
