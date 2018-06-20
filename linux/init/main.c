@@ -63,16 +63,16 @@ void main() {
     int id = fork();
     int lock = getsem(0);
     if (id == 1) {
-        testPV();
-        // int id = fork();
-        // if (id == 1) {
-        //     p(lock);
-        //     printks("111\n");
-        // } else {
-        //     printks("222\n");
-        //     BochsBreak();
-        //     //v(lock);
-        // }
+        //testPV();
+        int id = fork();
+        if (id == 1) {
+            p(lock);
+            printks("111\n");
+        } else {
+            printks("222\n");
+            BochsBreak();
+            //v(lock);
+        }
     }
     while(1);
     return;

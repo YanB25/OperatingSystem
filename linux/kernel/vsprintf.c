@@ -91,15 +91,15 @@ static char * number(char * str, int num, int base, int size, int precision
 	return str;
 }
 
-int strlen(const char* str) {
-	int length = 0;
-	const char* p = str;
-	while (*p) {
-		p++;
-		length++;
-	}
-	return length;
-}
+// int strlen(const char* str) {
+// 	int length = 0;
+// 	const char* p = str;
+// 	while (*p) {
+// 		p++;
+// 		length++;
+// 	}
+// 	return length;
+// }
 
 int vsprintf(char *buf, const char *fmt, va_list args)
 {
