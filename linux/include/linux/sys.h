@@ -2,6 +2,7 @@
 #ifndef __SYS_H_
 #define __SYS_H_
 #include "../linux/sched.h"
+#include "../linux/semaphore.h"
 char arr[] = "hello!\n";
 int printks(const char*);
 int32_t first_empty_pcb();
@@ -52,8 +53,21 @@ int sys_exit() {
     reschedule();
     return 1;
 }
+
+extern Semaphone semaphone_list[NR_SEMAPHORE];
+int do_getsem(int value) {
+    for (int i = 0; i < NR_SEMAPHORE; ++i) {
+        if(semaphone_list[i].used == 0) {
+            semaphone_list[i].used = 1;
+            semaphone_list[i].value = value;
+            semaphone_list[i].bsize = 0;
+            return i;
+        }
+    }
+    return -1;
+}
 fn_ptr sys_call_table[] = {
-    test_print, print_hello, sys_fork, sys_wait, sys_exit
+    test_print, print_hello, sys_fork, sys_wait, sys_exit, do_getsem
 };
 
 #endif

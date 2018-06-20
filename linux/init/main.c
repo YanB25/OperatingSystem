@@ -26,7 +26,7 @@ void main() {
     sched_init();
     printks("\nnow in protected mode!\n");
     int errno;
-    BochsBreak();
+    //BochsBreak();
     __asm__ volatile(
         "movl $0x0, %%eax\n"
         "int $0x80\n"
@@ -59,8 +59,17 @@ void main() {
     //int mgnum = 1234;
     //int mgnum2 = 5678;
     int id = fork();
+    int lock = getsem(0);
     if (id == 1) {
-        testPV();
+        //testPV();
+        int id = fork();
+        if (id == 1) {
+            p(lock);
+            printks("111\n");
+        } else {
+            printks("222\n");
+            v(lock);
+        }
     }
     while(1);
     return;
@@ -113,13 +122,16 @@ void pop() {
     beg = next(beg);
 }
 //#define D 1000000
-#define D 1000
+#define D 100000
 void testPV() {
     full_lock = getsem(15);
     empty_lock = getsem(0);
+    puti(full_lock);
+    puti(empty_lock);
     beg = end = 0;
     int id = fork();
     if (id == 1) {
+        //while(1);
         while(1) {
             for (int i = 0; i < D; ++i) {}
             p(empty_lock);
@@ -137,6 +149,7 @@ void testPV() {
 
         }        
     } else {
+        //while(1);
         while (1) {
             for (int i = 0; i < D; ++i) {}
             p(full_lock);

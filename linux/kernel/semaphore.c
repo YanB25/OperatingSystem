@@ -1,17 +1,11 @@
 #include "../include/linux/sched.h"
 #include "../include/linux/fork.h"
 #include "../include/asm/system.h"
-#define NR_SEMAPHORE 256
+#include "../include/linux/semaphore.h"
 extern int current;
 typedef struct PCB PCB_List_T;
 extern PCB_List_T PCB_List[NR_TASKS];
 int printks(const char*);
-typedef struct Semaphone {
-    int value;
-    int block_processes[NR_TASKS];
-    int bsize;
-    int used;
-} Semaphone;
 
 Semaphone semaphone_list[NR_SEMAPHORE];
 
@@ -23,15 +17,23 @@ void init_semaphore() {
 }
 
 int getsem(int value) {
-    for (int i = 0; i < NR_SEMAPHORE; ++i) {
-        if(semaphone_list[i].used == 0) {
-            semaphone_list[i].used = 1;
-            semaphone_list[i].value = value;
-            semaphone_list[i].bsize = 0;
-            return i;
-        }
-    }
-    return -1;
+    // for (int i = 0; i < NR_SEMAPHORE; ++i) {
+    //     if(semaphone_list[i].used == 0) {
+    //         semaphone_list[i].used = 1;
+    //         semaphone_list[i].value = value;
+    //         semaphone_list[i].bsize = 0;
+    //         return i;
+    //     }
+    // }
+    // return -1;
+    int ret;
+    __asm__(
+        "movl $0x05, %%eax\n"
+        "int $0x80\n"
+        :"=r"(ret)
+        :"b"(value)
+    );
+    return ret;
 }
 
 int freesem(int id) {
