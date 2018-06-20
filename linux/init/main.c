@@ -5,6 +5,7 @@
 #include "../include/debug.h"
 #include "../include/linux/semaphore.h"
 #include "../include/linux/sched.h"
+void init_sys_call();
 const char* msg = "now in main function";
 extern void trap_init();
 extern void sched_init();
@@ -13,7 +14,7 @@ void I_AM_HERE(int32_t id);
 void testPV();
 int system_call();
 int32_t printks(const char*);
-extern int current;
+extern int32_t current;
 typedef struct PCB PCB_List_T;
 extern PCB_List_T PCB_List[NR_TASKS];
 
@@ -23,10 +24,11 @@ void puti(int number) ;
 void main() {
     //BochsBreak();
     trap_init();
+    init_sys_call();
     sched_init();
     printks("\nnow in protected mode!\n");
     int errno;
-    BochsBreak();
+    //BochsBreak();
     __asm__ volatile(
         "movl $0x0, %%eax\n"
         "int $0x80\n"
@@ -68,7 +70,8 @@ void main() {
             printks("111\n");
         } else {
             printks("222\n");
-            v(lock);
+            BochsBreak();
+            //v(lock);
         }
     }
     while(1);

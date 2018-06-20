@@ -5,7 +5,7 @@
 #include "../linux/semaphore.h"
 #include "../linux/fork.h"
 char arr[] = "hello!\n";
-int printks(const char*);
+int32_t printks(const char*);
 int32_t first_empty_pcb();
 void copy_process(int32_t, int32_t);
 extern int32_t current;
@@ -123,8 +123,20 @@ int do_v(int id) {
     sti();
     return 0;
 }
-fn_ptr sys_call_table[] = {
-    test_print, print_hello, sys_fork, sys_wait, sys_exit, do_getsem, do_free_sem, do_p, do_v
+#define NR_SYS_CALL 256
+fn_ptr sys_call_table[NR_SYS_CALL] = {
+    //test_print, print_hello, sys_fork, sys_wait, sys_exit, do_getsem, do_free_sem, do_p, do_v
 };
 
+void init_sys_call() {
+    sys_call_table[0] = test_print;
+    sys_call_table[1] = print_hello;
+    sys_call_table[2] = sys_fork;
+    sys_call_table[3] = sys_wait;
+    sys_call_table[4] = sys_exit;
+    sys_call_table[5] = do_getsem;
+    sys_call_table[6] = do_free_sem;
+    sys_call_table[7] = do_p;
+    sys_call_table[8] = do_v;
+}
 #endif
