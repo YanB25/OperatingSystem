@@ -1,7 +1,7 @@
 LD=ld 
 LDFLAGS=-melf_i386 -N
 CC=gcc
-CCFLAGS=-march=i386 -m32 -mpreferred-stack-boundary=2 -ffreestanding
+CCFLAGS=-march=i386 -m32 -mpreferred-stack-boundary=2 -ffreestanding -W -Wall
 #TODO: in pm, here should be -m32 not -m16
 AS=nasm
 ASFLAGS=

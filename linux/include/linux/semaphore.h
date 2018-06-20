@@ -11,6 +11,6 @@ typedef struct Semaphone {
 } Semaphone;
 int getsem(int );
 int freesem(int );
-void p(int );
-void v(int );
+int p(int );
+int v(int );
 #endif
