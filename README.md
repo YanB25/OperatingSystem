@@ -3,7 +3,7 @@
 本项目将长期更新，并按照本学期操作系统课程的进度逐步完成。  
 其中每个文件夹代表每次可提交的课程作业（或里程碑式事件）  
 本项目打算以.pdf和.latex的方式，公开以往的所有项目报告  
-
+[点此查看实验六的实验报告(首次实现进程切换的实验)](https://github.com/YanB25/OperatingSystem/blob/master/report/16337269_%E9%A2%9C%E5%BD%AC_%E5%AE%9E%E9%AA%8C%E5%85%AD.pdf)
 ## 介绍
 使用`git tag`和`git checkout`查看项目完成的各个阶段。  
 `/step_0`到`/step_2`是一些demo代码，**后续所有代码都在`/step_3`上完成**   
