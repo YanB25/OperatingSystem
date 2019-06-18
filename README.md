@@ -3,11 +3,13 @@
 [点此查看实验六的实验报告(首次实现进程切换的实验)](https://github.com/YanB25/OperatingSystem/blob/master/report/16337269_%E9%A2%9C%E5%BD%AC_%E5%AE%9E%E9%AA%8C%E5%85%AD.pdf)
 ## 介绍
 使用`git tag`和`git checkout`查看项目完成的各个阶段。  
+
 `/step_0`到`/step_2`是一些demo代码，是建立起该OS的一些初步尝试。**后续所有代码都在`/step_3`上完成**   
 `/linux`文件夹存放的是linux系统的早期版本的内核，用于学习用途  
-`/protectmod`存放的是我试图进入保护模式完成实验的一些代码。这部分代码最终没有成功(无法完成进程切换)故暂时弃置了。
+`/protectmod`存放的是我试图进入保护模式完成实验的一些代码。这部分代码最终没有成功(无法完成进程切换)故暂时弃置了。  
+
 想要了解项目的具体情况，可以`git checkout`到具体的版本上，并查看实验报告`/report/16337269_颜彬_实验*.pdf`
-## 更新log（outdated）
+## 更新log（outdated，后续更新见实验报告）
 1. [step three][4]
 C语言和汇编混合编程。 
 linux下工具链：编译器gcc，连接器ld。  
